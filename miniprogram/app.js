@@ -1,7 +1,10 @@
 // app.js
 App({
   globalData: {
-    baseUrl: 'http://10.249.34.19:3001/api', // 开发环境地址（用局域网IP避免localhost解析问题）
+    // 自动判断运行环境：模拟器用 localhost，真机用电脑局域网 IP
+    baseUrl: wx.getSystemInfoSync().platform === 'devtools'
+      ? 'http://127.0.0.1:3001/api'
+      : 'http://192.168.71.79:3001/api',
     token: '',
     userInfo: null,
     systemInfo: null,
