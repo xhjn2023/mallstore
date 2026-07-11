@@ -1,0 +1,66 @@
+<!-- pages/search/search.wxml -->
+<view class="search-page">
+  <!-- 顶部搜索框 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="搜索商品"
+        placeholder-class="search-placeholder"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onInput"
+        bindconfirm="onConfirm"
+        focus
+      />
+      <text class="clear-icon" wx:if="{{keyword}}" bindtap="onClearInput">✕</text>
+    </view>
+    <text class="search-btn" bindtap="onConfirm">搜索</text>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view class="section" wx:if="{{hotList.length}}">
+    <view class="section-header">
+      <text class="section-title">🔥 热门搜索</text>
+    </view>
+    <view class="hot-list">
+      <view
+        class="hot-chip"
+        wx:for="{{hotList}}"
+        wx:key="*this"
+        bindtap="onHotTap"
+        data-keyword="{{item}}"
+      >
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="section" wx:if="{{historyList.length}}">
+    <view class="section-header">
+      <text class="section-title">🕐 搜索历史</text>
+      <text class="clear-btn" bindtap="onClearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view
+        class="history-item"
+        wx:for="{{historyList}}"
+        wx:key="*this"
+        bindtap="onHistoryTap"
+        data-keyword="{{item}}"
+      >
+        <text class="history-text text-ellipsis">{{item}}</text>
+        <text class="history-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空历史提示 -->
+  <view class="empty-history" wx:if="{{!hotList.length && !historyList.length}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">输入关键词搜索商品</text>
+  </view>
+</view>

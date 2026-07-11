@@ -1,0 +1,95 @@
+<!-- pages/cart/cart.wxml -->
+<view class="cart-page">
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{isEmpty}}">
+    <view class="empty-icon-wrap">🛒</view>
+    <view class="empty-text">购物车空空如也</view>
+    <navigator url="/pages/home/home" open-type="switchTab" class="empty-btn">去逛逛</navigator>
+  </view>
+
+  <block wx:else>
+    <!-- 顶部操作栏 -->
+    <view class="top-bar">
+      <view class="top-bar-left" bindtap="toggleAll">
+        <view class="checkbox {{allSelected ? 'checked' : ''}}"></view>
+        <text>全选</text>
+      </view>
+      <view class="top-bar-right" bindtap="toggleEdit">
+        <text>{{isEdit ? '完成' : '编辑'}}</text>
+      </view>
+    </view>
+
+    <!-- 有效商品列表 -->
+    <view class="cart-list" wx:if="{{validItems.length}}">
+      <view class="cart-item" wx:for="{{validItems}}" wx:key="id">
+        <view class="checkbox {{item.selected ? 'checked' : ''}}" catchtap="toggleSelect" data-id="{{item.id}}" data-index="{{index}}"></view>
+        <image src="{{item.image}}" mode="aspectFill" class="item-img" lazy-load catchtap="goDetail" data-id="{{item.product_id}}"></image>
+        <view class="item-info">
+          <view class="item-name text-ellipsis-2" catchtap="goDetail" data-id="{{item.product_id}}">{{item.name}}</view>
+          <view class="item-specs" wx:if="{{item.specs}}">
+            <text wx:for="{{item.specs}}" wx:for-item="v" wx:key="*this" class="spec-tag">{{v}}</text>
+          </view>
+          <view class="item-bottom">
+            <view class="item-price">
+              <text class="price-symbol">¥</text>
+              <text class="price-num">{{item.priceText}}</text>
+            </view>
+            <view class="stepper" wx:if="{{!isEdit}}">
+              <view class="step-btn {{item.quantity <= 1 ? 'disabled' : ''}}" catchtap="onMinus" data-id="{{item.id}}" data-index="{{index}}" data-quantity="{{item.quantity}}">-</view>
+              <view class="step-num">{{item.quantity}}</view>
+              <view class="step-btn {{item.quantity >= item.stock ? 'disabled' : ''}}" catchtap="onPlus" data-id="{{item.id}}" data-index="{{index}}" data-quantity="{{item.quantity}}" data-stock="{{item.stock}}">+</view>
+            </view>
+            <view class="edit-actions" wx:else>
+              <view class="edit-action-fav" catchtap="onMoveFav" data-id="{{item.id}}">移入收藏</view>
+              <view class="edit-action-del" catchtap="onDelete" data-id="{{item.id}}">删除</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 失效商品 -->
+    <view class="invalid-section" wx:if="{{invalidItems.length}}">
+      <view class="invalid-header">
+        <text class="invalid-title">失效商品（{{invalidItems.length}}件）</text>
+        <text class="invalid-clear" bindtap="onClearInvalid">清空失效</text>
+      </view>
+      <view class="cart-item invalid" wx:for="{{invalidItems}}" wx:key="id">
+        <view class="invalid-tag">失效</view>
+        <image src="{{item.image}}" mode="aspectFill" class="item-img" lazy-load></image>
+        <view class="item-info">
+          <view class="item-name text-ellipsis-2">{{item.name}}</view>
+          <view class="invalid-tip">{{item.stock > 0 ? '商品已下架' : '库存不足'}}</view>
+          <view class="item-bottom">
+            <view class="edit-actions">
+              <view class="edit-action-del" catchtap="onDelete" data-id="{{item.id}}">删除</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部结算栏 -->
+    <view class="bottom-bar" wx:if="{{validItems.length}}">
+      <view class="bottom-left" bindtap="toggleAll">
+        <view class="checkbox {{allSelected ? 'checked' : ''}}"></view>
+        <text>全选</text>
+      </view>
+      <view class="bottom-right" wx:if="{{!isEdit}}">
+        <view class="total-wrap">
+          <text class="total-label">合计：</text>
+          <text class="price-symbol">¥</text>
+          <text class="total-num">{{totalPriceText}}</text>
+        </view>
+        <view class="checkout-btn {{selectedCount === 0 ? 'disabled' : ''}}" catchtap="onCheckout">
+          结算{{selectedCount > 0 ? '(' + selectedCount + ')' : ''}}
+        </view>
+      </view>
+      <view class="bottom-right" wx:else>
+        <view class="del-all-btn" catchtap="onBatchDelete">删除所选</view>
+      </view>
+    </view>
+
+    <view class="safe-bottom"></view>
+  </block>
+</view>

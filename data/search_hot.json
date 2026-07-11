@@ -1,0 +1,38 @@
+[
+  {
+    "keyword": "耳机",
+    "count": 977,
+    "created_at": 1783784214,
+    "id": 1
+  },
+  {
+    "keyword": "运动鞋",
+    "count": 541,
+    "created_at": 1783784214,
+    "id": 2
+  },
+  {
+    "keyword": "空气炸锅",
+    "count": 843,
+    "created_at": 1783784214,
+    "id": 3
+  },
+  {
+    "keyword": "面膜",
+    "count": 950,
+    "created_at": 1783784214,
+    "id": 4
+  },
+  {
+    "keyword": "扫地机器人",
+    "count": 517,
+    "created_at": 1783784214,
+    "id": 5
+  },
+  {
+    "keyword": "机械键盘",
+    "count": 596,
+    "created_at": 1783784214,
+    "id": 6
+  }
+]

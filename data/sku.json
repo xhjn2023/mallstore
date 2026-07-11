@@ -1,0 +1,418 @@
+[
+  {
+    "product_id": 1,
+    "specs": "{\"颜色\":\"白色\",\"版本\":\"标准版\"}",
+    "price": 29900,
+    "stock": 50,
+    "sku_code": "SKU1-8166",
+    "id": 1
+  },
+  {
+    "product_id": 1,
+    "specs": "{\"颜色\":\"白色\",\"版本\":\"降噪版\"}",
+    "price": 29900,
+    "stock": 50,
+    "sku_code": "SKU1-6228",
+    "id": 2
+  },
+  {
+    "product_id": 1,
+    "specs": "{\"颜色\":\"黑色\",\"版本\":\"标准版\"}",
+    "price": 29900,
+    "stock": 50,
+    "sku_code": "SKU1-4546",
+    "id": 3
+  },
+  {
+    "product_id": 1,
+    "specs": "{\"颜色\":\"黑色\",\"版本\":\"降噪版\"}",
+    "price": 29900,
+    "stock": 50,
+    "sku_code": "SKU1-5692",
+    "id": 4
+  },
+  {
+    "product_id": 2,
+    "specs": "{\"颜色\":\"黑色\"}",
+    "price": 59900,
+    "stock": 50,
+    "sku_code": "SKU2-3286",
+    "id": 5
+  },
+  {
+    "product_id": 2,
+    "specs": "{\"颜色\":\"银色\"}",
+    "price": 59900,
+    "stock": 50,
+    "sku_code": "SKU2-6872",
+    "id": 6
+  },
+  {
+    "product_id": 2,
+    "specs": "{\"颜色\":\"金色\"}",
+    "price": 59900,
+    "stock": 50,
+    "sku_code": "SKU2-5170",
+    "id": 7
+  },
+  {
+    "product_id": 3,
+    "specs": "{}",
+    "price": 12900,
+    "stock": 500,
+    "sku_code": "SKU3",
+    "id": 8
+  },
+  {
+    "product_id": 4,
+    "specs": "{}",
+    "price": 15900,
+    "stock": 180,
+    "sku_code": "SKU4",
+    "id": 9
+  },
+  {
+    "product_id": 5,
+    "specs": "{\"轴体\":\"青轴\"}",
+    "price": 34900,
+    "stock": 40,
+    "sku_code": "SKU5-1118",
+    "id": 10
+  },
+  {
+    "product_id": 5,
+    "specs": "{\"轴体\":\"红轴\"}",
+    "price": 34900,
+    "stock": 40,
+    "sku_code": "SKU5-4133",
+    "id": 11
+  },
+  {
+    "product_id": 5,
+    "specs": "{\"轴体\":\"茶轴\"}",
+    "price": 34900,
+    "stock": 40,
+    "sku_code": "SKU5-2128",
+    "id": 12
+  },
+  {
+    "product_id": 6,
+    "specs": "{}",
+    "price": 8900,
+    "stock": 300,
+    "sku_code": "SKU6",
+    "id": 13
+  },
+  {
+    "product_id": 7,
+    "specs": "{}",
+    "price": 19900,
+    "stock": 200,
+    "sku_code": "SKU7",
+    "id": 14
+  },
+  {
+    "product_id": 8,
+    "specs": "{}",
+    "price": 89900,
+    "stock": 80,
+    "sku_code": "SKU8",
+    "id": 15
+  },
+  {
+    "product_id": 9,
+    "specs": "{}",
+    "price": 129900,
+    "stock": 100,
+    "sku_code": "SKU9",
+    "id": 16
+  },
+  {
+    "product_id": 10,
+    "specs": "{}",
+    "price": 39900,
+    "stock": 200,
+    "sku_code": "SKU10",
+    "id": 17
+  },
+  {
+    "product_id": 11,
+    "specs": "{}",
+    "price": 49900,
+    "stock": 150,
+    "sku_code": "SKU11",
+    "id": 18
+  },
+  {
+    "product_id": 12,
+    "specs": "{}",
+    "price": 15900,
+    "stock": 400,
+    "sku_code": "SKU12",
+    "id": 19
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"S\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-9436",
+    "id": 20
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"M\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-6048",
+    "id": 21
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"L\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-5716",
+    "id": 22
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"XL\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-572",
+    "id": 23
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"S\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-3441",
+    "id": 24
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"M\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-4253",
+    "id": 25
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"L\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-1192",
+    "id": 26
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"XL\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-9851",
+    "id": 27
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"灰色\",\"尺码\":\"S\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-8090",
+    "id": 28
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"灰色\",\"尺码\":\"M\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-5730",
+    "id": 29
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"灰色\",\"尺码\":\"L\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-1045",
+    "id": 30
+  },
+  {
+    "product_id": 13,
+    "specs": "{\"颜色\":\"灰色\",\"尺码\":\"XL\"}",
+    "price": 5900,
+    "stock": 66,
+    "sku_code": "SKU13-8323",
+    "id": 31
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"38\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-51",
+    "id": 32
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"39\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-5636",
+    "id": 33
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"40\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-391",
+    "id": 34
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"41\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-8579",
+    "id": 35
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"42\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-5541",
+    "id": 36
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"黑色\",\"尺码\":\"43\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-6521",
+    "id": 37
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"38\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-1945",
+    "id": 38
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"39\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-5891",
+    "id": 39
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"40\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-8437",
+    "id": 40
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"41\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-9627",
+    "id": 41
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"42\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-5330",
+    "id": 42
+  },
+  {
+    "product_id": 14,
+    "specs": "{\"颜色\":\"白色\",\"尺码\":\"43\"}",
+    "price": 19900,
+    "stock": 25,
+    "sku_code": "SKU14-9570",
+    "id": 43
+  },
+  {
+    "product_id": 15,
+    "specs": "{}",
+    "price": 29900,
+    "stock": 120,
+    "sku_code": "SKU15",
+    "id": 44
+  },
+  {
+    "product_id": 16,
+    "specs": "{}",
+    "price": 4900,
+    "stock": 1000,
+    "sku_code": "SKU16",
+    "id": 45
+  },
+  {
+    "product_id": 17,
+    "specs": "{}",
+    "price": 3900,
+    "stock": 600,
+    "sku_code": "SKU17",
+    "id": 46
+  },
+  {
+    "product_id": 18,
+    "specs": "{}",
+    "price": 2990,
+    "stock": 500,
+    "sku_code": "SKU18",
+    "id": 47
+  },
+  {
+    "product_id": 19,
+    "specs": "{}",
+    "price": 5900,
+    "stock": 300,
+    "sku_code": "SKU19",
+    "id": 48
+  },
+  {
+    "product_id": 20,
+    "specs": "{}",
+    "price": 25900,
+    "stock": 100,
+    "sku_code": "SKU20",
+    "id": 49
+  },
+  {
+    "product_id": 21,
+    "specs": "{}",
+    "price": 12900,
+    "stock": 400,
+    "sku_code": "SKU21",
+    "id": 50
+  },
+  {
+    "product_id": 22,
+    "specs": "{}",
+    "price": 6900,
+    "stock": 500,
+    "sku_code": "SKU22",
+    "id": 51
+  },
+  {
+    "product_id": 23,
+    "specs": "{}",
+    "price": 19900,
+    "stock": 150,
+    "sku_code": "SKU23",
+    "id": 52
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "product_id": 1,
+    "sku_id": 0,
+    "seckill_price": 17940,
+    "original_price": 29900,
+    "stock": 50,
+    "sold": 9,
+    "start_time": 1783784214,
+    "end_time": 1783870614,
+    "status": 1,
+    "id": 1
+  },
+  {
+    "product_id": 5,
+    "sku_id": 0,
+    "seckill_price": 20940,
+    "original_price": 34900,
+    "stock": 50,
+    "sold": 37,
+    "start_time": 1783784214,
+    "end_time": 1783957014,
+    "status": 1,
+    "id": 2
+  },
+  {
+    "product_id": 9,
+    "sku_id": 0,
+    "seckill_price": 77940,
+    "original_price": 129900,
+    "stock": 50,
+    "sold": 14,
+    "start_time": 1783784214,
+    "end_time": 1784043414,
+    "status": 1,
+    "id": 3
+  },
+  {
+    "product_id": 13,
+    "sku_id": 0,
+    "seckill_price": 3540,
+    "original_price": 5900,
+    "stock": 50,
+    "sold": 16,
+    "start_time": 1783784214,
+    "end_time": 1784129814,
+    "status": 1,
+    "id": 4
+  },
+  {
+    "product_id": 17,
+    "sku_id": 0,
+    "seckill_price": 2340,
+    "original_price": 3900,
+    "stock": 50,
+    "sold": 11,
+    "start_time": 1783784214,
+    "end_time": 1784216214,
+    "status": 1,
+    "id": 5
+  }
+]

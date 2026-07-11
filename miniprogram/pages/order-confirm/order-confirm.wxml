@@ -1,0 +1,124 @@
+<!-- pages/order-confirm/order-confirm.wxml -->
+<view class="confirm-page">
+  <!-- 收货地址 -->
+  <view class="address-card" bindtap="goSelectAddress">
+    <block wx:if="{{address}}">
+      <view class="addr-icon">📍</view>
+      <view class="addr-info">
+        <view class="addr-user">
+          <text class="addr-name">{{address.name}}</text>
+          <text class="addr-phone">{{address.phone}}</text>
+        </view>
+        <view class="addr-detail">{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="addr-empty">
+        <text class="addr-empty-text">请选择收货地址</text>
+      </view>
+    </block>
+    <view class="addr-arrow">></view>
+  </view>
+
+  <!-- 订单商品 -->
+  <view class="goods-card">
+    <view class="goods-item" wx:for="{{items}}" wx:key="product_id">
+      <image src="{{item.image}}" mode="aspectFill" class="goods-img" lazy-load></image>
+      <view class="goods-info">
+        <view class="goods-name text-ellipsis-2">{{item.name}}</view>
+        <view class="goods-specs" wx:if="{{item.specsText}}">
+          <text class="spec-tag">{{item.specsText}}</text>
+        </view>
+        <view class="goods-bottom">
+          <view class="goods-price">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{item.priceText}}</text>
+          </view>
+          <text class="goods-qty">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="remark-card">
+    <text class="remark-label">订单备注</text>
+    <input class="remark-input" placeholder="选填，给商家留言（50字内）" maxlength="50" value="{{remark}}" bindinput="onRemarkInput"></input>
+  </view>
+
+  <!-- 优惠券 -->
+  <view class="coupon-card" bindtap="openCouponPicker">
+    <text class="coupon-label">优惠券</text>
+    <view class="coupon-value">
+      <text wx:if="{{selectedCoupon}}" class="coupon-applied">-¥{{selectedCoupon.amountText}}</text>
+      <text wx:elif="{{coupons.length}}" class="coupon-available">{{coupons.length}}张可用</text>
+      <text wx:else class="coupon-none">暂无可用</text>
+      <text class="coupon-arrow">></text>
+    </view>
+  </view>
+
+  <!-- 金额明细 -->
+  <view class="amount-card">
+    <view class="amount-row">
+      <text class="amount-label">商品总额</text>
+      <text class="amount-val">¥{{totalAmountText}}</text>
+    </view>
+    <view class="amount-row">
+      <text class="amount-label">运费</text>
+      <text class="amount-val">{{freight > 0 ? '¥' + freightText : '免运费'}}</text>
+    </view>
+    <view class="amount-row" wx:if="{{discount > 0}}">
+      <text class="amount-label">优惠</text>
+      <text class="amount-val discount-val">-¥{{discountText}}</text>
+    </view>
+    <view class="amount-divider"></view>
+    <view class="amount-row total-row">
+      <text class="amount-label">实付款</text>
+      <view class="pay-amount">
+        <text class="price-symbol">¥</text>
+        <text class="pay-num">{{payAmountText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提交栏 -->
+  <view class="bottom-bar">
+    <view class="bottom-amount">
+      <text class="bottom-label">实付：</text>
+      <text class="price-symbol">¥</text>
+      <text class="bottom-num">{{payAmountText}}</text>
+    </view>
+    <view class="submit-btn {{!address ? 'disabled' : ''}}" bindtap="onSubmit">提交订单</view>
+  </view>
+
+  <view class="safe-bottom"></view>
+
+  <!-- 优惠券选择弹层 -->
+  <view class="coupon-mask" wx:if="{{showCouponPicker}}" bindtap="closeCouponPicker"></view>
+  <view class="coupon-popup {{showCouponPicker ? 'show' : ''}}">
+    <view class="popup-header">
+      <text class="popup-title">选择优惠券</text>
+      <text class="popup-close" bindtap="closeCouponPicker">✕</text>
+    </view>
+    <scroll-view scroll-y class="popup-list">
+      <view class="coupon-item {{selectedCoupon && selectedCoupon.user_coupon_id === c.user_coupon_id ? 'selected' : ''}}" wx:for="{{coupons}}" wx:for-item="c" wx:key="user_coupon_id" bindtap="onSelectCoupon" data-coupon="{{c}}">
+        <view class="coupon-item-left">
+          <text class="coupon-amount">¥{{c.amountText}}</text>
+          <text class="coupon-threshold">满{{c.thresholdText}}可用</text>
+        </view>
+        <view class="coupon-item-right">
+          <text class="coupon-name text-ellipsis">{{c.name}}</text>
+          <text class="coupon-time">{{c.endTimeText}}到期</text>
+        </view>
+        <view class="coupon-radio {{selectedCoupon && selectedCoupon.user_coupon_id === c.user_coupon_id ? 'checked' : ''}}"></view>
+      </view>
+      <view class="coupon-item no-coupon {{!selectedCoupon ? 'selected' : ''}}" bindtap="onSelectNone">
+        <text class="no-coupon-text">不使用优惠券</text>
+        <view class="coupon-radio {{!selectedCoupon ? 'checked' : ''}}"></view>
+      </view>
+      <view class="popup-empty" wx:if="{{!coupons.length}}">
+        <text>暂无可用优惠券</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

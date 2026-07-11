@@ -1,0 +1,18 @@
+[
+  {
+    "username": "admin",
+    "password": "$2a$10$OhBb39r56xmdLrsMWzinkuDkoF9lG7gbyd6nV4SqD6Kpw/7nqb.C6",
+    "role": "admin",
+    "status": 1,
+    "created_at": 1783784214,
+    "id": 1
+  },
+  {
+    "username": "operator",
+    "password": "$2a$10$HCjxvztcx/Fo9SGupiqKHej8QwONDJdeB6olLmcuECMlK45wFsYtO",
+    "role": "operator",
+    "status": 1,
+    "created_at": 1783784214,
+    "id": 2
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "name": "新人专享满50减10",
+    "type": 1,
+    "amount": 1000,
+    "threshold": 5000,
+    "total": 1000,
+    "issued": 0,
+    "used": 0,
+    "start_time": 1783784214,
+    "end_time": 1791560214,
+    "status": 1,
+    "id": 1
+  },
+  {
+    "name": "满200减30",
+    "type": 1,
+    "amount": 3000,
+    "threshold": 20000,
+    "total": 500,
+    "issued": 0,
+    "used": 0,
+    "start_time": 1783784214,
+    "end_time": 1788968214,
+    "status": 1,
+    "id": 2
+  },
+  {
+    "name": "满500减80",
+    "type": 1,
+    "amount": 8000,
+    "threshold": 50000,
+    "total": 300,
+    "issued": 0,
+    "used": 0,
+    "start_time": 1783784214,
+    "end_time": 1786376214,
+    "status": 1,
+    "id": 3
+  }
+]

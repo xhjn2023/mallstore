@@ -1,0 +1,162 @@
+<!-- pages/goods-detail/goods-detail.wxml -->
+<view class="detail-page">
+  <!-- 骨架屏 -->
+  <view class="skeleton-wrap" wx:if="{{loading}}">
+    <view class="skeleton skeleton-swiper"></view>
+    <view class="skeleton-info">
+      <view class="skeleton skeleton-price"></view>
+      <view class="skeleton skeleton-name"></view>
+      <view class="skeleton skeleton-line"></view>
+    </view>
+    <view class="skeleton skeleton-block"></view>
+    <view class="skeleton skeleton-block"></view>
+  </view>
+
+  <!-- 商品内容 -->
+  <block wx:elif="{{product.id}}">
+    <!-- 图片轮播 -->
+    <swiper class="img-swiper" indicator-dots circular duration="500" wx:if="{{images.length}}">
+      <swiper-item wx:for="{{images}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" class="swiper-img" lazy-load bindtap="onPreviewImage" data-src="{{item}}" />
+      </swiper-item>
+    </swiper>
+
+    <!-- 商品信息 -->
+    <view class="info-card">
+      <view class="price-row">
+        <view class="price-box">
+          <text class="price-symbol">¥</text>
+          <text class="price-num">{{priceText}}</text>
+        </view>
+        <text class="price-original" wx:if="{{originalPriceText !== '0.00'}}">¥{{originalPriceText}}</text>
+      </view>
+      <text class="product-name">{{product.name}}</text>
+      <view class="info-row">
+        <text class="info-item">已售{{salesText}}</text>
+        <text class="info-item">库存{{displayStock}}件</text>
+      </view>
+    </view>
+
+    <!-- 规格选择 -->
+    <view class="spec-card" wx:if="{{hasSpecs}}" bindtap="onOpenSkuPopup" data-mode="cart">
+      <text class="spec-label">规格</text>
+      <text class="spec-value {{selectedSpecText ? '' : 'placeholder'}}">{{selectedSpecText || '请选择规格'}}</text>
+      <text class="spec-arrow">›</text>
+    </view>
+
+    <!-- 商品详情 -->
+    <view class="detail-card">
+      <view class="card-title">商品详情</view>
+      <rich-text class="detail-content" nodes="{{product.detail}}"></rich-text>
+    </view>
+
+    <!-- 评价 -->
+    <view class="comment-card">
+      <view class="card-title">
+        <text>用户评价({{commentCount}})</text>
+      </view>
+
+      <block wx:if="{{comments.length}}">
+        <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+          <view class="comment-header">
+            <image src="{{item.user_avatar}}" mode="aspectFill" class="comment-avatar" lazy-load />
+            <view class="comment-user">
+              <text class="comment-name">{{item.user_name}}</text>
+              <view class="comment-stars">
+                <text class="star {{star ? 'star-on' : 'star-off'}}" wx:for="{{item.stars}}" wx:for-item="star" wx:key="*this">★</text>
+              </view>
+            </view>
+            <text class="comment-time">{{item.timeText}}</text>
+          </view>
+          <text class="comment-content">{{item.content}}</text>
+        </view>
+      </block>
+
+      <view class="comment-empty" wx:else>
+        <text class="empty-text">暂无评价</text>
+      </view>
+    </view>
+
+    <view class="bottom-placeholder"></view>
+
+    <!-- 底部操作栏 -->
+    <view class="action-bar">
+      <view class="action-icon" bindtap="onContactService">
+        <text class="icon-emoji">💬</text>
+        <text class="icon-text">客服</text>
+      </view>
+      <view class="action-icon" bindtap="onToggleFavorite">
+        <text class="icon-emoji {{isFavorite ? 'fav-on' : ''}}">{{isFavorite ? '❤️' : '🤍'}}</text>
+        <text class="icon-text {{isFavorite ? 'fav-on' : ''}}">收藏</text>
+      </view>
+      <view class="action-icon" bindtap="onGoCart">
+        <text class="icon-emoji">🛒</text>
+        <text class="icon-text">购物车</text>
+      </view>
+      <view class="action-btns">
+        <view class="btn-cart" bindtap="onAddCart">加入购物车</view>
+        <view class="btn-buy" bindtap="onBuyNow">立即购买</view>
+      </view>
+    </view>
+
+    <!-- 规格选择弹窗 -->
+    <view class="sku-mask" wx:if="{{showSkuPopup}}" bindtap="onCloseSkuPopup"></view>
+    <view class="sku-popup {{showSkuPopup ? 'show' : ''}}">
+      <!-- 弹窗头部商品信息 -->
+      <view class="popup-header">
+        <image src="{{product.main_image}}" mode="aspectFill" class="popup-img" lazy-load />
+        <view class="popup-info">
+          <view class="popup-price">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{priceText}}</text>
+          </view>
+          <text class="popup-stock">库存{{displayStock}}件</text>
+          <text class="popup-selected" wx:if="{{selectedSpecText}}">已选：{{selectedSpecText}}</text>
+          <text class="popup-selected" wx:else>请选择规格</text>
+        </view>
+        <view class="popup-close" bindtap="onCloseSkuPopup">✕</view>
+      </view>
+
+      <!-- 规格选择 -->
+      <scroll-view scroll-y class="popup-body">
+        <view class="spec-group" wx:for="{{specDimensions}}" wx:key="name">
+          <text class="spec-group-title">{{item.name}}</text>
+          <view class="spec-values">
+            <view
+              class="spec-value-item {{selectedSpecs[item.name] === v ? 'selected' : ''}}"
+              wx:for="{{item.values}}"
+              wx:for-item="v"
+              wx:key="*this"
+              bindtap="onPopupSpecTap"
+              data-name="{{item.name}}"
+              data-value="{{v}}"
+            >
+              <text>{{v}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 数量选择 -->
+        <view class="qty-group">
+          <text class="spec-group-title">数量</text>
+          <view class="qty-stepper">
+            <view class="qty-btn {{quantity <= 1 ? 'disabled' : ''}}" bindtap="onMinusQty">-</view>
+            <text class="qty-num">{{quantity}}</text>
+            <view class="qty-btn {{quantity >= displayStock ? 'disabled' : ''}}" bindtap="onPlusQty">+</view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 确认按钮 -->
+      <view class="popup-footer">
+        <view class="popup-confirm" bindtap="onConfirmSku">确定</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 加载失败 -->
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">📭</text>
+    <text class="empty-text">商品不存在</text>
+  </view>
+</view>

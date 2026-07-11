@@ -1,0 +1,84 @@
+<!-- pages/category/category.wxml -->
+<view class="category-page">
+  <!-- 骨架屏 -->
+  <view class="skeleton-wrap" wx:if="{{loading}}">
+    <view class="skeleton-sidebar">
+    <view class="skeleton-item skeleton" wx:for="{{[1,2,3,4,5,6,7,8]}}" wx:key="*this"></view>
+  </view>
+    <view class="skeleton-content">
+      <view class="skeleton-card" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="skeleton skeleton-img"></view>
+        <view class="skeleton skeleton-line"></view>
+        <view class="skeleton skeleton-line short"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主体内容 -->
+  <view class="category-body" wx:else>
+    <!-- 左侧分类 -->
+    <scroll-view scroll-y class="sidebar">
+      <view
+        class="sidebar-item {{activeId === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="onCategoryTap"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+      >
+        <view class="sidebar-bar" wx:if="{{activeId === item.id}}"></view>
+        <text class="sidebar-icon">{{item.icon || '📦'}}</text>
+        <text class="sidebar-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <!-- 右侧商品 -->
+    <scroll-view scroll-y class="content">
+      <view class="content-header" wx:if="{{activeName}}">
+        <text class="content-title">{{activeName}}</text>
+      </view>
+
+      <!-- 商品加载中 -->
+      <view class="product-loading" wx:if="{{productLoading}}">
+        <view class="skeleton-product" wx:for="{{[1,2]}}" wx:key="*this">
+          <view class="skeleton skeleton-img"></view>
+          <view class="skeleton skeleton-line"></view>
+          <view class="skeleton skeleton-line short"></view>
+        </view>
+      </view>
+
+      <!-- 商品列表 -->
+      <block wx:elif="{{products.length}}">
+        <view class="product-list">
+          <view
+            class="product-card"
+            wx:for="{{products}}"
+            wx:key="id"
+            bindtap="goDetail"
+            data-id="{{item.id}}"
+          >
+            <image src="{{item.main_image}}" mode="aspectFill" class="product-img" lazy-load />
+            <view class="product-info">
+              <text class="product-name text-ellipsis-2">{{item.name}}</text>
+              <view class="product-bottom">
+                <view class="product-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-num">{{item.priceText}}</text>
+                </view>
+                <text class="product-sales">已售{{item.salesText}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <text class="empty-icon">📦</text>
+        <text class="empty-text">该分类暂无商品</text>
+      </view>
+
+      <view class="safe-bottom"></view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,38 @@
+<!-- pages/coupon/coupon.wxml -->
+<view class="coupon-page">
+  <!-- Tab栏 -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === index ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="status" bindtap="onTabChange" data-index="{{index}}">
+      <text>{{item.text}}</text>
+      <view class="tab-line" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <!-- 优惠券列表 -->
+  <view class="coupon-list" wx:if="{{currentList.length > 0}}">
+    <view class="coupon-card {{item.status !== 0 ? 'disabled' : ''}}" wx:for="{{currentList}}" wx:key="id">
+      <!-- 左侧金额 -->
+      <view class="coupon-left">
+        <view class="amount-row">
+          <text class="amount-symbol">¥</text>
+          <text class="amount-num">{{item.amountText}}</text>
+        </view>
+        <text class="threshold-text">满{{item.thresholdText}}可用</text>
+      </view>
+      <!-- 虚线分隔 -->
+      <view class="coupon-divider"></view>
+      <!-- 右侧信息 -->
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.name}}</text>
+        <text class="coupon-period">{{item.startText}} - {{item.endText}}</text>
+        <view class="coupon-status {{item.statusClass}}">{{item.statusText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{currentList.length === 0}}">
+    <text class="empty-icon">🎟️</text>
+    <text class="empty-text">暂无{{tabs[activeTab].text}}优惠券</text>
+  </view>
+</view>

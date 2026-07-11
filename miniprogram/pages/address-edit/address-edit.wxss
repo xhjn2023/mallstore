@@ -1,0 +1,107 @@
+/* pages/address-edit/address-edit.wxss */
+.edit-page {
+  min-height: 100vh;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-item-textarea {
+  align-items: flex-start;
+}
+
+.form-label {
+  width: 160rpx;
+  font-size: 30rpx;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.form-picker {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-picker.placeholder {
+  color: #ccc;
+}
+
+.arrow {
+  color: #ccc;
+  font-size: 28rpx;
+  margin-left: 12rpx;
+}
+
+.form-textarea {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  min-height: 80rpx;
+  line-height: 1.6;
+}
+
+/* 默认地址 */
+.default-card {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-top: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.default-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.default-label {
+  font-size: 30rpx;
+  color: #333;
+}
+
+/* 保存按钮 */
+.save-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  color: #fff;
+  text-align: center;
+  padding: 30rpx 0;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+  font-size: 34rpx;
+  font-weight: 500;
+}
+
+.save-btn:active {
+  opacity: 0.85;
+}

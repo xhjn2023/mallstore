@@ -1,0 +1,37 @@
+[
+  {
+    "key": "freight_free_threshold",
+    "value": "9900",
+    "id": 1
+  },
+  {
+    "key": "default_freight",
+    "value": "800",
+    "id": 2
+  },
+  {
+    "key": "ship_address",
+    "value": "广东省深圳市南山区科技园",
+    "id": 3
+  },
+  {
+    "key": "wx_appid",
+    "value": "",
+    "id": 4
+  },
+  {
+    "key": "wx_secret",
+    "value": "",
+    "id": 5
+  },
+  {
+    "key": "wx_mch_id",
+    "value": "",
+    "id": 6
+  },
+  {
+    "key": "wx_pay_key",
+    "value": "",
+    "id": 7
+  }
+]

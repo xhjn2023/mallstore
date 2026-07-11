@@ -1,0 +1,84 @@
+/* pages/pay-result/pay-result.wxss */
+.pay-result-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+.result-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140rpx 48rpx 0;
+}
+
+/* 结果图标 */
+.result-icon {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+.success-icon {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+}
+.fail-icon {
+  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  box-shadow: 0 8rpx 24rpx rgba(255, 68, 68, 0.3);
+}
+.icon-mark {
+  font-size: 96rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* 结果文字 */
+.result-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+.result-desc {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+  word-break: break-all;
+  text-align: center;
+}
+.result-tips {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 80rpx;
+  text-align: center;
+}
+
+/* 按钮组 */
+.btn-group {
+  display: flex;
+  gap: 24rpx;
+  width: 100%;
+}
+.btn {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+.btn.outline {
+  background: #fff;
+  color: #ff4444;
+  border: 2rpx solid #ff4444;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  color: #fff;
+  border: 2rpx solid transparent;
+}

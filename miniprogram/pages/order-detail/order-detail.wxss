@@ -1,0 +1,294 @@
+/* pages/order-detail/order-detail.wxss */
+.detail-page {
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+  box-sizing: border-box;
+}
+
+/* 状态横幅 */
+.status-banner {
+  padding: 48rpx 32rpx;
+  color: #fff;
+}
+.status-bg-0 {
+  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+}
+.status-bg-1 {
+  background: linear-gradient(135deg, #ff9800, #ffb74d);
+}
+.status-bg-2 {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+}
+.status-bg-3 {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+}
+.status-bg-4 {
+  background: linear-gradient(135deg, #999, #bbb);
+}
+.status-text {
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+.status-desc {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+/* 地址卡片 */
+.address-card {
+  display: flex;
+  align-items: center;
+  margin: 16rpx;
+  padding: 28rpx 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.addr-icon {
+  font-size: 36rpx;
+  margin-right: 16rpx;
+}
+.addr-info {
+  flex: 1;
+  min-width: 0;
+}
+.addr-user {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 8rpx;
+}
+.addr-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+.addr-phone {
+  font-size: 28rpx;
+  color: #666;
+}
+.addr-detail {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 商品卡片 */
+.goods-card {
+  margin: 16rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.goods-item {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.goods-item:last-child {
+  border-bottom: none;
+}
+.goods-img {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+.goods-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.4;
+}
+.goods-specs {
+  margin-top: 8rpx;
+}
+.spec-tag {
+  font-size: 22rpx;
+  color: #999;
+  background: #f5f5f5;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+.goods-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 8rpx;
+}
+.goods-price {
+  color: #ff4444;
+}
+.price-symbol {
+  font-size: 22rpx;
+}
+.price-num {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+.goods-qty {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 售后信息 */
+.aftersale-card {
+  margin: 16rpx;
+  padding: 24rpx;
+  background: #fff7f7;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.aftersale-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ff4444;
+  margin-bottom: 16rpx;
+}
+
+/* 信息卡片 */
+.info-card {
+  margin: 16rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14rpx 0;
+}
+.info-label {
+  font-size: 26rpx;
+  color: #999;
+  flex-shrink: 0;
+  margin-right: 24rpx;
+}
+.info-val {
+  font-size: 26rpx;
+  color: #333;
+  text-align: right;
+  word-break: break-all;
+  flex: 1;
+}
+.copy-val {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  justify-content: flex-end;
+}
+.copy-btn {
+  font-size: 22rpx;
+  color: #ff4444;
+  border: 1rpx solid #ffcfcb;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+.info-val.warn {
+  color: #ff9800;
+}
+.info-val.success {
+  color: #4caf50;
+}
+.info-val.danger {
+  color: #ff4444;
+}
+
+/* 金额明细 */
+.amount-card {
+  margin: 16rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+}
+.amount-label {
+  font-size: 26rpx;
+  color: #666;
+}
+.amount-val {
+  font-size: 26rpx;
+  color: #333;
+}
+.discount-val {
+  color: #ff4444;
+}
+.amount-divider {
+  height: 1rpx;
+  background: #f0f0f0;
+  margin: 12rpx 0;
+}
+.total-row {
+  padding: 16rpx 0 4rpx;
+}
+.pay-amount {
+  color: #ff4444;
+}
+.pay-num {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+/* 底部操作栏 */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16rpx;
+  height: 100rpx;
+  padding: 0 24rpx;
+  background: #fff;
+  border-top: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+}
+.action-btn {
+  font-size: 26rpx;
+  padding: 14rpx 36rpx;
+  border-radius: 48rpx;
+  border: 1rpx solid #ddd;
+  color: #666;
+  background: #fff;
+}
+.action-btn.outline {
+  border-color: #ddd;
+  color: #666;
+}
+.action-btn.primary {
+  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  border-color: transparent;
+  color: #fff;
+}
+
+.safe-bottom {
+  height: 40rpx;
+}
+
+.loading {
+  padding: 200rpx 0;
+  text-align: center;
+  color: #ccc;
+  font-size: 28rpx;
+}

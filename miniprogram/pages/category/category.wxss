@@ -1,0 +1,202 @@
+/* pages/category/category.wxss */
+.category-page {
+  height: 100vh;
+  padding-bottom: 100rpx;
+  box-sizing: border-box;
+  background: #f5f5f5;
+}
+
+/* 骨架屏 */
+.skeleton-wrap {
+  display: flex;
+  height: 100vh;
+}
+.skeleton-sidebar {
+  width: 180rpx;
+  background: #fff;
+  padding: 20rpx 0;
+}
+.skeleton-item {
+  width: 120rpx;
+  height: 60rpx;
+  margin: 30rpx auto;
+}
+.skeleton-content {
+  flex: 1;
+  padding: 20rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.skeleton-card {
+  width: 300rpx;
+}
+.skeleton-img {
+  width: 100%;
+  height: 300rpx;
+}
+.skeleton-line {
+  width: 100%;
+  height: 28rpx;
+  margin-top: 16rpx;
+}
+.skeleton-line.short {
+  width: 60%;
+}
+
+/* 主体 */
+.category-body {
+  display: flex;
+  height: 100vh;
+}
+
+/* 左侧分类 */
+.sidebar {
+  width: 180rpx;
+  height: 100%;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+.sidebar-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx 0;
+  gap: 8rpx;
+}
+.sidebar-item.active {
+  background: #fff;
+}
+.sidebar-bar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 40rpx;
+  background: #ff4444;
+  border-radius: 0 4rpx 4rpx 0;
+}
+.sidebar-icon {
+  font-size: 36rpx;
+}
+.sidebar-name {
+  font-size: 24rpx;
+  color: #666;
+}
+.sidebar-item.active .sidebar-name {
+  color: #ff4444;
+  font-weight: 600;
+}
+
+/* 右侧商品 */
+.content {
+  flex: 1;
+  height: 100%;
+  background: #fff;
+}
+.content-header {
+  padding: 24rpx;
+}
+.content-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 商品加载 */
+.product-loading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 0 16rpx;
+}
+.skeleton-product {
+  width: 300rpx;
+}
+.skeleton-product .skeleton-img {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 16rpx;
+}
+.skeleton-product .skeleton-line {
+  width: 100%;
+  height: 28rpx;
+  margin-top: 16rpx;
+}
+.skeleton-product .skeleton-line.short {
+  width: 60%;
+}
+
+/* 商品列表 */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 0 16rpx 16rpx;
+}
+.product-card {
+  width: 300rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+.product-img {
+  width: 100%;
+  height: 300rpx;
+  background: #f5f5f5;
+}
+.product-info {
+  padding: 16rpx;
+}
+.product-name {
+  font-size: 26rpx;
+  color: #333;
+  height: 72rpx;
+  line-height: 36rpx;
+}
+.product-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 12rpx;
+}
+.product-price {
+  color: #ff4444;
+}
+.price-symbol {
+  font-size: 22rpx;
+}
+.price-num {
+  font-size: 34rpx;
+  font-weight: 600;
+}
+.product-sales {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 0;
+}
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.4;
+}
+.empty-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.safe-bottom {
+  height: 40rpx;
+}

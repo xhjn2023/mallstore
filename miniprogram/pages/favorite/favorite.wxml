@@ -1,0 +1,28 @@
+<!-- pages/favorite/favorite.wxml -->
+<view class="favorite-page">
+  <!-- 收藏列表 -->
+  <view class="fav-grid" wx:if="{{list.length > 0}}">
+    <view class="fav-card" wx:for="{{list}}" wx:key="id">
+      <view class="fav-img-wrap" bindtap="goDetail" data-id="{{item.id}}">
+        <image class="fav-img" src="{{item.main_image}}" mode="aspectFill" lazy-load></image>
+      </view>
+      <view class="fav-info">
+        <text class="fav-name text-ellipsis-2" bindtap="goDetail" data-id="{{item.id}}">{{item.name}}</text>
+        <view class="fav-bottom">
+          <view class="fav-price">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{item.priceText}}</text>
+          </view>
+          <view class="cancel-btn" catchtap="onCancelFavorite" data-id="{{item.id}}" data-index="{{index}}">取消收藏</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{list.length === 0 && !loading}}">
+    <text class="empty-icon">💔</text>
+    <text class="empty-text">暂无收藏商品</text>
+    <view class="empty-btn" bindtap="goHome">去逛逛</view>
+  </view>
+</view>
