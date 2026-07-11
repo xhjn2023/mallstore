@@ -1,5 +1,4 @@
 // utils/auth.js
-const app = getApp()
 const { post } = require('./request')
 
 // 微信登录
@@ -11,6 +10,7 @@ function wxLogin() {
           // 调用后端换取 token
           post('/user/login', { code: res.code })
             .then((data) => {
+              const app = getApp()
               app.saveLogin(data.token, data.userInfo)
               resolve(data)
             })
@@ -24,9 +24,10 @@ function wxLogin() {
   })
 }
 
-// 确保已登录
+// 确保已登录，未登录则自动拉起微信登录
 function ensureLogin() {
   return new Promise((resolve, reject) => {
+    const app = getApp()
     if (app.globalData.token) {
       resolve()
     } else {

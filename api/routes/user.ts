@@ -2,13 +2,13 @@ import { Router, type Request, type Response } from 'express'
 import { load, insert, findOne, updateById } from '../db/store.js'
 import { ok, fail } from '../utils/response.js'
 import { code2Openid } from '../utils/wechat.js'
-import { signUserToken } from '../middleware/auth.js'
+import { signUserToken, authUser } from '../middleware/auth.js'
 import { now } from '../utils/id.js'
 import type { User } from '../../shared/types.js'
 
 const router = Router()
 
-/** 微信登录 */
+/** 微信登录（公开接口） */
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { code, nickname, avatar } = req.body || {}
   if (!code) {
@@ -34,27 +34,21 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   ok(res, { token: signUserToken(user.id, user.openid), userInfo: sanitize(user) })
 })
 
-/** 绑定手机号 */
-router.post('/bindPhone', async (req: Request, res: Response): Promise<void> => {
-  if (!req.userId) {
-    fail(res, '请先登录', 401, 401)
-    return
-  }
-  const { phone } = req.body || {}
-  if (!phone) {
+/** 绑定手机号（需登录） */
+router.post('/bindPhone', authUser, async (req: Request, res: Response): Promise<void> => {
+  const { phone, code } = req.body || {}
+  // 兼容小程序 getPhoneNumber 返回的 code（mock 模式下直接用 code 作手机号占位）
+  const finalPhone = phone || (code ? `mock_${String(code).slice(0, 11)}` : '')
+  if (!finalPhone) {
     fail(res, '缺少手机号')
     return
   }
-  const user = updateById<User>('user', req.userId, { phone } as User)
+  const user = updateById<User>('user', req.userId as number, { phone: finalPhone } as User)
   ok(res, sanitize(user as User))
 })
 
-/** 获取用户信息 */
-router.get('/profile', async (req: Request, res: Response): Promise<void> => {
-  if (!req.userId) {
-    fail(res, '请先登录', 401, 401)
-    return
-  }
+/** 获取用户信息（需登录） */
+router.get('/profile', authUser, async (req: Request, res: Response): Promise<void> => {
   const user = findOne<User>('user', (u) => u.id === req.userId)
   if (!user) {
     fail(res, '用户不存在', 404, 404)
@@ -63,14 +57,10 @@ router.get('/profile', async (req: Request, res: Response): Promise<void> => {
   ok(res, sanitize(user))
 })
 
-/** 更新用户资料 */
-router.put('/profile', async (req: Request, res: Response): Promise<void> => {
-  if (!req.userId) {
-    fail(res, '请先登录', 401, 401)
-    return
-  }
+/** 更新用户资料（需登录） */
+router.put('/profile', authUser, async (req: Request, res: Response): Promise<void> => {
   const { nickname, avatar } = req.body || {}
-  const user = updateById<User>('user', req.userId, { nickname, avatar } as User)
+  const user = updateById<User>('user', req.userId as number, { nickname, avatar } as User)
   ok(res, sanitize(user as User))
 })
 

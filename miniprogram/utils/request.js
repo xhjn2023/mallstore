@@ -11,7 +11,8 @@ function getAppInstance() {
 function request(url, options = {}) {
   const { method = 'GET', data = {} } = options
   const app = getAppInstance()
-  const baseUrl = (app && app.globalData && app.globalData.baseUrl) || 'http://10.249.34.19:3001/api'
+  const baseUrl =
+    (app && app.globalData && app.globalData.baseUrl) || 'http://127.0.0.1:3001/api'
 
   const header = {
     'Content-Type': 'application/json',
@@ -30,14 +31,19 @@ function request(url, options = {}) {
       header,
       success(res) {
         console.log('[response]', res.statusCode, res.data)
-        // 401 鉴权失败
+        // 401 鉴权失败：清理登录态并提示（登录接口本身不在此列）
         if (res.statusCode === 401 || (res.data && res.data.code === 401)) {
-          if (app) app.clearLogin()
-          wx.showToast({ title: '请先登录', icon: 'none' })
-          setTimeout(() => {
-            wx.switchTab({ url: '/pages/user/user' })
-          }, 1000)
-          reject(new Error('未登录'))
+          // 避免登录接口 401 时反复跳转
+          const isLoginReq = url.indexOf('/user/login') === 0
+          if (app && !isLoginReq) app.clearLogin()
+          const msg = (res.data && res.data.message) || '请先登录'
+          if (!isLoginReq) {
+            wx.showToast({ title: msg, icon: 'none' })
+            setTimeout(() => {
+              wx.switchTab({ url: '/pages/user/user' })
+            }, 1000)
+          }
+          reject(new Error(msg))
           return
         }
         if (res.data && res.data.code === 0) {
@@ -68,7 +74,8 @@ module.exports = {
   del: (url) => request(url, { method: 'DELETE' }),
   upload: (filePath) => {
     const app = getAppInstance()
-    const baseUrl = (app && app.globalData && app.globalData.baseUrl) || 'http://10.249.34.19:3001/api'
+    const baseUrl =
+      (app && app.globalData && app.globalData.baseUrl) || 'http://127.0.0.1:3001/api'
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: baseUrl + '/upload',

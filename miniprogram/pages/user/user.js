@@ -6,6 +6,7 @@ const { wxLogin } = require('../../utils/auth')
 Page({
   data: {
     isLogin: false,
+    logging: false,
     userInfo: {},
     orderIcons: [
       { status: 0, text: '待付款', icon: '💰', count: 0 },
@@ -65,17 +66,25 @@ Page({
   },
 
   async onProfileTap() {
-    if (this.data.isLogin) return
+    if (this.data.isLogin || this.data.logging) return
+    this.setData({ logging: true })
+    wx.showLoading({ title: '登录中...', mask: true })
     try {
       const data = await wxLogin()
+      wx.hideLoading()
       this.setData({
         isLogin: true,
+        logging: false,
         userInfo: data.userInfo || {},
       })
+      wx.showToast({ title: '登录成功', icon: 'success' })
       this.loadProfile()
       this.loadOrderCounts()
     } catch (e) {
+      wx.hideLoading()
+      this.setData({ logging: false })
       console.error('login failed', e)
+      wx.showToast({ title: '登录失败，请重试', icon: 'none' })
     }
   },
 

@@ -51,7 +51,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
 app.use('/uploads', express.static(uploadDir))
 
 // ===== C 端用户 API =====
-app.use('/api/user', userRoutes) // 登录无需鉴权，其余内部校验
+app.use('/api/user', userRoutes) // /login 公开，其余路由内部已挂 authUser
 app.use('/api', homeRoutes) // /api, /api/category/list, /api/search/*
 app.use('/api/product', productRoutes) // 商品列表/详情/评价/秒杀
 app.use('/api/cart', authUser, cartRoutes)
