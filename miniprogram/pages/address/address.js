@@ -32,6 +32,9 @@ Page({
     if (!this.data.selectMode) return
     const index = e.currentTarget.dataset.index
     const address = this.data.list[index]
+    const app = getApp()
+    // 通过全局变量传递选中地址（order-confirm 的 onShow 依赖此方式）
+    app.globalData._selectedAddress = address
     const pages = getCurrentPages()
     const prevPage = pages[pages.length - 2]
     if (prevPage) {
