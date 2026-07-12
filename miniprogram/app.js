@@ -1,19 +1,26 @@
 // app.js
+const { CLOUDBASE_ENV_ID, CLOUDBASE_SERVICE_NAME } = require('./config.js')
+
 App({
   globalData: {
     // 双模式：
-    //   模拟器(devtools) → 本地 3001，避免本机代理导致云端请求超时
-    //   真机预览/体验版  → 云端 mallstore.vercel.app，与线上后台同源，
-    //                       手机走公网必能连通，下单后云端后台订单管理立即可见
+    //   模拟器(devtools) → 本地 3001/api，用于本地开发调试
+    //   真机/体验版      → wx.cloud.callContainer 走微信内网通道，
+    //                       无需域名、无需白名单，直连 CloudBase 云托管
     baseUrl: wx.getSystemInfoSync().platform === 'devtools'
       ? 'http://127.0.0.1:3001/api'
-      : 'https://mallstore.vercel.app/api',
+      : null, // 真机走 callContainer，不需要 baseUrl
     token: '',
     userInfo: null,
     systemInfo: null,
   },
 
   onLaunch() {
+    // 初始化云开发（callContainer 前必须先 init）
+    if (wx.cloud && CLOUDBASE_ENV_ID) {
+      wx.cloud.init({ env: CLOUDBASE_ENV_ID })
+    }
+
     // 获取系统信息
     const sysInfo = wx.getSystemInfoSync()
     this.globalData.systemInfo = sysInfo

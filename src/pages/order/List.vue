@@ -240,7 +240,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { http } from '@/api/request'
+import { http, BASE } from '@/api/request'
 import { toast } from '@/composables/useToast'
 import { fenToYuan, formatTime, ORDER_STATUS_COLOR } from '@/utils/format'
 import Modal from '@/components/Modal.vue'
@@ -381,7 +381,7 @@ function exportOrders() {
   if (filters.status >= 0) params.set('status', String(filters.status))
   const token = localStorage.getItem('admin_token') || ''
   // 使用 fetch 下载
-  fetch(`/api/admin/order/export?${params}`, {
+  fetch(`${BASE}/admin/order/export?${params}`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.blob())

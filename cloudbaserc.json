@@ -1,0 +1,8 @@
+{
+  "version": "2.0",
+  "envId": "xhjn-d7gfgxcvk06569b48",
+  "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+  "cloudrun": {
+    "name": "mallstore-api"
+  }
+}

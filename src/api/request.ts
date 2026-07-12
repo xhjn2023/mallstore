@@ -4,7 +4,9 @@
 import { useAdminStore } from '@/stores/admin'
 import router from '@/router'
 
-const BASE = '/api'
+// 生产环境通过 VITE_API_BASE 指向 CloudBase 云托管 API 域名；
+// 本地开发未设置时回退到 '/api'（由 Vite 代理到本地 3001）。
+const BASE: string = import.meta.env.VITE_API_BASE || '/api'
 
 export interface ApiResult<T = any> {
   code: number
@@ -56,6 +58,8 @@ async function request<T = any>(
     throw new ApiError('网络异常，请检查网络连接', -1)
   }
 }
+
+export { BASE }
 
 export const http = {
   get: <T = any>(url: string) => request<T>(url, { method: 'GET' }),

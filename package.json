@@ -6,6 +6,8 @@
   "scripts": {
     "client:dev": "vite",
     "server:dev": "nodemon",
+    "start": "tsx server/server.ts",
+    "deploy:cloudbase": "tcb cloudrun deploy -e xhjn-d7gfgxcvk06569b48 -s mallstore-api --port 3000 --force",
     "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
