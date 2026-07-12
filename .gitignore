@@ -33,3 +33,9 @@ project.private.config.json
 # Build output
 dist-ssr
 *.tsbuildinfo
+
+# WorkBuddy internal workspace memory (not project source)
+.workbuddy/
+
+# Vite dev temporary files (e.g. vite.config.ts.timestamp-<num>-<hash>.mjs)
+*.timestamp-*.mjs
