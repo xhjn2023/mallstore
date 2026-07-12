@@ -123,8 +123,9 @@ curl https://mallstore-api-281210-7-1453135100.sh.run.tcloudbase.com/api/categor
 ### 代码已做的改造
 - `src/api/request.ts`：`BASE` 改为读取 `import.meta.env.VITE_API_BASE`，未设置时回退 `/api`（本地代理到 3001）；并已 `export { BASE }`。
 - `src/pages/order/List.vue`：订单导出 `fetch` 改用 `BASE`，不再写死 `/api`。
-- `.env.production`：写入 `VITE_API_BASE=https://mallstore-api-281210-7-1453135100.sh.run.tcloudbase.com`（生产 API 基地址）。
-- `cloudbaserc/cloudbaserc.json`：增加 `hosting.rewrites`，让静态托管 SPA 深链回退到 `index.html`。
+- `.env.production`：`VITE_API_BASE` **必须带 `/api` 后缀**（否则登录报 API not found）：
+  `VITE_API_BASE=https://mallstore-api-281210-7-1453135100.sh.run.tcloudbase.com/api`
+- SPA 深链回退：见下方「控制台收尾」，用 COS 错误文档实现（`tcb hosting deploy` 不会自动应用 `hosting.rewrites`）。
 
 > 后端 `server/app.ts` 已 `app.use(cors())`（允许所有来源），浏览器从静态托管域名跨域调 API 不受限。
 
@@ -149,7 +150,9 @@ tcb hosting deploy dist -e xhjn-d7gfgxcvk06569b48
 1. CloudBase 控制台 → 左侧 **静态网站托管** → 若提示未开通，先「开通」（免费额度内）。
 2. 部署后在 **静态网站托管 → 设置** 里：
    - 复制「默认域名」，形如 `https://<envId>.tcloudbaseapp.com`（或你绑定的自定义域名）。
-   - **设置 SPA 回退**：把「错误页面(404)」指向 `index.html`（或用上面的 `hosting.rewrites` 规则），
-     否则刷新 `/product`、`/order/123` 等深链会 404。
+   - **设置 SPA 回退（必须）**：把「错误页面 / ErrorDocument」指向 `index.html`，否则刷新 `/product`、`/order/123` 等深链会 404。
+     - 控制台方式：静态网站托管 → 设置 → 错误页面 = `index.html`。
+     - 命令行方式：`tcb hosting deploy` **不会**应用 `hosting.rewrites`；须用 COS SDK `putBucketWebsite` 设置 `ErrorDocument`（见 troubleshooting.md 第 10 节）。
+     - ⚠️ 不要用 COS `RoutingRules.ReplaceKeyWith`——它会把 `/order` **301 重定向到 `/index.html`**，导致前端路由错乱。
 3. 浏览器打开该域名即可登录管理后台，数据来自云托管 API → Supabase。
 

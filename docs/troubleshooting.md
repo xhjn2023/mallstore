@@ -1,7 +1,7 @@
 # 问题排查记录（Troubleshooting）
 
 > 记录项目开发与部署过程中真实碰到的问题、根因与解决方案。
-> 最近更新：2026-07-12
+> 最近更新：2026-07-13
 
 ---
 
@@ -14,6 +14,10 @@
 5. [【核心 Bug】云端订单落库失败](#5-核心-bug云端订单落库失败)
 6. [部署时 flushAll 未导入导致构建失败](#6-部署时-flushall-未导入导致构建失败)
 7. [环境相关坑（Vercel 部署 / 代理）](#7-环境相关坑vercel-部署--代理)
+8. [管理后台线上 404（dist 未部署到静态托管）](#8-管理后台线上-404dist-未部署到静态托管)
+9. [登录报 API not found（.env.production 缺 /api 后缀）](#9-登录报-api-not-foundenvproduction-缺-api-后缀)
+10. [子路由刷新 404（SPA 回退 / COS ErrorDocument）](#10-子路由刷新-404spa-回退--cos-errordocument)
+11. [cloudbaserc 文件与目录冲突导致 tcb EISDIR](#11-cloudbaserc-文件与目录冲突导致-tcb-eisdir)
 
 ---
 
@@ -142,6 +146,82 @@ import { load, insert, findOne, findMany, updateById, removeById, persist, flush
   或在能访问 vercel.app 的本机/真机上验证。
 - **Vite 后台仅监听 IPv6**：本地 `npm run client:dev` 绑定 `[::1]:5173`，浏览器须用 `localhost:5173`（解析到 `::1`），`127.0.0.1:5173` 连不上。
 - **`.gitignore` 已保护敏感文件**：`.env*`、`.workbuddy/`、`.vercel/`、`*.timestamp-*.mjs` 均被忽略，提交不会泄露密钥。
+
+---
+
+## 8. 管理后台线上 404（dist 未部署到静态托管）
+
+**现象**：打开 CloudBase 静态托管默认域名 `https://xhjn-d7gfgxcvk06569b48-1453135100.tcloudbaseapp.com` 报 404，根路径返回 `NoSuchKey: index.html`。
+
+**根因**：之前只部署了云托管 API（`mallstore-api` 服务），**没有把前端 `dist/` 部署到 CloudBase 静态网站托管**，桶里是空的。
+
+**解决方案**：用 `tcb hosting deploy` 把 `dist` 推到静态托管（密钥用 `TENCENTCLOUD_SECRET_ID/KEY` 环境变量传入，或先 `tcb login`）：
+```bash
+tcb hosting deploy dist -e xhjn-d7gfgxcvk06569b48
+```
+> 部署前用 `npx vite build` 重新产出 `dist/`（构建时 `VITE_API_BASE` 已由 `.env.production` 注入）。详见第 9 节。
+
+---
+
+## 9. 登录报 API not found（.env.production 缺 /api 后缀）
+
+**现象**：后台页面能打开，但登录报 `API not found`（实际是后端返回 404）。
+
+**根因**：`.env.production` 里 `VITE_API_BASE` 写成
+`https://mallstore-api-281210-7-1453135100.sh.run.tcloudbase.com`（**没有 `/api`**），
+而 `src/api/request.ts` 直接拼接 `BASE + url`，生产环境请求变成
+`https://...sh.run.tcloudbase.com/admin/login`；但后端所有接口都挂在 `/api/...` 下，catch-all 返回 404。
+
+**解决方案**：`VITE_API_BASE` **必须带 `/api` 后缀**：
+```
+VITE_API_BASE=https://mallstore-api-281210-7-1453135100.sh.run.tcloudbase.com/api
+```
+改后重新 `npx vite build` 并 `tcb hosting deploy dist` 重新部署；浏览器强刷（Ctrl+Shift+R）清掉旧 JS 缓存。
+
+> 本地 `BASE` 默认 `/api`（Vite 代理到 3001），无需此后缀；此坑仅生产构建出现。`.env*` 被 git 忽略，正确值见 `docs/deploy-cloudbase.md`。
+
+---
+
+## 10. 子路由刷新 404（SPA 回退 / COS ErrorDocument）
+
+**现象**：后台根路径能打开，但手动刷新 `/order`、`/product` 等子路由报 404。
+
+**根因**：CloudBase 静态托管的**错误文档（ErrorDocument）未配置**，访问不存在的文件直接 404。
+- `tcb hosting deploy` **不会**自动应用 `cloudbaserc` 里的 `hosting.rewrites`；
+- COS 的 `RoutingRules.ReplaceKeyWith` 会把 `/order` **301 重定向到 `/index.html`**，导致 URL 变成根路径、前端路由错乱——两者都不可用。
+
+**正确解决方案**：用 COS SDK（`cos-nodejs-sdk-v5`）的 `putBucketWebsite` 设置 `ErrorDocument = index.html`（底层桶 `d204-static-xhjn-d7gfgxcvk06569b48-1453135100`，region `ap-shanghai`）：
+```js
+const COS = require('cos-nodejs-sdk-v5')
+const cos = new COS({ SecretId, SecretKey })
+cos.putBucketWebsite({
+  Bucket: 'd204-static-xhjn-d7gfgxcvk06569b48-1453135100',
+  Region: 'ap-shanghai',
+  WebsiteConfiguration: {
+    IndexDocument: { Suffix: 'index.html' },
+    ErrorDocument: { Key: 'index.html' }   // 关键：仅设错误文档，不做 ReplaceKeyWith 重定向
+  }
+}, (err, data) => { /* ... */ })
+```
+设置后，`/order` 返回 **index.html 内容 + HTTP 404 状态码**（URL 保持 `/order` 不变），Vue Router 正常接管。
+
+> 说明：CloudBase 默认域名下子路由状态码是 404（非 200），页面功能不受影响；要完全 200 需绑自定义域名 + CDN 配置。
+
+---
+
+## 11. cloudbaserc 文件与目录冲突导致 tcb EISDIR
+
+**现象**：在项目根目录直接跑 `tcb ...` 报 `EISDIR`（把目录当文件读），并非认证错误。
+
+**根因**：项目根同时存在 `cloudbaserc.json`（**文件**）和 `cloudbaserc/`（**目录**，里面才是 hosting 配置），`tcb` 加载配置时误读取了目录。
+
+**解决方案（临时绕过）**：在干净目录放一份仅含 `envId` 的极简 `cloudbaserc.json`，从那里执行 `tcb`：
+```bash
+mkdir /tmp/deploy && cd /tmp/deploy
+# 把 dist 拷到这里，并写极简 cloudbaserc.json: { "envId": "xhjn-d7gfgxcvk06569b48" }
+tcb hosting deploy dist -e xhjn-d7gfgxcvk06569b48
+```
+**根治**：把 `cloudbaserc/cloudbaserc.json` 里的 `hosting` 配置合并进根 `cloudbaserc.json`，然后删除 `cloudbaserc/` 目录。
 
 ---
 
