@@ -12,7 +12,7 @@ function request(url, options = {}) {
   const { method = 'GET', data = {} } = options
   const app = getAppInstance()
   const baseUrl =
-    (app && app.globalData && app.globalData.baseUrl) || 'http://127.0.0.1:3001/api'
+    (app && app.globalData && app.globalData.baseUrl) || 'https://mallstore.vercel.app/api'
 
   const header = {
     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ module.exports = {
   upload: (filePath) => {
     const app = getAppInstance()
     const baseUrl =
-      (app && app.globalData && app.globalData.baseUrl) || 'http://127.0.0.1:3001/api'
+      (app && app.globalData && app.globalData.baseUrl) || 'https://mallstore.vercel.app/api'
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: baseUrl + '/upload',

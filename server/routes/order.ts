@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from 'express'
-import { load, insert, findOne, findMany, updateById, removeById, persist } from '../db/store.js'
+import { load, insert, findOne, findMany, updateById, removeById, persist, flushAll } from '../db/store.js'
 import { ok, fail } from '../utils/response.js'
 import { now, genOrderNo } from '../utils/id.js'
 import { sendSubscribeMessage, getSetting } from '../utils/wechat.js'
@@ -153,6 +153,10 @@ router.post('/create', async (req: Request, res: Response): Promise<void> => {
       if (inOrder) removeById('cart', c.id)
     })
   }
+
+  // 云端模式必须确保数据落库后再返回（Serverless 函数响应后可能被冻结，
+  // 异步 fire-and-forget 的 scheduleFlush 可能来不及写完）
+  await flushAll()
 
   ok(res, { orderId: order.id, orderNo: order.order_no, payAmount })
 })
@@ -393,6 +397,8 @@ router.post('/pay/callback', async (req: Request, res: Response): Promise<void> 
     status: ORDER_STATUS.UNSHIP,
     pay_time: now(),
   })
+  // 确保订单状态变更落库（Serverless 环境下异步 flush 可能丢失）
+  await flushAll()
   // 发送订阅消息
   const user = findOne<any>('user', (u) => u.id === req.userId)
   if (user) {

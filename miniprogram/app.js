@@ -1,10 +1,13 @@
 // app.js
 App({
   globalData: {
-    // 自动判断运行环境：模拟器用 localhost，真机用电脑局域网 IP
+    // 双模式：
+    //   模拟器(devtools) → 本地 3001，避免本机代理导致云端请求超时
+    //   真机预览/体验版  → 云端 mallstore.vercel.app，与线上后台同源，
+    //                       手机走公网必能连通，下单后云端后台订单管理立即可见
     baseUrl: wx.getSystemInfoSync().platform === 'devtools'
       ? 'http://127.0.0.1:3001/api'
-      : 'http://192.168.71.79:3001/api',
+      : 'https://mallstore.vercel.app/api',
     token: '',
     userInfo: null,
     systemInfo: null,

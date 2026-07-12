@@ -27,7 +27,7 @@
     "product_id": 1,
     "specs": "{\"颜色\":\"黑色\",\"版本\":\"降噪版\"}",
     "price": 29900,
-    "stock": 50,
+    "stock": 48,
     "sku_code": "SKU1-5692",
     "id": 4
   },
@@ -59,7 +59,7 @@
     "product_id": 3,
     "specs": "{}",
     "price": 12900,
-    "stock": 500,
+    "stock": 499,
     "sku_code": "SKU3",
     "id": 8
   },
@@ -91,7 +91,7 @@
     "product_id": 5,
     "specs": "{\"轴体\":\"茶轴\"}",
     "price": 34900,
-    "stock": 40,
+    "stock": 39,
     "sku_code": "SKU5-2128",
     "id": 12
   },
@@ -107,7 +107,7 @@
     "product_id": 7,
     "specs": "{}",
     "price": 19900,
-    "stock": 200,
+    "stock": 199,
     "sku_code": "SKU7",
     "id": 14
   },

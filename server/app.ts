@@ -8,7 +8,6 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 import { fileURLToPath } from 'url'
 
-import { seedIfNeeded } from './db/seed.js'
 import { authUser, optionalUser, authAdmin, requireSuperAdmin } from './middleware/auth.js'
 import { ok, fail } from './utils/response.js'
 
@@ -39,8 +38,7 @@ dotenv.config()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 初始化种子数据
-seedIfNeeded()
+// 初始化种子数据（在 ensureReady 中执行，见 api/index.ts / api/server.ts）
 
 const app: express.Application = express()
 
@@ -58,7 +56,11 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }))
 
 // 静态资源（上传文件）
 const uploadDir = path.join(__dirname, '../public/uploads')
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+try {
+  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+} catch (e) {
+  console.warn('[upload] 无法创建上传目录（只读环境），上传功能不可用:', (e as Error).message)
+}
 app.use('/uploads', express.static(uploadDir))
 
 // ===== C 端用户 API =====
@@ -90,7 +92,12 @@ app.post('/api/upload', (req: Request, res: Response): void => {
   }
   const ext = matches[1].split('/')[1] || 'png'
   const name = `${Date.now()}_${filename || 'img'}.${ext}`
-  fs.writeFileSync(path.join(uploadDir, name), Buffer.from(matches[2], 'base64'))
+  try {
+    fs.writeFileSync(path.join(uploadDir, name), Buffer.from(matches[2], 'base64'))
+  } catch (e) {
+    fail(res, '上传失败：当前环境存储不可用')
+    return
+  }
   ok(res, { url: `/uploads/${name}` })
 })
 
