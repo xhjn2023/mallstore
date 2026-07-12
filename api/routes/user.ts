@@ -15,7 +15,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     fail(res, '缺少 code')
     return
   }
-  const openid = code2Openid(code)
+  const openid = await code2Openid(code)
   let user = findOne<User>('user', (u) => u.openid === openid)
   if (!user) {
     user = insert<User>('user', {

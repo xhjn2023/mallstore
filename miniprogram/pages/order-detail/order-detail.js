@@ -1,6 +1,7 @@
 // pages/order-detail/order-detail.js
 const { get, post, del } = require('../../utils/request')
 const { fenToYuan, formatTime } = require('../../utils/format')
+const { payAndRedirect } = require('../../utils/pay')
 
 const STATUS_DESC = {
   0: '请尽快完成支付，超时订单将自动取消',
@@ -117,51 +118,7 @@ Page({
 
   // 立即支付
   async onPay() {
-    wx.showLoading({ title: '支付准备中', mask: true })
-    try {
-      const res = await post('/order/pay', { id: this.orderId })
-      wx.hideLoading()
-      const params = res.payParams || {}
-      if (params.timeStamp && params.nonceStr && params.package) {
-        this.doWxPay(res.orderNo, params)
-      } else {
-        this.mockPayCallback(res.orderNo)
-      }
-    } catch (e) {
-      wx.hideLoading()
-    }
-  },
-
-  doWxPay(orderNo, params) {
-    wx.requestPayment({
-      timeStamp: params.timeStamp,
-      nonceStr: params.nonceStr,
-      package: params.package,
-      signType: params.signType || 'MD5',
-      paySign: params.paySign,
-      success: () => this.mockPayCallback(orderNo),
-      fail: () => {
-        wx.redirectTo({
-          url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=fail',
-        })
-      },
-    })
-  },
-
-  async mockPayCallback(orderNo) {
-    wx.showLoading({ title: '支付中', mask: true })
-    try {
-      await post('/order/pay/callback', { orderNo })
-      wx.hideLoading()
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=success',
-      })
-    } catch (e) {
-      wx.hideLoading()
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=fail',
-      })
-    }
+    await payAndRedirect({ id: this.orderId, orderNo: this.data.order && this.data.order.order_no })
   },
 
   // 确认收货

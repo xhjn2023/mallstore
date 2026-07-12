@@ -23,6 +23,8 @@ declare global {
       openid?: string
       adminId?: number
       adminRole?: string
+      /** express.json 的 verify 回调写入的原始请求体（用于微信回调验签） */
+      rawBody?: Buffer
     }
   }
 }

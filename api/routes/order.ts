@@ -2,7 +2,15 @@ import { Router, type Request, type Response } from 'express'
 import { load, insert, findOne, findMany, updateById, removeById, persist } from '../db/store.js'
 import { ok, fail } from '../utils/response.js'
 import { now, genOrderNo } from '../utils/id.js'
-import { createPayOrder, sendSubscribeMessage, getSetting } from '../utils/wechat.js'
+import { sendSubscribeMessage, getSetting } from '../utils/wechat.js'
+import {
+  createJsapiPayment,
+  queryPayment,
+  closePayment,
+  createRefund,
+  applyPaid,
+  ORDER_PAY_TIMEOUT,
+} from '../payment/service.js'
 import type { Order, OrderItem, Product, Sku, CartItem, Address, UserCoupon, Coupon, Aftersale } from '../../shared/types.js'
 import { ORDER_STATUS, ORDER_STATUS_TEXT } from '../../shared/types.js'
 
@@ -113,6 +121,8 @@ router.post('/create', async (req: Request, res: Response): Promise<void> => {
     remark: remark || '',
     coupon_id: usedCoupon?.id || 0,
     created_at: t,
+    expire_time: t + ORDER_PAY_TIMEOUT,
+    closed: 0,
   } as Order)
 
   // 订单项
@@ -231,6 +241,12 @@ router.post('/cancel', async (req: Request, res: Response): Promise<void> => {
     fail(res, '仅待付款订单可取消')
     return
   }
+  // 通知微信关闭该笔订单（幂等，失败不影响本地）
+  try {
+    await closePayment(order.order_no)
+  } catch {
+    /* ignore */
+  }
   // 恢复库存
   const items = findMany<OrderItem>('order_item', (it) => it.order_id === id)
   items.forEach((it) => {
@@ -295,8 +311,66 @@ router.post('/pay', async (req: Request, res: Response): Promise<void> => {
     return
   }
   const user = findOne<any>('user', (u) => u.id === req.userId)
-  const payParams = createPayOrder(order.order_no, order.pay_amount, user?.openid || '')
+  const payParams = await createJsapiPayment(order, user?.openid || '')
   ok(res, { orderId: order.id, orderNo: order.order_no, payParams, payAmount: order.pay_amount })
+})
+
+/** 支付状态查询（主动轮询同步） */
+router.get('/pay/query', async (req: Request, res: Response): Promise<void> => {
+  if (!req.userId) {
+    fail(res, '请先登录', 401, 401)
+    return
+  }
+  const id = Number(req.query.id)
+  const orderNo = (req.query.order_no as string) || ''
+  const order = id
+    ? findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
+    : findOne<Order>('order', (o) => o.order_no === orderNo && o.user_id === req.userId)
+  if (!order) {
+    fail(res, '订单不存在')
+    return
+  }
+  try {
+    const q = await queryPayment(order.order_no)
+    // 微信侧已支付但本地未更新（回调可能延迟/丢失）→ 主动补偿
+    if (q.tradeState === 'SUCCESS' && order.status === ORDER_STATUS.UNPAID) {
+      applyPaid(order.order_no, q.transactionId)
+    }
+    const refreshed = findOne<Order>('order', (o) => o.id === order.id)!
+    ok(res, {
+      orderId: refreshed.id,
+      status: refreshed.status,
+      status_text: ORDER_STATUS_TEXT[refreshed.status],
+      tradeState: q.tradeState,
+      paid: refreshed.status !== ORDER_STATUS.UNPAID,
+    })
+  } catch (e) {
+    fail(res, '查询微信支付状态失败：' + (e as Error).message)
+  }
+})
+
+/** 申请退款（仅已支付未完成的订单） */
+router.post('/refund', async (req: Request, res: Response): Promise<void> => {
+  if (!req.userId) {
+    fail(res, '请先登录', 401, 401)
+    return
+  }
+  const { id, reason, amount } = req.body || {}
+  const order = findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
+  if (!order) {
+    fail(res, '订单不存在')
+    return
+  }
+  if (order.status !== ORDER_STATUS.UNSHIP && order.status !== ORDER_STATUS.UNRECEIVE) {
+    fail(res, '当前订单状态不可申请退款')
+    return
+  }
+  try {
+    const refund = await createRefund(order, reason || '用户申请退款', amount ? Number(amount) : undefined)
+    ok(res, refund)
+  } catch (e) {
+    fail(res, '退款申请失败：' + (e as Error).message)
+  }
 })
 
 /** 支付结果回调（mock 模式下前端模拟支付成功后调用） */

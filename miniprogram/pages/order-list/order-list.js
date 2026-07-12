@@ -1,6 +1,7 @@
 // pages/order-list/order-list.js
 const { get, post, del } = require('../../utils/request')
 const { fenToYuan, ORDER_STATUS_TEXT } = require('../../utils/format')
+const { payAndRedirect } = require('../../utils/pay')
 
 Page({
   data: {
@@ -123,56 +124,9 @@ Page({
   // 立即支付
   async onPay(e) {
     const id = e.currentTarget.dataset.id
-    wx.showLoading({ title: '支付准备中', mask: true })
-    try {
-      const res = await post('/order/pay', { id })
-      wx.hideLoading()
-      const params = res.payParams || {}
-      // 判断是否为真实支付参数
-      if (params.timeStamp && params.nonceStr && params.package) {
-        this.doWxPay(res.orderNo, params)
-      } else {
-        // mock 模式直接走支付回调
-        this.mockPayCallback(res.orderNo)
-      }
-    } catch (e) {
-      wx.hideLoading()
-    }
-  },
-
-  // 调用微信支付
-  doWxPay(orderNo, params) {
-    wx.requestPayment({
-      timeStamp: params.timeStamp,
-      nonceStr: params.nonceStr,
-      package: params.package,
-      signType: params.signType || 'MD5',
-      paySign: params.paySign,
-      success: () => this.mockPayCallback(orderNo),
-      fail: () => {
-        wx.redirectTo({
-          url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=fail',
-        })
-      },
-    })
-  },
-
-  // 支付回调
-  async mockPayCallback(orderNo) {
-    wx.showLoading({ title: '支付中', mask: true })
-    try {
-      await post('/order/pay/callback', { orderNo })
-      wx.hideLoading()
-      this._needRefresh = true
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=success',
-      })
-    } catch (e) {
-      wx.hideLoading()
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=fail',
-      })
-    }
+    const target = (this.data.list || []).find((o) => o.id === id)
+    this._needRefresh = true
+    await payAndRedirect({ id, orderNo: target && target.order_no })
   },
 
   // 确认收货

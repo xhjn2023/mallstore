@@ -3,6 +3,7 @@ import { load, findOne, findMany, updateById } from '../../db/store.js'
 import { ok, fail, paginate } from '../../utils/response.js'
 import { now } from '../../utils/id.js'
 import { sendSubscribeMessage } from '../../utils/wechat.js'
+import { createRefund } from '../../payment/service.js'
 import type { Order, OrderItem, Aftersale, User, Product } from '../../../shared/types.js'
 import { ORDER_STATUS, ORDER_STATUS_TEXT } from '../../../shared/types.js'
 
@@ -182,11 +183,40 @@ router.post('/aftersale/handle', async (req: Request, res: Response): Promise<vo
     return
   }
   updateById<Aftersale>('aftersale', id, { status, admin_remark: admin_remark || '' })
-  // 同意退款则更新订单状态为已取消
+  // 同意退款则更新订单状态为已取消，并向微信发起退款
   if (status === 1) {
+    const order = findOne<Order>('order', (o) => o.id === aftersale.order_id)
+    const wasPaid = !!order && order.status !== ORDER_STATUS.UNPAID
     updateById<Order>('order', aftersale.order_id, { status: ORDER_STATUS.CANCELED })
+    if (order && wasPaid) {
+      try {
+        await createRefund(order, admin_remark || '售后退款')
+      } catch (e) {
+        console.error('[wxpay] 售后退款失败', (e as Error).message)
+      }
+    }
   }
   ok(res)
+})
+
+/** 管理端直接退款（针对已支付订单） */
+router.post('/refund', async (req: Request, res: Response): Promise<void> => {
+  const { id, reason, amount } = req.body || {}
+  const order = findOne<Order>('order', (o) => o.id === id)
+  if (!order) {
+    fail(res, '订单不存在')
+    return
+  }
+  if (order.status === ORDER_STATUS.UNPAID || order.status === ORDER_STATUS.CANCELED) {
+    fail(res, '当前订单状态不可退款')
+    return
+  }
+  try {
+    const refund = await createRefund(order, reason || '管理员退款', amount ? Number(amount) : undefined)
+    ok(res, refund)
+  } catch (e) {
+    fail(res, '退款失败：' + (e as Error).message)
+  }
 })
 
 export default router

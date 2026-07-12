@@ -85,6 +85,11 @@ export interface Order {
   remark: string
   coupon_id: number
   created_at: number
+  // 支付相关扩展字段
+  transaction_id?: string // 微信支付流水号
+  prepay_id?: string // 预支付会话标识
+  expire_time?: number // 订单关闭时间（秒级），超时未支付自动关单
+  closed?: number // 是否已调用过关单 0/1
 }
 
 export interface OrderItem {
@@ -205,4 +210,36 @@ export const ORDER_STATUS_TEXT: Record<number, string> = {
   2: '待收货',
   3: '已完成',
   4: '已取消',
+}
+
+/** 退款单状态 */
+export const REFUND_STATUS = {
+  PROCESSING: 0, // 退款中
+  SUCCESS: 1, // 退款成功
+  FAIL: 2, // 退款失败/关闭
+  ABNORMAL: 3, // 退款异常（需人工处理）
+} as const
+
+export const REFUND_STATUS_TEXT: Record<number, string> = {
+  0: '退款中',
+  1: '退款成功',
+  2: '退款失败',
+  3: '退款异常',
+}
+
+export interface Refund {
+  id: number
+  refund_no: string // 商户退款单号
+  order_id: number
+  order_no: string
+  user_id: number
+  transaction_id: string // 微信支付流水号
+  wx_refund_id: string // 微信退款单号
+  amount: number // 退款金额（分）
+  total: number // 原订单金额（分）
+  reason: string // 退款原因
+  status: number // 0退款中 1成功 2失败 3异常
+  channel: string // 退款渠道 ORIGINAL/WECHAT
+  created_at: number
+  finished_at: number // 退款完成时间
 }

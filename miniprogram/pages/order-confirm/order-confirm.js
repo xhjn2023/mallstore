@@ -1,6 +1,7 @@
 // pages/order-confirm/order-confirm.js
 const { get, post } = require('../../utils/request')
 const { fenToYuan, formatTime } = require('../../utils/format')
+const { payAndRedirect } = require('../../utils/pay')
 const app = getApp()
 
 Page({
@@ -236,32 +237,13 @@ Page({
       }
       const res = await post('/order/create', payload)
       wx.hideLoading()
-      // 模拟支付
-      await this.mockPay(res.orderNo)
+      // 发起微信支付（订阅授权 → 下单 → 调起支付 → 同步 → 结果页）
+      await payAndRedirect({ id: res.orderId, orderNo: res.orderNo })
+      this.setData({ submitting: false })
     } catch (e) {
       wx.hideLoading()
       this.setData({ submitting: false })
       console.error('create order failed', e)
-    }
-  },
-
-  // 模拟支付
-  async mockPay(orderNo) {
-    wx.showLoading({ title: '支付中', mask: true })
-    try {
-      // 调用支付回调（mock 模式直接成功）
-      await post('/order/pay/callback', { orderNo })
-      wx.hideLoading()
-      this.setData({ submitting: false })
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=success',
-      })
-    } catch (e) {
-      wx.hideLoading()
-      this.setData({ submitting: false })
-      wx.redirectTo({
-        url: '/pages/pay-result/pay-result?order_no=' + orderNo + '&status=fail',
-      })
     }
   },
 })

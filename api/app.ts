@@ -31,6 +31,9 @@ import adminMarketingRoutes from './routes/admin/marketing.js'
 import adminStatsRoutes from './routes/admin/stats.js'
 import adminSystemRoutes from './routes/admin/system.js'
 
+// 微信支付
+import paymentRoutes from './routes/payment.js'
+
 dotenv.config()
 
 const __filename = fileURLToPath(import.meta.url)
@@ -42,7 +45,15 @@ seedIfNeeded()
 const app: express.Application = express()
 
 app.use(cors())
-app.use(express.json({ limit: '20mb' }))
+app.use(
+  express.json({
+    limit: '20mb',
+    // 保留原始请求体，供微信支付回调验签使用
+    verify: (req, _res, buf) => {
+      ;(req as any).rawBody = buf
+    },
+  }),
+)
 app.use(express.urlencoded({ extended: true, limit: '20mb' }))
 
 // 静态资源（上传文件）
@@ -98,6 +109,9 @@ app.use('/api/admin/admin', authAdmin, requireSuperAdmin, adminAccountRoutes)
 app.use('/api/health', (_req: Request, res: Response): void => {
   res.status(200).json({ code: 0, message: 'ok', data: { status: 'healthy' } })
 })
+
+// ===== 微信支付异步通知（公开，无需登录）=====
+app.use('/api/payment', paymentRoutes)
 
 // 404
 app.use((req: Request, res: Response): void => {
