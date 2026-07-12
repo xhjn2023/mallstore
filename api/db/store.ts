@@ -39,12 +39,12 @@ export function persist(table: string): void {
 }
 
 /** 插入（自动生成自增 id） */
-export function insert<T extends Record<string, any>>(table: string, row: T): T {
+export function insert<T extends Record<string, any>>(table: string, row: T): T & { id: number } {
   const data = load<T>(table)
   ;(row as any).id = data.length ? Math.max(...data.map((r) => r.id || 0)) + 1 : 1
   data.push(row)
   persist(table)
-  return row
+  return row as T & { id: number }
 }
 
 /** 按 id 更新 */

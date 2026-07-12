@@ -286,7 +286,7 @@ const statusTabs = [
   { label: '待收货', value: 2 },
   { label: '已完成', value: 3 },
   { label: '已取消', value: 4 },
-]
+] as { label: string; value: number; count?: number }[]
 
 const companies = ['顺丰速运', '中通快递', '圆通速递', '韵达快递', '申通快递', '百世快递', '京东物流', 'EMS']
 

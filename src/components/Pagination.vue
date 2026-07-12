@@ -59,8 +59,9 @@ const pages = computed<(number | string)[]>(() => {
   return [1, '...', c - 1, c, c + 1, '...', t]
 })
 
-function go(p: number) {
-  if (p < 1 || p > totalPages.value || p === props.page) return
-  emit('change', p)
+function go(p: number | string) {
+  const page = typeof p === 'number' ? p : Number(p)
+  if (page < 1 || page > totalPages.value || page === props.page) return
+  emit('change', page)
 }
 </script>
