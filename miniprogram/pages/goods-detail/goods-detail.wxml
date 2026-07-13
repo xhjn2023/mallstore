@@ -81,22 +81,23 @@
 
     <!-- 底部操作栏 -->
     <view class="action-bar">
-      <view class="action-bar-bg"></view>
-      <view class="action-icon" bindtap="onContactService">
-        <text class="icon-emoji">💬</text>
-        <text class="icon-text">客服</text>
-      </view>
-      <view class="action-icon" bindtap="onToggleFavorite">
-        <text class="icon-emoji {{isFavorite ? 'fav-on' : ''}}">{{isFavorite ? '❤️' : '🤍'}}</text>
-        <text class="icon-text {{isFavorite ? 'fav-on' : ''}}">收藏</text>
-      </view>
-      <view class="action-icon" bindtap="onGoCart">
-        <text class="icon-emoji">🛒</text>
-        <text class="icon-text">购物车</text>
-      </view>
-      <view class="action-btns">
-        <view class="btn-cart" bindtap="onAddCart">加入购物车</view>
-        <view class="btn-buy" bindtap="onBuyNow">立即购买</view>
+      <view class="action-bar-inner">
+        <view class="action-icon" bindtap="onContactService">
+          <text class="icon-emoji">💬</text>
+          <text class="icon-text">客服</text>
+        </view>
+        <view class="action-icon" bindtap="onToggleFavorite">
+          <text class="icon-emoji {{isFavorite ? 'fav-on' : ''}}">{{isFavorite ? '❤️' : '🤍'}}</text>
+          <text class="icon-text {{isFavorite ? 'fav-on' : ''}}">收藏</text>
+        </view>
+        <view class="action-icon" bindtap="onGoCart">
+          <text class="icon-emoji">🛒</text>
+          <text class="icon-text">购物车</text>
+        </view>
+        <view class="action-btns">
+          <view class="btn-cart" bindtap="onAddCart">加入购物车</view>
+          <view class="btn-buy" bindtap="onBuyNow">立即购买</view>
+        </view>
       </view>
     </view>
 
