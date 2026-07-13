@@ -81,7 +81,7 @@
 
     <!-- 底部操作栏 -->
     <view class="action-bar">
-      <view class="action-bar-safe"></view>
+      <view class="action-bar-bg"></view>
       <view class="action-icon" bindtap="onContactService">
         <text class="icon-emoji">💬</text>
         <text class="icon-text">客服</text>
