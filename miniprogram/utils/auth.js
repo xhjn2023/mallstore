@@ -41,4 +41,13 @@ function bindPhone(phoneCode) {
   return post('/user/bindPhone', { code: phoneCode })
 }
 
-module.exports = { wxLogin, ensureLogin, bindPhone }
+// 退出登录：清理本地登录态（token、userInfo）
+// JWT 为无状态认证，后端不维护 session，前端清缓存即可完成登出
+function wxLogout() {
+  const app = getApp()
+  if (app && typeof app.clearLogin === 'function') {
+    app.clearLogin()
+  }
+}
+
+module.exports = { wxLogin, ensureLogin, bindPhone, wxLogout }

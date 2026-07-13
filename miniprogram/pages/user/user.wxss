@@ -161,3 +161,15 @@
 .safe-bottom {
   height: 40rpx;
 }
+
+/* 退出登录按钮 */
+.logout-btn {
+  text-align: center;
+  font-size: 30rpx;
+  color: #ff4444;
+  padding: 28rpx 24rpx;
+}
+
+.logout-btn:active {
+  background: #fafafa;
+}
