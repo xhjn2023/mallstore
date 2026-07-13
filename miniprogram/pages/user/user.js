@@ -1,6 +1,6 @@
 // pages/user/user.js
 const app = getApp()
-const { get } = require('../../utils/request')
+const { get, put } = require('../../utils/request')
 const { wxLogin, wxLogout } = require('../../utils/auth')
 
 Page({
@@ -8,6 +8,9 @@ Page({
     isLogin: false,
     logging: false,
     userInfo: {},
+    // 编辑资料弹层状态
+    editVisible: false,
+    editForm: { nickname: '', avatar: '' },
     orderIcons: [
       { status: 0, text: '待付款', icon: '💰', count: 0 },
       { status: 1, text: '待发货', icon: '📦', count: 0 },
@@ -145,5 +148,72 @@ Page({
         wx.showToast({ title: '已退出登录', icon: 'success' })
       },
     })
+  },
+
+  // ---------- 编辑真实微信资料（昵称 + 头像） ----------
+  onEditProfile() {
+    if (!this.checkLogin()) return
+    this.setData({
+      editVisible: true,
+      editForm: {
+        nickname: this.data.userInfo.nickname || '',
+        avatar: this.data.userInfo.avatar || '',
+      },
+    })
+  },
+
+  onCancelEdit() {
+    this.setData({ editVisible: false })
+  },
+
+  // 阻止点击弹层内容区时关闭
+  preventClose() {},
+
+  // 微信头像选择（open-type="chooseAvatar" 回调，拿到真实微信头像）
+  onChooseAvatar(e) {
+    const avatarUrl = e.detail && e.detail.avatarUrl
+    if (!avatarUrl) return
+    const ext = (avatarUrl.split('.').pop() || 'png').toLowerCase()
+    const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'image/png'
+    wx.getFileSystemManager().readFile({
+      filePath: avatarUrl,
+      encoding: 'base64',
+      success: (res) => {
+        const dataUrl = `data:${mime};base64,` + res.data
+        this.setData({ 'editForm.avatar': dataUrl })
+      },
+      fail: (err) => {
+        console.error('读取微信头像失败', err)
+        wx.showToast({ title: '头像读取失败', icon: 'none' })
+      },
+    })
+  },
+
+  // 微信昵称输入（type="nickname" 会弹出微信昵称建议）
+  onNicknameInput(e) {
+    this.setData({ 'editForm.nickname': e.detail.value })
+  },
+
+  async onSaveProfile() {
+    const nickname = (this.data.editForm.nickname || '').trim()
+    if (!nickname) {
+      wx.showToast({ title: '昵称不能为空', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '保存中' })
+    try {
+      const data = await put('/user/profile', {
+        nickname,
+        avatar: this.data.editForm.avatar || '',
+      })
+      app.globalData.userInfo = data
+      wx.setStorageSync('userInfo', data)
+      this.setData({ userInfo: data, editVisible: false })
+      wx.showToast({ title: '已保存', icon: 'success' })
+    } catch (e) {
+      console.error('保存资料失败', e)
+    } finally {
+      wx.hideLoading()
+    }
   },
 })

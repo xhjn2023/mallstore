@@ -2,6 +2,7 @@
 <view class="user-page">
   <!-- 用户信息区 -->
   <view class="profile-section">
+    <view class="edit-entry" wx:if="{{isLogin}}" bindtap="onEditProfile">编辑资料</view>
     <view class="profile-info" bindtap="onProfileTap">
       <image class="avatar" src="{{userInfo.avatar || '/assets/default-avatar.png'}}" mode="aspectFill"></image>
       <view class="profile-detail">
@@ -75,4 +76,37 @@
   </view>
 
   <view class="safe-bottom"></view>
+
+  <!-- 编辑真实微信资料弹层 -->
+  <view class="edit-mask" wx:if="{{editVisible}}" bindtap="onCancelEdit">
+    <view class="edit-sheet" catchtap="preventClose">
+      <view class="edit-title">编辑资料</view>
+
+      <view class="edit-row">
+        <text class="edit-label">头像</text>
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image class="edit-avatar" src="{{editForm.avatar || userInfo.avatar || '/assets/default-avatar.png'}}" mode="aspectFill"></image>
+          <text class="avatar-tip">点击选择微信头像</text>
+        </button>
+      </view>
+
+      <view class="edit-row">
+        <text class="edit-label">昵称</text>
+        <input
+          class="edit-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          placeholder-class="edit-ph"
+          value="{{editForm.nickname}}"
+          bindblur="onNicknameInput"
+          bindconfirm="onNicknameInput"
+        />
+      </view>
+
+      <view class="edit-actions">
+        <button class="edit-cancel" bindtap="onCancelEdit">取消</button>
+        <button class="edit-save" bindtap="onSaveProfile">保存</button>
+      </view>
+    </view>
+  </view>
 </view>
