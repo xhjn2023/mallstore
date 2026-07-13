@@ -70,5 +70,10 @@
     </view>
   </view>
 
+  <!-- 退出登录按钮（仅登录时显示） -->
+  <view class="logout-btn card" wx:if="{{isLogin}}" bindtap="onLogout">
+    <text>退出登录</text>
+  </view>
+
   <view class="safe-bottom"></view>
 </view>

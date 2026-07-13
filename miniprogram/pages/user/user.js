@@ -1,7 +1,7 @@
 // pages/user/user.js
 const app = getApp()
 const { get } = require('../../utils/request')
-const { wxLogin } = require('../../utils/auth')
+const { wxLogin, wxLogout } = require('../../utils/auth')
 
 Page({
   data: {
@@ -137,6 +137,29 @@ Page({
             },
           })
         }
+      },
+    })
+  },
+
+  onLogout() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      confirmText: '退出',
+      confirmColor: '#ff4444',
+      success: (r) => {
+        if (!r.confirm) return
+        // 清理本地登录态
+        wxLogout()
+        // 重置页面状态
+        this.setData({
+          isLogin: false,
+          userInfo: {},
+          orderIcons: this.data.orderIcons.map((item) =>
+            item.status >= 0 ? { ...item, count: 0 } : item,
+          ),
+        })
+        wx.showToast({ title: '已退出登录', icon: 'success' })
       },
     })
   },
