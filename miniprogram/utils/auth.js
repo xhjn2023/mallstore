@@ -37,8 +37,8 @@ function ensureLogin() {
 }
 
 // 绑定手机号
-function bindPhone(phoneCode) {
-  return post('/user/bindPhone', { code: phoneCode })
+function bindPhone(phoneCode, phone) {
+  return post('/user/bindPhone', { code: phoneCode, phone })
 }
 
 // 退出登录：清理本地登录态（token、userInfo）

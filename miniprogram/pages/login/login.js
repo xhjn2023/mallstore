@@ -90,12 +90,19 @@ Page({
     wx.showLoading({ title: '登录中...', mask: true })
     try {
       // 1. 先用 wx.login 的 code 完成登录，获取 token
-      const data = await wxLogin()
-      // 2. 再用 getPhoneNumber 返回的 code 绑定手机号
-      await bindPhone(e.detail.code)
+      const wxData = await wxLogin()
+      // 2. 再用 getPhoneNumber 返回的 code 绑定手机号（若手机号已存在则后端自动合并数据并返回新 token）
+      const bindData = await bindPhone(e.detail.code)
       wx.hideLoading()
       this.setData({ logging: false })
-      this.afterLogin(data)
+      // 绑定后若返回了新 token，说明已合并到手机号账号，需刷新本地登录态
+      if (bindData && bindData.token) {
+        const app = getApp()
+        app.saveLogin(bindData.token, bindData.userInfo)
+        this.afterLogin(bindData)
+      } else {
+        this.afterLogin(wxData)
+      }
     } catch (e) {
       wx.hideLoading()
       this.setData({ logging: false })

@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from 'express'
-import { load, insert, findOne, updateById } from '../db/store.js'
+import { load, insert, findOne, findMany, updateById, removeById, flushAll } from '../db/store.js'
 import { ok, fail } from '../utils/response.js'
 import { code2Openid } from '../utils/wechat.js'
 import { signUserToken, authUser } from '../middleware/auth.js'
@@ -34,6 +34,8 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       avatar: avatar || user.avatar,
     } as User)
   }
+  // 云端必须确保新用户/登录态写入落库后再返回，否则 Serverless 函数冻结后异步 flush 可能丢失
+  await flushAll()
   ok(res, { token: signUserToken(user.id, user.openid), userInfo: sanitize(user) })
 })
 
@@ -75,6 +77,8 @@ router.post('/phoneLogin', async (req: Request, res: Response): Promise<void> =>
   } else if (!user.phone) {
     user = updateById<User>('user', user.id, { phone } as User)
   }
+  // 云端必须确保登录态写入落库后再返回
+  await flushAll()
   ok(res, { token: signUserToken(user.id, user.openid), userInfo: sanitize(user as User) })
 })
 
@@ -87,9 +91,31 @@ router.post('/bindPhone', authUser, async (req: Request, res: Response): Promise
     fail(res, '缺少手机号')
     return
   }
+  // 查找是否已有该手机号用户；如有则合并当前微信用户的数据到该账号，避免订单/地址丢失
+  const existing = findOne<User>('user', (u) => u.phone === finalPhone)
+  if (existing && existing.id !== req.userId) {
+    mergeUserData(req.userId as number, existing.id)
+    removeById('user', req.userId as number)
+    await flushAll()
+    ok(res, {
+      token: signUserToken(existing.id, existing.openid),
+      userInfo: sanitize(existing),
+    })
+    return
+  }
   const user = updateById<User>('user', req.userId as number, { phone: finalPhone } as User)
+  await flushAll()
   ok(res, sanitize(user as User))
 })
+
+/** 合并用户数据：将源用户的订单、地址、购物车、收藏、优惠券、售后迁移到目标用户 */
+function mergeUserData(fromUserId: number, toUserId: number) {
+  const tables = ['order', 'address', 'cart', 'favorite', 'user_coupon', 'aftersale']
+  tables.forEach((table) => {
+    const rows = findMany<any>(table, (r) => r.user_id === fromUserId)
+    rows.forEach((r) => updateById<any>(table, r.id, { user_id: toUserId }))
+  })
+}
 
 /** 获取用户信息（需登录） */
 router.get('/profile', authUser, async (req: Request, res: Response): Promise<void> => {
