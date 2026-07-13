@@ -15,7 +15,8 @@
     "pages/address-edit/address-edit",
     "pages/favorite/favorite",
     "pages/coupon/coupon",
-    "pages/feedback/feedback"
+    "pages/feedback/feedback",
+    "pages/login/login"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

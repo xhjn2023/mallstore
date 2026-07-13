@@ -8,6 +8,9 @@ import type { User } from '../../shared/types.js'
 
 const router = Router()
 
+/** mock 默认短信验证码（生产环境需替换为真实短信服务下发并校验） */
+const PHONE_DEFAULT_CODE = '123456'
+
 /** 微信登录（公开接口） */
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { code, nickname, avatar } = req.body || {}
@@ -32,6 +35,47 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     } as User)
   }
   ok(res, { token: signUserToken(user.id, user.openid), userInfo: sanitize(user) })
+})
+
+/** 下发短信验证码（公开接口，mock 模式固定为 123456） */
+router.post('/sendCode', async (req: Request, res: Response): Promise<void> => {
+  const { phone } = req.body || {}
+  if (!/^1\d{10}$/.test(phone || '')) {
+    fail(res, '手机号格式不正确')
+    return
+  }
+  // mock：生产环境应调用真实短信服务，并服务端留存验证码做校验
+  const body: Record<string, unknown> = { expire: 300 }
+  if (process.env.NODE_ENV !== 'production') {
+    body.devCode = PHONE_DEFAULT_CODE // 仅开发/联调时回显，便于测试
+  }
+  ok(res, body)
+})
+
+/** 手机号 + 验证码登录（公开接口） */
+router.post('/phoneLogin', async (req: Request, res: Response): Promise<void> => {
+  const { phone, code } = req.body || {}
+  if (!/^1\d{10}$/.test(phone || '')) {
+    fail(res, '手机号格式不正确')
+    return
+  }
+  if (code !== PHONE_DEFAULT_CODE) {
+    fail(res, '验证码错误')
+    return
+  }
+  let user = findOne<User>('user', (u) => u.phone === phone)
+  if (!user) {
+    user = insert<User>('user', {
+      openid: 'phone_' + phone,
+      nickname: '用户' + phone.slice(-4),
+      avatar: '',
+      phone,
+      created_at: now(),
+    } as User)
+  } else if (!user.phone) {
+    user = updateById<User>('user', user.id, { phone } as User)
+  }
+  ok(res, { token: signUserToken(user.id, user.openid), userInfo: sanitize(user as User) })
 })
 
 /** 绑定手机号（需登录） */

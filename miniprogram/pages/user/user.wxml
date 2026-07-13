@@ -68,11 +68,10 @@
       <text class="menu-text">系统设置</text>
       <text class="menu-arrow">></text>
     </view>
-  </view>
-
-  <!-- 退出登录按钮（仅登录时显示） -->
-  <view class="logout-btn card" wx:if="{{isLogin}}" bindtap="onLogout">
-    <text>退出登录</text>
+    <view class="menu-item logout-item" wx:if="{{isLogin}}" bindtap="onLogout">
+      <text class="menu-icon">🚪</text>
+      <text class="menu-text logout-text">退出登录</text>
+    </view>
   </view>
 
   <view class="safe-bottom"></view>

@@ -65,27 +65,10 @@ Page({
     }
   },
 
-  async onProfileTap() {
-    if (this.data.isLogin || this.data.logging) return
-    this.setData({ logging: true })
-    wx.showLoading({ title: '登录中...', mask: true })
-    try {
-      const data = await wxLogin()
-      wx.hideLoading()
-      this.setData({
-        isLogin: true,
-        logging: false,
-        userInfo: data.userInfo || {},
-      })
-      wx.showToast({ title: '登录成功', icon: 'success' })
-      this.loadProfile()
-      this.loadOrderCounts()
-    } catch (e) {
-      wx.hideLoading()
-      this.setData({ logging: false })
-      console.error('login failed', e)
-      wx.showToast({ title: '登录失败，请重试', icon: 'none' })
-    }
+  onProfileTap() {
+    if (this.data.isLogin) return
+    // 跳转到统一登录页（微信 / 手机号）
+    wx.navigateTo({ url: '/pages/login/login' })
   },
 
   goOrderList(e) {

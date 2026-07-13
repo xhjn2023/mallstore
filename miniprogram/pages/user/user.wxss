@@ -158,18 +158,18 @@
   color: #ccc;
 }
 
+/* 退出登录项（红色，左对齐无箭头） */
+.logout-item {
+  justify-content: center;
+}
+
+.logout-text {
+  flex: none;
+  margin-left: 20rpx;
+  color: #ff4444;
+  font-weight: 500;
+}
+
 .safe-bottom {
   height: 40rpx;
-}
-
-/* 退出登录按钮 */
-.logout-btn {
-  text-align: center;
-  font-size: 30rpx;
-  color: #ff4444;
-  padding: 28rpx 24rpx;
-}
-
-.logout-btn:active {
-  background: #fafafa;
 }

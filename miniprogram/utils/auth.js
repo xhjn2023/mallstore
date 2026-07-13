@@ -50,4 +50,22 @@ function wxLogout() {
   }
 }
 
-module.exports = { wxLogin, ensureLogin, bindPhone, wxLogout }
+// 获取短信验证码
+function sendCode(phone) {
+  return post('/user/sendCode', { phone })
+}
+
+// 手机号 + 验证码登录
+function phoneLogin(phone, code) {
+  return new Promise((resolve, reject) => {
+    post('/user/phoneLogin', { phone, code })
+      .then((data) => {
+        const app = getApp()
+        app.saveLogin(data.token, data.userInfo)
+        resolve(data)
+      })
+      .catch(reject)
+  })
+}
+
+module.exports = { wxLogin, ensureLogin, bindPhone, wxLogout, sendCode, phoneLogin }
