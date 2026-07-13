@@ -125,10 +125,11 @@
   border-color: #eee;
 }
 
-/* 主按钮 */
+/* 主按钮：重置小程序 button 默认边距，避免被默认样式挤压 */
 .btn-primary {
   width: 100%;
-  margin-top: 40rpx;
+  margin: 0;
+  padding: 0;
   background: #ff4444;
   color: #fff;
   font-size: 32rpx;
@@ -137,13 +138,16 @@
   height: 92rpx;
   line-height: 92rpx;
   box-sizing: border-box;
+  border: none;
+  text-align: center;
 }
 
-/* 微信一键登录按钮：居中胶囊样式，避免被 flex 容器拉伸导致视觉不居中 */
+/* 微信一键登录按钮：固定宽度并在面板中居中 */
 .wx-btn {
   width: 72%;
-  align-self: center;
-  margin: 40rpx auto 0;
+  margin-top: 40rpx;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-primary::after {
@@ -151,8 +155,8 @@
 }
 
 .btn-primary[disabled] {
-  background: #ffb3b3;
-  color: #fff;
+  background: #ffb3b3 !important;
+  color: #fff !important;
 }
 
 .code-hint {

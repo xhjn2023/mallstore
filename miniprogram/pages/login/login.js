@@ -1,5 +1,5 @@
 // pages/login/login.js
-const { wxLogin, sendCode, phoneLogin } = require('../../utils/auth')
+const { wxLogin, sendCode, phoneLogin, bindPhone } = require('../../utils/auth')
 
 Page({
   data: {
@@ -70,21 +70,36 @@ Page({
     return true
   },
 
-  // 微信一键登录
-  async onWechatLogin() {
+  // 微信一键登录：通过 getPhoneNumber 能力获取手机号授权
+  async onGetPhoneNumber(e) {
     if (this.data.logging) return
     if (!this.checkAgree()) return
+
+    // 用户拒绝授权或微信返回错误
+    if (e.detail.errCode !== undefined && e.detail.errCode !== 0) {
+      console.error('getPhoneNumber failed', e.detail)
+      wx.showToast({ title: '请授权手机号以继续登录', icon: 'none' })
+      return
+    }
+    if (!e.detail.code) {
+      wx.showToast({ title: '未获取到手机号，请重试', icon: 'none' })
+      return
+    }
+
     this.setData({ logging: true })
     wx.showLoading({ title: '登录中...', mask: true })
     try {
+      // 1. 先用 wx.login 的 code 完成登录，获取 token
       const data = await wxLogin()
+      // 2. 再用 getPhoneNumber 返回的 code 绑定手机号
+      await bindPhone(e.detail.code)
       wx.hideLoading()
       this.setData({ logging: false })
       this.afterLogin(data)
     } catch (e) {
       wx.hideLoading()
       this.setData({ logging: false })
-      console.error('wechat login failed', e)
+      console.error('wechat phone login failed', e)
       wx.showToast({ title: '登录失败，请重试', icon: 'none' })
     }
   },
