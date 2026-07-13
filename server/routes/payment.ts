@@ -9,6 +9,7 @@ import { Router, type Request, type Response } from 'express'
 import { loadWxPayConfig } from '../payment/config.js'
 import { verifySignature } from '../payment/crypto.js'
 import { getPlatformCert } from '../payment/cert.js'
+import { flushAll } from '../db/store.js'
 import {
   applyPaid,
   applyRefundSuccess,
@@ -97,6 +98,8 @@ router.post('/notify', async (req: Request, res: Response): Promise<void> => {
       applyPaid(out_trade_no, transaction_id)
     }
     // 非 SUCCESS（如 CLOSED / NOTPAY）忽略，但仍返回成功避免重试
+    // 先确保订单状态变更落库再回包，避免 serverless 环境下异步 flush 未完成导致丢单
+    await flushAll().catch((e) => console.error('[wxpay] flush 失败:', e))
     ackSuccess(res)
   } catch (e) {
     console.error('[wxpay] 处理支付回调异常', (e as Error).message)
@@ -126,6 +129,7 @@ router.post('/refund/notify', async (req: Request, res: Response): Promise<void>
     } else if (refund_status === 'ABNORMAL' || refund_status === 'CLOSED') {
       applyRefundFail(refund_id)
     }
+    await flushAll().catch((e) => console.error('[wxpay] flush 失败:', e))
     ackSuccess(res)
   } catch (e) {
     console.error('[wxpay] 处理退款回调异常', (e as Error).message)

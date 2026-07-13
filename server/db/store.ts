@@ -13,6 +13,16 @@ const DATA_DIR = path.join(__dirname, '../../data')
 
 const USE_DB = !!process.env.DATABASE_URL
 
+// 生产环境未配置 DATABASE_URL → 回退到容器临时磁盘(JSON 文件)，
+// 容器回收 / 多副本后数据将丢失。打出醒目告警，便于在 CloudBase 日志里快速定位根因。
+if (!USE_DB && process.env.NODE_ENV === 'production') {
+  console.warn(
+    '[store] ⚠️ 生产环境未配置 DATABASE_URL：数据将写入容器临时磁盘，' +
+      '容器回收或多副本后数据会丢失！请在 CloudBase 云托管控制台「服务配置 → 环境变量」' +
+      '中配置 Supabase Transaction Pooler 连接串到 DATABASE_URL。',
+  )
+}
+
 // ---------- 内存缓存（两种后端共用） ----------
 const cache: Record<string, any[]> = {}
 const dirty: Record<string, Set<number>> = {}
