@@ -212,18 +212,28 @@
 /* 底部操作栏 */
 .action-bar {
   position: fixed;
-  bottom: 0;
+  bottom: -100rpx;
   left: 0;
   right: 0;
-  background: #fff;
-  padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
   z-index: 50;
 }
+.action-bar-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 0;
+}
 .action-bar-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   padding: 12rpx 24rpx;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 }
 .action-icon {
   display: flex;
