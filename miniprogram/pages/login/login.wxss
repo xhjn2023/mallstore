@@ -136,6 +136,14 @@
   border-radius: 48rpx;
   height: 92rpx;
   line-height: 92rpx;
+  box-sizing: border-box;
+}
+
+/* 微信一键登录按钮：居中胶囊样式，避免被 flex 容器拉伸导致视觉不居中 */
+.wx-btn {
+  width: 72%;
+  align-self: center;
+  margin: 40rpx auto 0;
 }
 
 .btn-primary::after {

@@ -10,6 +10,26 @@ interface SystemSetting {
   value: string
 }
 
+/**
+ * mock 模式下的稳定 openid。
+ * 未配置 appid+secret 时，wx.login 每次返回的 code 都是一次性的，
+ * 若直接拿 code 拼 openid 会在「每次微信登录」都新建一个用户，
+ * 导致该用户之前的订单永远查不到（订单按 user_id 隔离）。
+ * 这里在同一后端复用同一个稳定 openid，保证登录态与历史订单可连续。
+ */
+let _devOpenid = ''
+function getDevOpenid(): string {
+  if (_devOpenid) return _devOpenid
+  const existing = getSetting('dev_wx_openid')
+  if (existing) {
+    _devOpenid = existing
+    return _devOpenid
+  }
+  _devOpenid = 'dev_wx_' + Math.random().toString(36).slice(2, 12)
+  setSetting('dev_wx_openid', _devOpenid)
+  return _devOpenid
+}
+
 /** 读取系统设置 */
 export function getSetting(key: string, defaultValue = ''): string {
   const row = findOneSetting(key)
@@ -67,8 +87,8 @@ export async function code2Openid(code: string): Promise<string> {
       console.warn('[wechat] jscode2session 异常', (e as Error).message)
     }
   }
-  // mock: 用 code 生成稳定 openid
-  return 'mock_openid_' + code.slice(0, 12).padEnd(12, '0')
+  // mock: 同一后端复用稳定的 openid，避免每次登录都新建用户导致订单丢失
+  return getDevOpenid()
 }
 
 /**
