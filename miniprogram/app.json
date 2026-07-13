@@ -10,6 +10,7 @@
     "pages/order-confirm/order-confirm",
     "pages/order-list/order-list",
     "pages/order-detail/order-detail",
+    "pages/aftersale/aftersale",
     "pages/pay-result/pay-result",
     "pages/address/address",
     "pages/address-edit/address-edit",

@@ -227,6 +227,19 @@ export const REFUND_STATUS_TEXT: Record<number, string> = {
   3: '退款异常',
 }
 
+/** 售后单状态 */
+export const AFTERSALE_STATUS = {
+  PENDING: 0, // 待审核
+  APPROVED: 1, // 已通过
+  REJECTED: 2, // 已拒绝
+} as const
+
+export const AFTERSALE_STATUS_TEXT: Record<number, string> = {
+  0: '审核中',
+  1: '已通过',
+  2: '已拒绝',
+}
+
 export interface Refund {
   id: number
   refund_no: string // 商户退款单号

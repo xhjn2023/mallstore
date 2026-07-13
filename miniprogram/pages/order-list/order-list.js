@@ -173,6 +173,10 @@ Page({
           await post('/order/aftersale/apply', { order_id: id, type: 1, reason })
           wx.showToast({ title: '已提交申请', icon: 'success' })
           this.loadList(true)
+          // 跳转到售后列表，便于立即查看
+          setTimeout(() => {
+            wx.navigateTo({ url: '/pages/aftersale/aftersale' })
+          }, 800)
         } catch (e) {}
       },
     })

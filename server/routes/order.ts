@@ -12,7 +12,7 @@ import {
   ORDER_PAY_TIMEOUT,
 } from '../payment/service.js'
 import type { Order, OrderItem, Product, Sku, CartItem, Address, UserCoupon, Coupon, Aftersale } from '../../shared/types.js'
-import { ORDER_STATUS, ORDER_STATUS_TEXT } from '../../shared/types.js'
+import { ORDER_STATUS, ORDER_STATUS_TEXT, AFTERSALE_STATUS_TEXT } from '../../shared/types.js'
 
 const router = Router()
 
@@ -235,7 +235,7 @@ router.post('/cancel', async (req: Request, res: Response): Promise<void> => {
     fail(res, '请先登录', 401, 401)
     return
   }
-  const { id } = req.body || {}
+  const id = Number(req.body?.id)
   const order = findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
   if (!order) {
     fail(res, '订单不存在')
@@ -281,7 +281,7 @@ router.post('/confirm', async (req: Request, res: Response): Promise<void> => {
     fail(res, '请先登录', 401, 401)
     return
   }
-  const { id } = req.body || {}
+  const id = Number(req.body?.id)
   const order = findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
   if (!order) {
     fail(res, '订单不存在')
@@ -304,7 +304,7 @@ router.post('/pay', async (req: Request, res: Response): Promise<void> => {
     fail(res, '请先登录', 401, 401)
     return
   }
-  const { id } = req.body || {}
+  const id = Number(req.body?.id)
   const order = findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
   if (!order) {
     fail(res, '订单不存在')
@@ -359,7 +359,8 @@ router.post('/refund', async (req: Request, res: Response): Promise<void> => {
     fail(res, '请先登录', 401, 401)
     return
   }
-  const { id, reason, amount } = req.body || {}
+  const id = Number(req.body?.id)
+  const { reason, amount } = req.body || {}
   const order = findOne<Order>('order', (o) => o.id === id && o.user_id === req.userId)
   if (!order) {
     fail(res, '订单不存在')
@@ -416,7 +417,8 @@ router.post('/aftersale/apply', async (req: Request, res: Response): Promise<voi
     fail(res, '请先登录', 401, 401)
     return
   }
-  const { order_id, type, reason } = req.body || {}
+  const order_id = Number(req.body?.order_id)
+  const { type, reason } = req.body || {}
   const order = findOne<Order>('order', (o) => o.id === order_id && o.user_id === req.userId)
   if (!order) {
     fail(res, '订单不存在')
@@ -442,6 +444,30 @@ router.post('/aftersale/apply', async (req: Request, res: Response): Promise<voi
     created_at: now(),
   } as Aftersale)
   ok(res, row)
+})
+
+/** 我的售后列表 */
+router.get('/aftersale/list', async (req: Request, res: Response): Promise<void> => {
+  if (!req.userId) {
+    fail(res, '请先登录', 401, 401)
+    return
+  }
+  const list = findMany<Aftersale>('aftersale', (a) => a.user_id === req.userId)
+  list.sort((a, b) => b.created_at - a.created_at)
+  const rows = list.map((a) => {
+    const order = findOne<Order>('order', (o) => o.id === a.order_id)
+    return {
+      ...a,
+      status_text: AFTERSALE_STATUS_TEXT[a.status] || '-',
+      order_no: order?.order_no || '',
+      order_status: order?.status,
+      items: findMany<OrderItem>('order_item', (it) => it.order_id === a.order_id).map((it) => ({
+        ...it,
+        specs: JSON.parse(it.specs || '{}'),
+      })),
+    }
+  })
+  ok(res, { list: rows })
 })
 
 export default router

@@ -77,6 +77,11 @@ Page({
   goOrderList(e) {
     if (!this.checkLogin()) return
     const status = e.currentTarget.dataset.status
+    // 售后入口跳转到独立的售后列表页
+    if (status === -2) {
+      wx.navigateTo({ url: '/pages/aftersale/aftersale' })
+      return
+    }
     wx.navigateTo({ url: `/pages/order-list/order-list?status=${status}` })
   },
 
