@@ -80,6 +80,8 @@
   bottom: 0;
   left: 0;
   right: 0;
+  margin: 0;
+  border-radius: 0;
   background: linear-gradient(135deg, #ff4444, #ff6b6b);
   color: #fff;
   text-align: center;
@@ -87,8 +89,19 @@
   padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
   font-size: 34rpx;
   font-weight: 500;
+  line-height: 1.4;
+}
+
+.submit-btn::after {
+  border: none;
 }
 
 .submit-btn:active {
   opacity: 0.85;
+}
+
+.submit-btn[disabled] {
+  background: linear-gradient(135deg, #ffb3b3, #ffc9c9);
+  color: #fff;
+  opacity: 1;
 }

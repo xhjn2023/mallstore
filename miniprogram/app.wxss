@@ -1,9 +1,22 @@
 /* app.wxss 全局样式 */
 page {
-  background: #f5f5f5;
+  /* ===== 设计令牌（统一视觉语言，参考主流开源商城 UI 规范） ===== */
+  --brand: #ff4444;          /* 主品牌色 */
+  --brand-light: #ff6b6b;
+  --brand-bg: #fff0f0;        /* 品牌浅色底 */
+  --text: #1f1f1f;            /* 主文本 */
+  --text-2: #666;             /* 次级文本 */
+  --text-3: #999;             /* 辅助文本 */
+  --bg: #f5f5f5;              /* 页面背景 */
+  --card: #ffffff;            /* 卡片背景 */
+  --border: #f0f0f0;          /* 分割线 */
+  --radius: 20rpx;            /* 圆角基准 */
+  --shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+
+  background: var(--bg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 28rpx;
-  color: #333;
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -15,23 +28,57 @@ page {
 
 /* 卡片 */
 .card {
-  background: #fff;
-  border-radius: 16rpx;
+  background: var(--card);
+  border-radius: var(--radius);
   margin: 20rpx;
   padding: 24rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow);
+}
+
+/* 区块标题（统一商城各列表页小标题风格） */
+.section-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  margin: 16rpx;
+  padding: 24rpx;
+  box-shadow: var(--shadow);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+.section-title::before {
+  content: '';
+  width: 8rpx;
+  height: 30rpx;
+  border-radius: 4rpx;
+  background: var(--brand);
+  margin-right: 14rpx;
+}
+.section-more {
+  font-size: 24rpx;
+  color: var(--text-3);
 }
 
 /* 价格 */
 .price {
-  color: #ff4444;
+  color: var(--brand);
   font-weight: 600;
 }
 .price-symbol {
   font-size: 24rpx;
 }
 .price-original {
-  color: #999;
+  color: var(--text-3);
   font-size: 24rpx;
   text-decoration: line-through;
   margin-left: 8rpx;
@@ -39,7 +86,7 @@ page {
 
 /* 按钮 */
 .btn-primary {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
   color: #fff;
   border-radius: 48rpx;
   padding: 20rpx 40rpx;
@@ -47,18 +94,24 @@ page {
   font-size: 30rpx;
   font-weight: 500;
   border: none;
+  transition: opacity 0.2s;
 }
 .btn-primary::after {
   border: none;
 }
+.btn-primary[disabled] {
+  opacity: 0.55;
+  color: #fff;
+}
 .btn-outline {
   background: #fff;
-  color: #ff4444;
-  border: 2rpx solid #ff4444;
+  color: var(--brand);
+  border: 2rpx solid var(--brand);
   border-radius: 48rpx;
   padding: 18rpx 40rpx;
   text-align: center;
   font-size: 30rpx;
+  transition: all 0.2s;
 }
 .btn-outline::after {
   border: none;
@@ -73,8 +126,8 @@ page {
   line-height: 1.4;
 }
 .tag-hot {
-  background: #fff0f0;
-  color: #ff4444;
+  background: var(--brand-bg);
+  color: var(--brand);
 }
 .tag-new {
   background: #e8f5e9;
@@ -90,7 +143,7 @@ page {
 .items-center { align-items: center; }
 
 /* 文字 */
-.text-gray { color: #999; }
+.text-gray { color: var(--text-3); }
 .text-sm { font-size: 24rpx; }
 .text-xs { font-size: 20rpx; }
 .text-ellipsis {
@@ -109,7 +162,7 @@ page {
 /* 分割线 */
 .divider {
   height: 1rpx;
-  background: #f0f0f0;
+  background: var(--border);
   margin: 20rpx 0;
 }
 

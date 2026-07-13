@@ -2,6 +2,7 @@
 const { get, post } = require('../../utils/request')
 const { fenToYuan, formatTime } = require('../../utils/format')
 const { ensureLogin } = require('../../utils/auth')
+const { guardSubmit } = require('../../utils/submit')
 
 Page({
   data: {
@@ -203,15 +204,20 @@ Page({
       return
     }
     const skuId = this.data.currentSku ? this.data.currentSku.id : (this.data.product.skuList && this.data.product.skuList[0] ? this.data.product.skuList[0].id : 0)
+    // 防重复提交：拦截连点导致的多次加购
     try {
-      const res = await post('/cart/add', {
-        product_id: this.data.productId,
-        sku_id: skuId,
-        quantity: this.data.quantity,
+      const ok = await guardSubmit(this, 'cart', async () => {
+        await post('/cart/add', {
+          product_id: this.data.productId,
+          sku_id: skuId,
+          quantity: this.data.quantity,
+        })
+        wx.showToast({ title: '已加入购物车', icon: 'success' })
       })
-      wx.showToast({ title: '已加入购物车', icon: 'success' })
+      if (!ok) return
     } catch (e) {
       console.error('add cart failed', e)
+      wx.showToast({ title: '加入购物车失败', icon: 'none' })
     }
   },
 
@@ -228,13 +234,17 @@ Page({
     } catch (e) {
       return
     }
+    // 防重复提交：避免连点造成的收藏状态反复横跳
     try {
-      const res = await post('/favorite/toggle', { product_id: this.data.productId })
-      this.setData({ isFavorite: !!res.isFavorite })
-      wx.showToast({
-        title: res.isFavorite ? '已收藏' : '已取消收藏',
-        icon: 'none',
+      const ok = await guardSubmit(this, 'fav', async () => {
+        const res = await post('/favorite/toggle', { product_id: this.data.productId })
+        this.setData({ isFavorite: !!res.isFavorite })
+        wx.showToast({
+          title: res.isFavorite ? '已收藏' : '已取消收藏',
+          icon: 'none',
+        })
       })
+      if (!ok) return
     } catch (e) {
       console.error('toggle favorite failed', e)
     }

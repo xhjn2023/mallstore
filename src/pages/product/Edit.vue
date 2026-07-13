@@ -248,6 +248,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { yuanToFen, fenToYuan } from '@/utils/format'
 import ImageUpload from '@/components/ImageUpload.vue'
 import { ArrowLeft, Plus, Trash2 } from 'lucide-vue-next'
@@ -257,7 +258,7 @@ const router = useRouter()
 
 const isEdit = computed(() => !!route.params.id)
 const enableSku = ref(false)
-const saving = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 
 const form = reactive({
   id: 0,
@@ -394,38 +395,39 @@ async function handleSave() {
   if (!form.name) return toast.warning('请填写商品名称')
   if (!priceYuan.value || Number(priceYuan.value) <= 0) return toast.warning('请填写正确的价格')
 
-  saving.value = true
+  // 防重复提交
   try {
-    const skus = enableSku.value
-      ? skuList.value.map((s) => ({
-          specs: s.specs,
-          price: yuanToFen(s.priceYuan),
-          stock: s.stock,
-          sku_code: s.sku_code,
-        }))
-      : undefined
+    const ok = await guard('save', async () => {
+      const skus = enableSku.value
+        ? skuList.value.map((s) => ({
+            specs: s.specs,
+            price: yuanToFen(s.priceYuan),
+            stock: s.stock,
+            sku_code: s.sku_code,
+          }))
+        : undefined
 
-    await http.post('/admin/product/save', {
-      id: form.id || undefined,
-      name: form.name,
-      category_id: form.category_id,
-      main_image: form.images[0] || '',
-      images: form.images,
-      detail: form.detail,
-      price: yuanToFen(priceYuan.value),
-      original_price: originalPriceYuan.value ? yuanToFen(originalPriceYuan.value) : 0,
-      stock: form.stock,
-      status: form.status,
-      is_new: form.is_new ? 1 : 0,
-      sort: form.sort,
-      skus,
+      await http.post('/admin/product/save', {
+        id: form.id || undefined,
+        name: form.name,
+        category_id: form.category_id,
+        main_image: form.images[0] || '',
+        images: form.images,
+        detail: form.detail,
+        price: yuanToFen(priceYuan.value),
+        original_price: originalPriceYuan.value ? yuanToFen(originalPriceYuan.value) : 0,
+        stock: form.stock,
+        status: form.status,
+        is_new: form.is_new ? 1 : 0,
+        sort: form.sort,
+        skus,
+      })
+      toast.success(isEdit.value ? '更新成功' : '新增成功')
+      router.push('/product')
     })
-    toast.success(isEdit.value ? '更新成功' : '新增成功')
-    router.push('/product')
+    if (!ok) return
   } catch (err: any) {
     toast.error(err.message || '保存失败')
-  } finally {
-    saving.value = false
   }
 }
 

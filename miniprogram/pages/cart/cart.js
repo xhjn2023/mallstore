@@ -1,6 +1,7 @@
 // pages/cart/cart.js
 const { get, post, put, del } = require('../../utils/request')
 const { fenToYuan } = require('../../utils/format')
+const { guardSubmit } = require('../../utils/submit')
 const app = getApp()
 
 Page({
@@ -73,14 +74,18 @@ Page({
     const { id, index } = e.currentTarget.dataset
     const item = this.data.validItems[index]
     const newSel = !item.selected
-    // 本地立即更新
-    this.setData({ [`validItems[${index}].selected`]: newSel }, () => this.calcTotal())
-    try {
-      await put('/cart/update', { id, selected: newSel ? 1 : 0 })
-    } catch (err) {
-      // 回滚
-      this.setData({ [`validItems[${index}].selected`]: !newSel }, () => this.calcTotal())
-    }
+    // 防重复提交：按商品 id 加锁，拦截连点造成的重复请求与状态错乱
+    const ok = await guardSubmit(this, 'sel-' + id, async () => {
+      // 本地立即更新
+      this.setData({ [`validItems[${index}].selected`]: newSel }, () => this.calcTotal())
+      try {
+        await put('/cart/update', { id, selected: newSel ? 1 : 0 })
+      } catch (err) {
+        // 回滚
+        this.setData({ [`validItems[${index}].selected`]: !newSel }, () => this.calcTotal())
+      }
+    })
+    if (!ok) return
   },
 
   // 全选
@@ -88,13 +93,16 @@ Page({
     const { validItems, allSelected } = this.data
     const target = !allSelected
     const ids = validItems.map((i) => i.id)
-    const newItems = validItems.map((i) => ({ ...i, selected: target }))
-    this.setData({ validItems: newItems, allSelected: target }, () => this.calcTotal())
-    try {
-      await put('/cart/updateAll', { selected: target ? 1 : 0, ids })
-    } catch (e) {
-      console.error('toggleAll failed', e)
-    }
+    const ok = await guardSubmit(this, 'all', async () => {
+      const newItems = validItems.map((i) => ({ ...i, selected: target }))
+      this.setData({ validItems: newItems, allSelected: target }, () => this.calcTotal())
+      try {
+        await put('/cart/updateAll', { selected: target ? 1 : 0, ids })
+      } catch (e) {
+        console.error('toggleAll failed', e)
+      }
+    })
+    if (!ok) return
   },
 
   // 数量减少
@@ -102,12 +110,15 @@ Page({
     const { id, index, quantity } = e.currentTarget.dataset
     if (quantity <= 1) return
     const newQty = quantity - 1
-    this.setData({ [`validItems[${index}].quantity`]: newQty }, () => this.calcTotal())
-    try {
-      await put('/cart/update', { id, quantity: newQty })
-    } catch (err) {
-      this.setData({ [`validItems[${index}].quantity`]: quantity }, () => this.calcTotal())
-    }
+    const ok = await guardSubmit(this, 'qty-' + id, async () => {
+      this.setData({ [`validItems[${index}].quantity`]: newQty }, () => this.calcTotal())
+      try {
+        await put('/cart/update', { id, quantity: newQty })
+      } catch (err) {
+        this.setData({ [`validItems[${index}].quantity`]: quantity }, () => this.calcTotal())
+      }
+    })
+    if (!ok) return
   },
 
   // 数量增加
@@ -118,12 +129,15 @@ Page({
       return
     }
     const newQty = quantity + 1
-    this.setData({ [`validItems[${index}].quantity`]: newQty }, () => this.calcTotal())
-    try {
-      await put('/cart/update', { id, quantity: newQty })
-    } catch (err) {
-      this.setData({ [`validItems[${index}].quantity`]: quantity }, () => this.calcTotal())
-    }
+    const ok = await guardSubmit(this, 'qty-' + id, async () => {
+      this.setData({ [`validItems[${index}].quantity`]: newQty }, () => this.calcTotal())
+      try {
+        await put('/cart/update', { id, quantity: newQty })
+      } catch (err) {
+        this.setData({ [`validItems[${index}].quantity`]: quantity }, () => this.calcTotal())
+      }
+    })
+    if (!ok) return
   },
 
   // 切换编辑模式

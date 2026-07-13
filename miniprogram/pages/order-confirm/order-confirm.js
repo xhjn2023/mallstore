@@ -2,6 +2,7 @@
 const { get, post } = require('../../utils/request')
 const { fenToYuan, formatTime } = require('../../utils/format')
 const { payAndRedirect } = require('../../utils/pay')
+const { guardSubmit } = require('../../utils/submit')
 const app = getApp()
 
 Page({
@@ -210,7 +211,6 @@ Page({
 
   // 提交订单
   async onSubmit() {
-    if (this.data.submitting) return
     const { items, address, remark, selectedCoupon, fromCart } = this.data
     if (!address) {
       wx.showToast({ title: '请选择收货地址', icon: 'none' })
@@ -220,30 +220,32 @@ Page({
       wx.showToast({ title: '无商品信息', icon: 'none' })
       return
     }
-    this.setData({ submitting: true })
-    wx.showLoading({ title: '提交中', mask: true })
-    try {
-      const payload = {
-        from_cart: fromCart ? 1 : 0,
-        items: items.map((i) => ({
-          product_id: i.product_id,
-          sku_id: i.sku_id,
-          quantity: i.quantity,
-          name: i.name,
-        })),
-        address_id: address.id,
-        remark,
-        coupon_id: selectedCoupon ? selectedCoupon.user_coupon_id : 0,
+
+    // 防重复提交：支付链路较长，必须阻断连点造成的重复下单
+    const ok = await guardSubmit(this, 'order', async () => {
+      wx.showLoading({ title: '提交中', mask: true })
+      try {
+        const payload = {
+          from_cart: fromCart ? 1 : 0,
+          items: items.map((i) => ({
+            product_id: i.product_id,
+            sku_id: i.sku_id,
+            quantity: i.quantity,
+            name: i.name,
+          })),
+          address_id: address.id,
+          remark,
+          coupon_id: selectedCoupon ? selectedCoupon.user_coupon_id : 0,
+        }
+        const res = await post('/order/create', payload)
+        wx.hideLoading()
+        // 发起微信支付（订阅授权 → 下单 → 调起支付 → 同步 → 结果页）
+        await payAndRedirect({ id: res.orderId, orderNo: res.orderNo })
+      } catch (e) {
+        wx.hideLoading()
+        console.error('create order failed', e)
       }
-      const res = await post('/order/create', payload)
-      wx.hideLoading()
-      // 发起微信支付（订阅授权 → 下单 → 调起支付 → 同步 → 结果页）
-      await payAndRedirect({ id: res.orderId, orderNo: res.orderNo })
-      this.setData({ submitting: false })
-    } catch (e) {
-      wx.hideLoading()
-      this.setData({ submitting: false })
-      console.error('create order failed', e)
-    }
+    })
+    if (!ok) return
   },
 })

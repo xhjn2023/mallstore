@@ -26,5 +26,5 @@
   </view>
 
   <!-- 提交按钮 -->
-  <view class="submit-btn" bindtap="onSubmit">提交反馈</view>
+  <button class="submit-btn" bindtap="onSubmit" loading="{{submitting}}" disabled="{{submitting}}">提交反馈</button>
 </view>

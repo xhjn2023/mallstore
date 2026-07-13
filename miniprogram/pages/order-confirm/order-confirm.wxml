@@ -88,7 +88,7 @@
       <text class="price-symbol">¥</text>
       <text class="bottom-num">{{payAmountText}}</text>
     </view>
-    <view class="submit-btn {{!address ? 'disabled' : ''}}" bindtap="onSubmit">提交订单</view>
+    <view class="submit-btn {{ (!address || submitting) ? 'disabled' : '' }}" bindtap="onSubmit">提交订单</view>
   </view>
 
   <view class="safe-bottom"></view>

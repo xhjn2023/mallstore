@@ -152,10 +152,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="save"
         >
-          保存
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '保存中...' : '保存' }}
         </button>
       </template>
     </Modal>
@@ -166,9 +168,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { fenToYuan, yuanToFen, formatTime } from '@/utils/format'
 import Modal from '@/components/Modal.vue'
-import { Plus, Zap } from 'lucide-vue-next'
+import { Plus, Zap, Loader2 } from 'lucide-vue-next'
 
 interface Seckill {
   id: number
@@ -187,6 +190,7 @@ interface Seckill {
 const list = ref<Seckill[]>([])
 const products = ref<any[]>([])
 const showEdit = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 
 const form = reactive({
   id: 0,
@@ -249,19 +253,27 @@ async function save() {
   if (!form.product_id) return toast.warning('请选择商品')
   if (!seckillPriceYuan.value) return toast.warning('请输入秒杀价')
   if (!startTimeStr.value || !endTimeStr.value) return toast.warning('请选择活动时间')
-  await http.post('/admin/marketing/seckill/save', {
-    id: form.id || undefined,
-    product_id: form.product_id,
-    seckill_price: yuanToFen(seckillPriceYuan.value),
-    original_price: originalPriceYuan.value ? yuanToFen(originalPriceYuan.value) : 0,
-    stock: form.stock,
-    start_time: fromLocalInput(startTimeStr.value),
-    end_time: fromLocalInput(endTimeStr.value),
-    status: form.status,
-  })
-  toast.success(form.id ? '更新成功' : '创建成功')
-  showEdit.value = false
-  loadList()
+  // 防重复提交
+  try {
+    const ok = await guard('save', async () => {
+      await http.post('/admin/marketing/seckill/save', {
+        id: form.id || undefined,
+        product_id: form.product_id,
+        seckill_price: yuanToFen(seckillPriceYuan.value),
+        original_price: originalPriceYuan.value ? yuanToFen(originalPriceYuan.value) : 0,
+        stock: form.stock,
+        start_time: fromLocalInput(startTimeStr.value),
+        end_time: fromLocalInput(endTimeStr.value),
+        status: form.status,
+      })
+      toast.success(form.id ? '更新成功' : '创建成功')
+      showEdit.value = false
+      loadList()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '保存失败')
+  }
 }
 
 async function remove(item: Seckill) {

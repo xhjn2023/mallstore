@@ -9,6 +9,7 @@ Page({
     counting: false,
     countdown: 60,
     logging: false,
+    agree: false, // 是否已勾选用户协议与隐私政策
   },
 
   onLoad() {
@@ -31,9 +32,48 @@ Page({
     this.setData({ code: e.detail.value })
   },
 
+  // 协议勾选
+  onAgreeChange() {
+    this.setData({ agree: !this.data.agree })
+  },
+
+  // 查看协议 / 隐私政策（演示：以弹窗展示摘要，生产可替换为 web-view 跳转）
+  onViewAgreement(e) {
+    const type = e.currentTarget.dataset.type
+    if (type === 'privacy') {
+      wx.showModal({
+        title: '隐私政策',
+        content:
+          '我们高度重视您的个人信息保护。本政策说明我们如何收集、使用、存储您的微信昵称、头像及交易信息，并承诺不会用于未经您授权的用途。登录即表示您理解并同意本政策。',
+        showCancel: false,
+        confirmText: '我已知晓',
+        confirmColor: '#ff4444',
+      })
+    } else {
+      wx.showModal({
+        title: '用户协议',
+        content:
+          '欢迎使用本商城。使用本服务前请仔细阅读以下条款：您需保证所提交信息的真实性；我们提供的商品与服务以页面描述为准；任何违规行为可能导致账号被限制。点击“同意”即代表您接受全部条款。',
+        showCancel: false,
+        confirmText: '我已知晓',
+        confirmColor: '#ff4444',
+      })
+    }
+  },
+
+  // 未勾选协议时的统一拦截提示
+  checkAgree() {
+    if (!this.data.agree) {
+      wx.showToast({ title: '请先阅读并同意用户协议和隐私政策', icon: 'none' })
+      return false
+    }
+    return true
+  },
+
   // 微信一键登录
   async onWechatLogin() {
     if (this.data.logging) return
+    if (!this.checkAgree()) return
     this.setData({ logging: true })
     wx.showLoading({ title: '登录中...', mask: true })
     try {
@@ -52,6 +92,7 @@ Page({
   // 获取验证码
   async onSendCode() {
     if (this.data.counting) return
+    if (!this.checkAgree()) return
     const phone = this.data.phone
     if (!/^1\d{10}$/.test(phone)) {
       wx.showToast({ title: '请输入正确的手机号', icon: 'none' })
@@ -87,6 +128,7 @@ Page({
   // 手机号 + 验证码登录
   async onPhoneLogin() {
     if (this.data.logging) return
+    if (!this.checkAgree()) return
     const { phone, code } = this.data
     if (!/^1\d{10}$/.test(phone)) {
       wx.showToast({ title: '请输入正确的手机号', icon: 'none' })

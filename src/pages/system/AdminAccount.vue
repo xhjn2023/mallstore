@@ -129,10 +129,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="save"
         >
-          保存
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '保存中...' : '保存' }}
         </button>
       </template>
     </Modal>
@@ -143,10 +145,11 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { formatTime } from '@/utils/format'
 import { useAdminStore } from '@/stores/admin'
 import Modal from '@/components/Modal.vue'
-import { Plus } from 'lucide-vue-next'
+import { Plus, Loader2 } from 'lucide-vue-next'
 
 const adminStore = useAdminStore()
 const currentAdminId = computed(() => adminStore.userInfo?.id)
@@ -161,6 +164,7 @@ interface AdminItem {
 
 const list = ref<AdminItem[]>([])
 const showEdit = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 const form = reactive({
   id: 0,
   username: '',
@@ -193,16 +197,24 @@ function openEdit(item: AdminItem | null) {
 async function save() {
   if (!form.username) return toast.warning('请输入用户名')
   if (!form.id && !form.password) return toast.warning('请输入密码')
-  await http.post('/admin/admin/save', {
-    id: form.id || undefined,
-    username: form.username,
-    password: form.password || undefined,
-    role: form.role,
-    status: form.status,
-  })
-  toast.success(form.id ? '更新成功' : '新增成功')
-  showEdit.value = false
-  loadList()
+  // 防重复提交
+  try {
+    const ok = await guard('save', async () => {
+      await http.post('/admin/admin/save', {
+        id: form.id || undefined,
+        username: form.username,
+        password: form.password || undefined,
+        role: form.role,
+        status: form.status,
+      })
+      toast.success(form.id ? '更新成功' : '新增成功')
+      showEdit.value = false
+      loadList()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '保存失败')
+  }
 }
 
 async function remove(item: AdminItem) {

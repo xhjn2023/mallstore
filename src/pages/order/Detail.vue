@@ -187,10 +187,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+          class="px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="confirmShip"
         >
-          确认发货
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '发货中...' : '确认发货' }}
         </button>
       </template>
     </Modal>
@@ -211,10 +213,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="confirmRemark"
         >
-          保存
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '保存中...' : '保存' }}
         </button>
       </template>
     </Modal>
@@ -226,9 +230,10 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { fenToYuan, formatTime, ORDER_STATUS_COLOR } from '@/utils/format'
 import Modal from '@/components/Modal.vue'
-import { ArrowLeft } from 'lucide-vue-next'
+import { ArrowLeft, Loader2 } from 'lucide-vue-next'
 
 const route = useRoute()
 const order = ref<any>(null)
@@ -239,6 +244,7 @@ const remarkVal = ref('')
 const companies = ['顺丰速运', '中通快递', '圆通速递', '韵达快递', '申通快递', '百世快递', '京东物流', 'EMS']
 
 const shipForm = reactive({ ship_no: '', ship_company: '' })
+const { submitting: saving, guard } = useSubmitLock()
 
 const timeline = computed(() => {
   if (!order.value) return []
@@ -266,21 +272,37 @@ function openShip() {
 async function confirmShip() {
   if (!shipForm.ship_no) return toast.warning('请输入物流单号')
   if (!shipForm.ship_company) return toast.warning('请选择物流公司')
-  await http.post('/admin/order/ship', {
-    id: order.value.id,
-    ship_no: shipForm.ship_no,
-    ship_company: shipForm.ship_company,
-  })
-  toast.success('发货成功')
-  showShip.value = false
-  loadOrder()
+  // 防重复提交：发货是资金/履约关键动作，必须阻断连点
+  try {
+    const ok = await guard('ship', async () => {
+      await http.post('/admin/order/ship', {
+        id: order.value.id,
+        ship_no: shipForm.ship_no,
+        ship_company: shipForm.ship_company,
+      })
+      toast.success('发货成功')
+      showShip.value = false
+      loadOrder()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '发货失败')
+  }
 }
 
 async function confirmRemark() {
-  await http.post('/admin/order/remark', { id: order.value.id, remark: remarkVal.value })
-  toast.success('备注已更新')
-  showRemark.value = false
-  loadOrder()
+  // 防重复提交
+  try {
+    const ok = await guard('remark', async () => {
+      await http.post('/admin/order/remark', { id: order.value.id, remark: remarkVal.value })
+      toast.success('备注已更新')
+      showRemark.value = false
+      loadOrder()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '保存失败')
+  }
 }
 
 onMounted(() => loadOrder())

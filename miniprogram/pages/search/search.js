@@ -1,5 +1,6 @@
 // pages/search/search.js
 const { get, post, del } = require('../../utils/request')
+const { guardSubmit } = require('../../utils/submit')
 
 Page({
   data: {
@@ -62,15 +63,19 @@ Page({
       wx.showToast({ title: '请输入搜索词', icon: 'none' })
       return
     }
-    // 记录搜索历史（失败不影响跳转）
-    try {
-      await post('/search/history', { keyword: kw })
-    } catch (e) {
-      // 未登录等情况静默忽略
-    }
-    wx.navigateTo({
-      url: `/pages/goods-list/goods-list?keyword=${encodeURIComponent(kw)}&title=${encodeURIComponent(kw)}`,
+    // 防重复提交：避免连点重复跳转 / 重复写历史
+    const ok = await guardSubmit(this, 'search', async () => {
+      // 记录搜索历史（失败不影响跳转）
+      try {
+        await post('/search/history', { keyword: kw })
+      } catch (e) {
+        // 未登录等情况静默忽略
+      }
+      wx.navigateTo({
+        url: `/pages/goods-list/goods-list?keyword=${encodeURIComponent(kw)}&title=${encodeURIComponent(kw)}`,
+      })
     })
+    if (!ok) return
   },
 
   onClearHistory() {

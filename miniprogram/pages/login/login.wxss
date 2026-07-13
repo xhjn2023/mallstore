@@ -20,6 +20,12 @@
   border-radius: 32rpx;
   background: #fff;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
 }
 
 .brand-name {
@@ -149,10 +155,44 @@
 
 /* 协议 */
 .agreement {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   font-size: 24rpx;
   color: #999;
-  text-align: center;
   margin-top: 60rpx;
+  padding: 0 20rpx;
+  line-height: 1.5;
+}
+
+.agree-check {
+  flex-shrink: 0;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ccc;
+  margin-right: 12rpx;
+  margin-top: 2rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.agree-check.checked {
+  background: #ff4444;
+  border-color: #ff4444;
+}
+
+.agree-tick {
+  color: #fff;
+  font-size: 22rpx;
+  line-height: 1;
+}
+
+.agree-text {
+  flex: 1;
 }
 
 .link {

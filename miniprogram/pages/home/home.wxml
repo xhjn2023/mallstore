@@ -50,7 +50,7 @@
   <!-- 热销推荐 -->
   <view class="hot-section">
     <view class="section-header">
-      <text class="title-text">🔥 热销推荐</text>
+      <view class="section-title">🔥 热销推荐</view>
     </view>
     <view class="product-grid">
       <view class="product-card" wx:for="{{hotProducts}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">

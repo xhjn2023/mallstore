@@ -126,10 +126,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="save"
         >
-          保存
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '保存中...' : '保存' }}
         </button>
       </template>
     </Modal>
@@ -140,9 +142,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import Modal from '@/components/Modal.vue'
 import ImageUpload from '@/components/ImageUpload.vue'
-import { Plus, Image } from 'lucide-vue-next'
+import { Plus, Image, Loader2 } from 'lucide-vue-next'
 
 interface Banner {
   id: number
@@ -155,6 +158,7 @@ interface Banner {
 
 const list = ref<Banner[]>([])
 const showEdit = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 const form = reactive({
   id: 0,
   images: [] as string[],
@@ -192,17 +196,25 @@ function openEdit(item: Banner | null) {
 
 async function save() {
   if (form.images.length === 0) return toast.warning('请上传图片')
-  await http.post('/admin/marketing/banner/save', {
-    id: form.id || undefined,
-    image: form.images[0],
-    link_type: form.link_type,
-    link_value: form.link_value,
-    sort: form.sort,
-    status: form.status,
-  })
-  toast.success(form.id ? '更新成功' : '新增成功')
-  showEdit.value = false
-  loadList()
+  // 防重复提交
+  try {
+    const ok = await guard('save', async () => {
+      await http.post('/admin/marketing/banner/save', {
+        id: form.id || undefined,
+        image: form.images[0],
+        link_type: form.link_type,
+        link_value: form.link_value,
+        sort: form.sort,
+        status: form.status,
+      })
+      toast.success(form.id ? '更新成功' : '新增成功')
+      showEdit.value = false
+      loadList()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '保存失败')
+  }
 }
 
 async function remove(item: Banner) {

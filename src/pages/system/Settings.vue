@@ -102,12 +102,13 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { AlertCircle } from 'lucide-vue-next'
 
-const saving = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 
 const form = reactive({
   freight_free_threshold: '',
@@ -125,14 +126,15 @@ async function load() {
 }
 
 async function save() {
-  saving.value = true
+  // 防重复提交
   try {
-    await http.post('/admin/system/setting', form)
-    toast.success('设置已保存')
+    const ok = await guard('save', async () => {
+      await http.post('/admin/system/setting', form)
+      toast.success('设置已保存')
+    })
+    if (!ok) return
   } catch (err: any) {
     toast.error(err.message || '保存失败')
-  } finally {
-    saving.value = false
   }
 }
 

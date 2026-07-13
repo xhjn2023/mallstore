@@ -133,10 +133,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="confirmHandle"
         >
-          确认处理
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '处理中...' : '确认处理' }}
         </button>
       </template>
     </Modal>
@@ -147,10 +149,11 @@
 import { ref, reactive, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { fenToYuan, AFTERSALE_STATUS_TEXT, AFTERSALE_STATUS_COLOR } from '@/utils/format'
 import Modal from '@/components/Modal.vue'
 import Pagination from '@/components/Pagination.vue'
-import { RotateCcw } from 'lucide-vue-next'
+import { RotateCcw, Loader2 } from 'lucide-vue-next'
 
 interface AftersaleItem {
   id: number
@@ -169,6 +172,7 @@ const list = ref<AftersaleItem[]>([])
 const total = ref(0)
 const showHandle = ref(false)
 const current = ref<AftersaleItem | null>(null)
+const { submitting: saving, guard } = useSubmitLock()
 
 const filters = reactive({ page: 1, pageSize: 10, status: -1 })
 
@@ -208,14 +212,22 @@ function openHandle(item: AftersaleItem) {
 
 async function confirmHandle() {
   if (!current.value) return
-  await http.post('/admin/order/aftersale/handle', {
-    id: current.value.id,
-    status: handleForm.status,
-    admin_remark: handleForm.admin_remark,
-  })
-  toast.success(handleForm.status === 1 ? '已同意退款' : '已拒绝退款')
-  showHandle.value = false
-  loadList()
+  // 防重复提交
+  try {
+    const ok = await guard('handle', async () => {
+      await http.post('/admin/order/aftersale/handle', {
+        id: current.value!.id,
+        status: handleForm.status,
+        admin_remark: handleForm.admin_remark,
+      })
+      toast.success(handleForm.status === 1 ? '已同意退款' : '已拒绝退款')
+      showHandle.value = false
+      loadList()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '操作失败')
+  }
 }
 
 onMounted(() => loadList(1))

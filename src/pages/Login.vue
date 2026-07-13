@@ -99,6 +99,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAdminStore } from '@/stores/admin'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { User, Lock, Eye, EyeOff, Loader2, Info } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -106,19 +107,20 @@ const adminStore = useAdminStore()
 
 const form = reactive({ username: '', password: '' })
 const showPwd = ref(false)
-const loading = ref(false)
+const { submitting: loading, guard } = useSubmitLock()
 
 async function handleLogin() {
   if (!form.username || !form.password) return
-  loading.value = true
+  // 防重复提交：登录在途时自动拦截连点
   try {
-    await adminStore.login(form.username, form.password)
-    toast.success('登录成功')
-    router.push('/dashboard')
+    const ok = await guard('login', async () => {
+      await adminStore.login(form.username, form.password)
+      toast.success('登录成功')
+      router.push('/dashboard')
+    })
+    if (!ok) return
   } catch (err: any) {
     toast.error(err.message || '登录失败')
-  } finally {
-    loading.value = false
   }
 }
 </script>

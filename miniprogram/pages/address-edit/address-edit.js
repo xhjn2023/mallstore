@@ -1,9 +1,11 @@
 // pages/address-edit/address-edit.js
 const { get, post } = require('../../utils/request')
+const { guardSubmit } = require('../../utils/submit')
 
 Page({
   data: {
     editId: null,
+    submitting: false,
     form: {
       name: '',
       phone: '',
@@ -81,23 +83,28 @@ Page({
       return
     }
 
+    // 防重复提交：同一 'save' 锁在途时直接拦截（按钮同时 disabled + loading）
     try {
-      await post('/address/save', {
-        id: this.data.editId ? Number(this.data.editId) : undefined,
-        name: name.trim(),
-        phone,
-        province,
-        city,
-        district,
-        detail: detail.trim(),
-        is_default: is_default ? 1 : 0,
+      const ok = await guardSubmit(this, 'save', async () => {
+        await post('/address/save', {
+          id: this.data.editId ? Number(this.data.editId) : undefined,
+          name: name.trim(),
+          phone,
+          province,
+          city,
+          district,
+          detail: detail.trim(),
+          is_default: is_default ? 1 : 0,
+        })
+        wx.showToast({ title: '保存成功', icon: 'success' })
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 1000)
       })
-      wx.showToast({ title: '保存成功', icon: 'success' })
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1000)
+      if (!ok) return
     } catch (e) {
       console.error('save address failed', e)
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' })
     }
   },
 })

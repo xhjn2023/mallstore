@@ -161,10 +161,12 @@
           取消
         </button>
         <button
-          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+          :disabled="saving"
           @click="save"
         >
-          保存
+          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+          {{ saving ? '保存中...' : '保存' }}
         </button>
       </template>
     </Modal>
@@ -175,9 +177,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { http } from '@/api/request'
 import { toast } from '@/composables/useToast'
+import { useSubmitLock } from '@/composables/useSubmitLock'
 import { fenToYuan, yuanToFen, formatTime } from '@/utils/format'
 import Modal from '@/components/Modal.vue'
-import { Plus, Ticket } from 'lucide-vue-next'
+import { Plus, Ticket, Loader2 } from 'lucide-vue-next'
 
 interface Coupon {
   id: number
@@ -195,6 +198,7 @@ interface Coupon {
 
 const list = ref<Coupon[]>([])
 const showEdit = ref(false)
+const { submitting: saving, guard } = useSubmitLock()
 
 const form = reactive({
   id: 0,
@@ -254,20 +258,28 @@ async function save() {
   if (!form.name) return toast.warning('请输入优惠券名称')
   if (!amountYuan.value) return toast.warning('请输入面额')
   if (form.type === 1 && !thresholdYuan.value) return toast.warning('请输入使用门槛')
-  await http.post('/admin/marketing/coupon/save', {
-    id: form.id || undefined,
-    name: form.name,
-    type: form.type,
-    amount: yuanToFen(amountYuan.value),
-    threshold: form.type === 1 ? yuanToFen(thresholdYuan.value) : 0,
-    total: form.total,
-    start_time: fromLocalInput(startTimeStr.value),
-    end_time: fromLocalInput(endTimeStr.value),
-    status: form.status,
-  })
-  toast.success(form.id ? '更新成功' : '创建成功')
-  showEdit.value = false
-  loadList()
+  // 防重复提交
+  try {
+    const ok = await guard('save', async () => {
+      await http.post('/admin/marketing/coupon/save', {
+        id: form.id || undefined,
+        name: form.name,
+        type: form.type,
+        amount: yuanToFen(amountYuan.value),
+        threshold: form.type === 1 ? yuanToFen(thresholdYuan.value) : 0,
+        total: form.total,
+        start_time: fromLocalInput(startTimeStr.value),
+        end_time: fromLocalInput(endTimeStr.value),
+        status: form.status,
+      })
+      toast.success(form.id ? '更新成功' : '创建成功')
+      showEdit.value = false
+      loadList()
+    })
+    if (!ok) return
+  } catch (err: any) {
+    toast.error(err.message || '保存失败')
+  }
 }
 
 async function remove(item: Coupon) {

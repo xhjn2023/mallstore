@@ -2,9 +2,11 @@
 <view class="login-page">
   <!-- 顶部品牌区 -->
   <view class="brand">
-    <image class="brand-logo" src="/assets/default-avatar.png" mode="aspectFill"></image>
-    <text class="brand-name">商城欢迎您</text>
-    <text class="brand-tip">登录后享受会员专属权益</text>
+    <view class="brand-logo">
+      <image src="/assets/default-avatar.png" mode="aspectFill" class="brand-logo-img"></image>
+    </view>
+    <text class="brand-name">欢迎来到商城</text>
+    <text class="brand-tip">登录后享受更优质的购物体验</text>
   </view>
 
   <!-- 方式切换 -->
@@ -17,7 +19,7 @@
   <view class="panel" wx:if="{{tab === 'wechat'}}">
     <view class="wx-icon">💬</view>
     <text class="panel-tip">使用微信账号一键登录，安全便捷</text>
-    <button class="btn-primary wx-btn" bindtap="onWechatLogin" loading="{{logging}}" disabled="{{logging}}">
+    <button class="btn-primary wx-btn" bindtap="onWechatLogin" loading="{{logging}}" disabled="{{logging || !agree}}">
       微信一键登录
     </button>
   </view>
@@ -34,14 +36,22 @@
         {{counting ? countdown + 's' : '获取验证码'}}
       </view>
     </view>
-    <button class="btn-primary phone-btn" bindtap="onPhoneLogin" loading="{{logging}}" disabled="{{logging}}">
+    <button class="btn-primary phone-btn" bindtap="onPhoneLogin" loading="{{logging}}" disabled="{{logging || !agree}}">
       登录 / 注册
     </button>
     <text class="code-hint">验证码默认为 123456（演示环境）</text>
   </view>
 
-  <!-- 底部协议 -->
+  <!-- 底部协议（可勾选 + 可查看） -->
   <view class="agreement">
-    登录即代表同意<text class="link">《用户协议》</text>和<text class="link">《隐私政策》</text>
+    <view class="agree-check {{agree ? 'checked' : ''}}" bindtap="onAgreeChange">
+      <text wx:if="{{agree}}" class="agree-tick">✓</text>
+    </view>
+    <view class="agree-text">
+      我已阅读并同意
+      <text class="link" catchtap="onViewAgreement" data-type="user">《用户协议》</text>
+      和
+      <text class="link" catchtap="onViewAgreement" data-type="privacy">《隐私政策》</text>
+    </view>
   </view>
 </view>
