@@ -36,7 +36,10 @@ Page({
     try {
       const data = await get('/')
       const banners = data.banners || []
-      const categories = data.categories || []
+      const categories = (data.categories || []).map((c) => ({
+        ...c,
+        iconType: (c.icon && (c.icon.indexOf('http') === 0 || c.icon.indexOf('/') === 0 || c.icon.indexOf('data:') === 0)) ? 'image' : 'emoji',
+      }))
       const seckills = (data.seckills || []).map((s) => ({
         ...s,
         seckillPriceText: fenToYuan(s.seckill_price),

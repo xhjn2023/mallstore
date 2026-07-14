@@ -25,7 +25,10 @@ Page({
   async loadCategories() {
     try {
       const list = await get('/category/list')
-      const categories = list || []
+      const categories = (list || []).map((c) => ({
+        ...c,
+        iconType: (c.icon && (c.icon.indexOf('http') === 0 || c.icon.indexOf('/') === 0 || c.icon.indexOf('data:') === 0)) ? 'image' : 'emoji',
+      }))
       this.setData({
         categories,
         activeId: categories.length ? categories[0].id : 0,

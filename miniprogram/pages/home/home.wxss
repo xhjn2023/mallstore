@@ -67,6 +67,10 @@
   font-size: 40rpx;
   margin-bottom: 8rpx;
 }
+.cat-icon-media {
+  width: 48rpx;
+  height: 48rpx;
+}
 .cat-name {
   font-size: 24rpx;
   color: #333;
