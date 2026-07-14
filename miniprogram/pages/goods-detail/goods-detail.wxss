@@ -210,11 +210,22 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: #fff;
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  background: transparent; /* 父容器背景透明，避免机型对 fixed 父元素 background 渲染不全 */
   padding-bottom: env(safe-area-inset-bottom);
 }
+.action-bar-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 0;
+}
 .action-bar-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   padding: 12rpx 24rpx;

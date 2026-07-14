@@ -79,6 +79,7 @@
 
     <!-- 底部操作栏 -->
     <view class="action-bar">
+      <view class="action-bar-bg"></view>
       <view class="action-bar-inner">
         <view class="action-icon" bindtap="onContactService">
           <text class="icon-emoji">💬</text>

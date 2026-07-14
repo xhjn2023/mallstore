@@ -10,10 +10,10 @@ function getAppInstance() {
   try { return getApp() } catch (e) { return null }
 }
 
-/** 是否在开发者工具模拟器中运行 */
+/** 是否在开发者工具模拟器中运行（wx.getSystemInfoSync 已弃用，改用 wx.getDeviceInfo） */
 function isDevtools() {
   try {
-    return wx.getSystemInfoSync().platform === 'devtools'
+    return wx.getDeviceInfo().platform === 'devtools'
   } catch (e) {
     return false // 兜底：无法判断时走云端（安全侧）
   }

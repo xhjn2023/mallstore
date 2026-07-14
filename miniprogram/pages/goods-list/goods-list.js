@@ -37,7 +37,10 @@ Page({
     }
 
     this.setData({ categoryId, keyword, sort })
-    this.loadProducts(true)
+    // 避免首次渲染同步触发大量数据更新，导致渲染层"Expected updated data"错误
+    wx.nextTick(() => {
+      this.loadProducts(true)
+    })
   },
 
   onPullDownRefresh() {
@@ -54,10 +57,7 @@ Page({
   async loadProducts(reset) {
     if (this.data.loading) return
     const page = reset ? 1 : this.data.page + 1
-    this.setData({ loading: true })
-    if (reset) {
-      this.setData({ firstLoading: true })
-    }
+    this.setData({ loading: true, firstLoading: reset })
     try {
       const params = {
         page,
