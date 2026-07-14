@@ -82,10 +82,6 @@
 .sidebar-icon {
   font-size: 36rpx;
 }
-.sidebar-icon-media {
-  width: 40rpx;
-  height: 40rpx;
-}
 .sidebar-name {
   font-size: 24rpx;
   color: #666;

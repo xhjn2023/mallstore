@@ -7,7 +7,9 @@ App({
     //   模拟器(devtools) → 本地 3001/api，用于本地开发调试
     //   真机/体验版      → wx.cloud.callContainer 走微信内网通道，
     //                       无需域名、无需白名单，直连 CloudBase 云托管
-    baseUrl: '',
+    baseUrl: wx.getSystemInfoSync().platform === 'devtools'
+      ? 'http://127.0.0.1:3001/api'
+      : null, // 真机走 callContainer，不需要 baseUrl
     token: '',
     userInfo: null,
     systemInfo: null,
@@ -19,13 +21,9 @@ App({
       wx.cloud.init({ env: CLOUDBASE_ENV_ID })
     }
 
-    // 获取系统信息（wx.getSystemInfoSync 已弃用，改用新同步 API）
-    const deviceInfo = wx.getDeviceInfo()
-    const windowInfo = wx.getWindowInfo()
-    this.globalData.baseUrl = deviceInfo.platform === 'devtools'
-      ? 'http://127.0.0.1:3001/api'
-      : null
-    this.globalData.systemInfo = { ...deviceInfo, ...windowInfo }
+    // 获取系统信息
+    const sysInfo = wx.getSystemInfoSync()
+    this.globalData.systemInfo = sysInfo
 
     // 恢复登录态
     const token = wx.getStorageSync('token')

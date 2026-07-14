@@ -2,7 +2,7 @@
 .detail-page {
   min-height: 100vh;
   background: #f5f5f5;
-  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  padding-bottom: 140rpx;
 }
 
 /* 骨架屏 */
@@ -203,15 +203,25 @@
   color: #999;
 }
 
+/* 底部占位 */
+.bottom-placeholder {
+  height: 140rpx;
+  background: #f5f5f5;
+}
+
 /* 底部操作栏 */
 .action-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 12rpx 24rpx;
+  padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
   z-index: 50;
-  background: transparent; /* 父容器背景透明，避免机型对 fixed 父元素 background 渲染不全 */
-  padding-bottom: env(safe-area-inset-bottom);
 }
 .action-bar-bg {
   position: absolute;
@@ -220,15 +230,12 @@
   right: 0;
   bottom: 0;
   background: #fff;
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
   z-index: 0;
 }
-.action-bar-inner {
+.action-icon,
+.action-btns {
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  padding: 12rpx 24rpx;
 }
 .action-icon {
   display: flex;

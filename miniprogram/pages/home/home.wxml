@@ -17,13 +17,10 @@
 
   <!-- 分类导航 -->
   <view class="category-nav" wx:if="{{categories.length}}">
-      <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
-        <view class="cat-icon">
-          <image wx:if="{{item.iconType === 'image'}}" class="cat-icon-media" src="{{item.icon}}" mode="aspectFit" />
-          <text wx:else>{{item.icon || '📦'}}</text>
-        </view>
-        <text class="cat-name">{{item.name}}</text>
-      </view>
+    <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
+      <view class="cat-icon">{{item.icon || '📦'}}</view>
+      <text class="cat-name">{{item.name}}</text>
+    </view>
   </view>
 
   <!-- 限时秒杀 -->

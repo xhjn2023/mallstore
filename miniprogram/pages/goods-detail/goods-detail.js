@@ -32,10 +32,7 @@ Page({
   onLoad(options) {
     const id = Number(options.id) || 0
     this.setData({ productId: id })
-    // 避免首次渲染同步触发大量数据更新，导致渲染层异常
-    wx.nextTick(() => {
-      if (id) this.loadProduct()
-    })
+    if (id) this.loadProduct()
   },
 
   async loadProduct() {
