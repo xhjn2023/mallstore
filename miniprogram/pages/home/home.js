@@ -36,7 +36,10 @@ Page({
     try {
       const data = await get('/')
       const banners = data.banners || []
-      const categories = data.categories || []
+      const categories = (data.categories || []).map((c) => ({
+        ...c,
+        _isImageIcon: /^(https?:\/\/|\/|data:)/.test(c.icon || ''),
+      }))
       const seckills = (data.seckills || []).map((s) => ({
         ...s,
         seckillPriceText: fenToYuan(s.seckill_price),

@@ -27,7 +27,10 @@
         data-name="{{item.name}}"
       >
         <view class="sidebar-bar" wx:if="{{activeId === item.id}}"></view>
-        <text class="sidebar-icon">{{item.icon || '📦'}}</text>
+        <view class="sidebar-icon">
+          <image wx:if="{{item._isImageIcon}}" class="sidebar-icon-media" src="{{item.icon}}" mode="aspectFit" />
+          <text wx:else>{{item.icon || '📦'}}</text>
+        </view>
         <text class="sidebar-name">{{item.name}}</text>
       </view>
     </scroll-view>
