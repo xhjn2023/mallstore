@@ -63,7 +63,7 @@
             <view class="comment-user">
               <text class="comment-name">{{item.user_name}}</text>
               <view class="comment-stars">
-                <text class="star {{star ? 'star-on' : 'star-off'}}" wx:for="{{item.stars}}" wx:for-item="star" wx:key="*this">★</text>
+                <view class="star {{star ? 'star-on' : 'star-off'}}" wx:for="{{item.stars}}" wx:for-item="star" wx:key="*this"></view>
               </view>
             </view>
             <text class="comment-time">{{item.timeText}}</text>
@@ -83,15 +83,15 @@
     <view class="action-bar">
       <view class="action-bar-bg"></view>
       <view class="action-icon" bindtap="onContactService">
-        <text class="icon-emoji">💬</text>
+        <view class="icon-emoji ic ic-chat"></view>
         <text class="icon-text">客服</text>
       </view>
       <view class="action-icon" bindtap="onToggleFavorite">
-        <text class="icon-emoji {{isFavorite ? 'fav-on' : ''}}">{{isFavorite ? '❤️' : '🤍'}}</text>
+        <view class="icon-emoji {{isFavorite ? 'fav-on' : ''}} ic {{isFavorite ? 'ic-heart-fill' : 'ic-heart'}}"></view>
         <text class="icon-text {{isFavorite ? 'fav-on' : ''}}">收藏</text>
       </view>
       <view class="action-icon" bindtap="onGoCart">
-        <text class="icon-emoji">🛒</text>
+        <view class="icon-emoji ic ic-cart"></view>
         <text class="icon-text">购物车</text>
       </view>
       <view class="action-btns">
@@ -115,7 +115,7 @@
           <text class="popup-selected" wx:if="{{selectedSpecText}}">已选：{{selectedSpecText}}</text>
           <text class="popup-selected" wx:else>请选择规格</text>
         </view>
-        <view class="popup-close" bindtap="onCloseSkuPopup">✕</view>
+        <view class="popup-close ic ic-close" bindtap="onCloseSkuPopup"></view>
       </view>
 
       <!-- 规格选择 -->
@@ -157,7 +157,7 @@
 
   <!-- 加载失败 -->
   <view class="empty-state" wx:else>
-    <text class="empty-icon">📭</text>
+    <view class="empty-icon ic ic-box"></view>
     <text class="empty-text">商品不存在</text>
   </view>
 </view>

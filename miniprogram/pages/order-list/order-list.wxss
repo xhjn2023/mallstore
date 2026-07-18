@@ -193,7 +193,8 @@
   text-align: center;
 }
 .empty-icon {
-  font-size: 120rpx;
+  width: 140rpx;
+  height: 140rpx;
   opacity: 0.4;
   margin-bottom: 20rpx;
 }

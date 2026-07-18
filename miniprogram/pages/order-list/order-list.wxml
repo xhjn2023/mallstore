@@ -57,7 +57,7 @@
 
   <!-- 空状态 -->
   <view class="empty" wx:elif="{{!loading}}">
-    <view class="empty-icon">📋</view>
+    <view class="empty-icon ic ic-doc"></view>
     <view class="empty-text">暂无相关订单</view>
     <navigator url="/pages/home/home" open-type="switchTab" class="empty-btn">去逛逛</navigator>
   </view>

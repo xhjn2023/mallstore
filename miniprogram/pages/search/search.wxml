@@ -3,7 +3,7 @@
   <!-- 顶部搜索框 -->
   <view class="search-bar">
     <view class="search-input-wrap">
-      <text class="search-icon">🔍</text>
+      <view class="search-icon ic ic-search"></view>
       <input
         class="search-input"
         type="text"
@@ -15,7 +15,7 @@
         bindconfirm="onConfirm"
         focus
       />
-      <text class="clear-icon" wx:if="{{keyword}}" bindtap="onClearInput">✕</text>
+      <view class="clear-icon ic ic-close" wx:if="{{keyword}}" bindtap="onClearInput"></view>
     </view>
     <text class="search-btn" bindtap="onConfirm">搜索</text>
   </view>
@@ -23,7 +23,7 @@
   <!-- 热门搜索 -->
   <view class="section" wx:if="{{hotList.length}}">
     <view class="section-header">
-      <text class="section-title">🔥 热门搜索</text>
+      <view class="title-with-ic"><view class="title-ic ic ic-fire"></view><text class="section-title">热门搜索</text></view>
     </view>
     <view class="hot-list">
       <view
@@ -41,7 +41,7 @@
   <!-- 搜索历史 -->
   <view class="section" wx:if="{{historyList.length}}">
     <view class="section-header">
-      <text class="section-title">🕐 搜索历史</text>
+      <view class="title-with-ic"><view class="title-ic ic ic-clock"></view><text class="section-title">搜索历史</text></view>
       <text class="clear-btn" bindtap="onClearHistory">清空</text>
     </view>
     <view class="history-list">
@@ -60,7 +60,7 @@
 
   <!-- 空历史提示 -->
   <view class="empty-history" wx:if="{{!hotList.length && !historyList.length}}">
-    <text class="empty-icon">🔍</text>
+    <view class="empty-icon ic ic-search"></view>
     <text class="empty-text">输入关键词搜索商品</text>
   </view>
 </view>

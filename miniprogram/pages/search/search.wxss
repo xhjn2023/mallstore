@@ -26,7 +26,8 @@
   gap: 12rpx;
 }
 .search-icon {
-  font-size: 28rpx;
+  width: 32rpx;
+  height: 32rpx;
 }
 .search-input {
   flex: 1;
@@ -40,7 +41,8 @@
   font-size: 28rpx;
 }
 .clear-icon {
-  font-size: 28rpx;
+  width: 32rpx;
+  height: 32rpx;
   color: #ccc;
   padding: 8rpx;
 }
@@ -69,6 +71,15 @@
   font-size: 30rpx;
   font-weight: 600;
   color: #333;
+}
+.title-with-ic {
+  display: flex;
+  align-items: center;
+}
+.title-ic {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 10rpx;
 }
 .clear-btn {
   font-size: 24rpx;
@@ -127,7 +138,8 @@
   padding: 200rpx 0;
 }
 .empty-history .empty-icon {
-  font-size: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   margin-bottom: 20rpx;
   opacity: 0.4;
 }

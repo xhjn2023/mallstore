@@ -3,7 +3,7 @@
   <!-- 搜索框 -->
   <view class="search-bar">
     <view class="search-input" bindtap="goSearch">
-      <text class="search-icon">🔍</text>
+      <view class="search-icon ic ic-search"></view>
       <text class="search-placeholder">搜索商品</text>
     </view>
   </view>
@@ -20,7 +20,7 @@
     <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
       <view class="cat-icon">
         <image wx:if="{{item._isImageIcon}}" class="cat-icon-media" src="{{item.icon}}" mode="aspectFit" />
-        <text wx:else>{{item.icon || '📦'}}</text>
+        <view wx:else class="cat-icon-fallback ic ic-box"></view>
       </view>
       <text class="cat-name">{{item.name}}</text>
     </view>

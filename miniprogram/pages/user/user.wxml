@@ -24,7 +24,7 @@
     <view class="order-icons">
       <view class="order-icon-item" wx:for="{{orderIcons}}" wx:key="status" bindtap="goOrderList" data-status="{{item.status}}">
         <view class="icon-wrap">
-          <text class="icon-emoji">{{item.icon}}</text>
+          <view class="icon-emoji ic ic-{{item.icon}}"></view>
           <text class="badge" wx:if="{{item.count > 0}}">{{item.count}}</text>
         </view>
         <text class="icon-text">{{item.text}}</text>
@@ -34,43 +34,43 @@
 
   <!-- 菜单列表 -->
   <view class="menu-list card">
-    <view class="menu-item" bindtap="goMenu" data-url="/pages/order-list/order-list" data-icon="📋">
-      <text class="menu-icon">📋</text>
+    <view class="menu-item" bindtap="goMenu" data-url="/pages/order-list/order-list" data-icon="doc">
+      <view class="menu-icon ic ic-doc"></view>
       <text class="menu-text">我的订单</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item" bindtap="goMenu" data-url="/pages/favorite/favorite" data-icon="❤️">
-      <text class="menu-icon">❤️</text>
+    <view class="menu-item" bindtap="goMenu" data-url="/pages/favorite/favorite" data-icon="heart">
+      <view class="menu-icon ic ic-heart"></view>
       <text class="menu-text">我的收藏</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item" bindtap="goMenu" data-url="/pages/coupon/coupon" data-icon="🎟️">
-      <text class="menu-icon">🎟️</text>
+    <view class="menu-item" bindtap="goMenu" data-url="/pages/coupon/coupon" data-icon="ticket">
+      <view class="menu-icon ic ic-ticket"></view>
       <text class="menu-text">我的优惠券</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item" bindtap="goMenu" data-url="/pages/address/address" data-icon="📍">
-      <text class="menu-icon">📍</text>
+    <view class="menu-item" bindtap="goMenu" data-url="/pages/address/address" data-icon="location">
+      <view class="menu-icon ic ic-location"></view>
       <text class="menu-text">收货地址</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="showContact">
-      <text class="menu-icon">📞</text>
+      <view class="menu-icon ic ic-phone"></view>
       <text class="menu-text">客服中心</text>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item" bindtap="goMenu" data-url="/pages/feedback/feedback" data-icon="💬">
-      <text class="menu-icon">💬</text>
+    <view class="menu-item" bindtap="goMenu" data-url="/pages/feedback/feedback" data-icon="chat">
+      <view class="menu-icon ic ic-chat"></view>
       <text class="menu-text">意见反馈</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item" bindtap="showSettings">
-      <text class="menu-icon">⚙️</text>
+      <view class="menu-icon ic ic-settings"></view>
       <text class="menu-text">系统设置</text>
       <text class="menu-arrow">></text>
     </view>
     <view class="menu-item logout-item" wx:if="{{isLogin}}" bindtap="onLogout">
-      <text class="menu-icon">🚪</text>
+      <view class="menu-icon ic ic-logout"></view>
       <text class="menu-text logout-text">退出登录</text>
     </view>
   </view>

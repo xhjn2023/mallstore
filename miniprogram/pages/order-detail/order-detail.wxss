@@ -46,7 +46,8 @@
   border: 1rpx solid #ededed;
 }
 .addr-icon {
-  font-size: 36rpx;
+  width: 40rpx;
+  height: 40rpx;
   margin-right: 16rpx;
 }
 .addr-info {

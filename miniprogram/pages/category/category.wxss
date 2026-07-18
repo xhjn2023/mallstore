@@ -80,7 +80,6 @@
   border-radius: 0 4rpx 4rpx 0;
 }
 .sidebar-icon {
-  font-size: 36rpx;
   width: 48rpx;
   height: 48rpx;
   display: flex;
@@ -198,7 +197,8 @@
   padding: 160rpx 0;
 }
 .empty-icon {
-  font-size: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   margin-bottom: 20rpx;
   opacity: 0.4;
 }

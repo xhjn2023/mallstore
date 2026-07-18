@@ -3,7 +3,7 @@
   <!-- 收货地址 -->
   <view class="address-card" bindtap="goSelectAddress">
     <block wx:if="{{address}}">
-      <view class="addr-icon">📍</view>
+      <view class="addr-icon ic ic-location"></view>
       <view class="addr-info">
         <view class="addr-user">
           <text class="addr-name">{{address.name}}</text>
@@ -98,7 +98,7 @@
   <view class="coupon-popup {{showCouponPicker ? 'show' : ''}}">
     <view class="popup-header">
       <text class="popup-title">选择优惠券</text>
-      <text class="popup-close" bindtap="closeCouponPicker">✕</text>
+      <view class="popup-close ic ic-close" bindtap="closeCouponPicker"></view>
     </view>
     <scroll-view scroll-y class="popup-list">
       <view class="coupon-item {{selectedCoupon && selectedCoupon.user_coupon_id === c.user_coupon_id ? 'selected' : ''}}" wx:for="{{coupons}}" wx:for-item="c" wx:key="user_coupon_id" bindtap="onSelectCoupon" data-coupon="{{c}}">

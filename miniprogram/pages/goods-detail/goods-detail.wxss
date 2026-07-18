@@ -176,14 +176,18 @@
   margin-top: 4rpx;
 }
 .star {
-  font-size: 22rpx;
+  width: 24rpx;
+  height: 24rpx;
   margin-right: 2rpx;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 .star-on {
-  color: #111111;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111' stroke='%23111111' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 17.3 5.8 20.9l1.6-6.8L2.2 8.9l6.9-.6z'/%3E%3C/svg%3E");
 }
 .star-off {
-  color: #ddd;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 17.3 5.8 20.9l1.6-6.8L2.2 8.9l6.9-.6z'/%3E%3C/svg%3E");
 }
 .comment-time {
   font-size: 22rpx;
@@ -246,7 +250,8 @@
   gap: 4rpx;
 }
 .icon-emoji {
-  font-size: 40rpx;
+  width: 44rpx;
+  height: 44rpx;
 }
 .icon-text {
   font-size: 20rpx;
@@ -358,7 +363,8 @@
   position: absolute;
   top: 24rpx;
   right: 24rpx;
-  font-size: 32rpx;
+  width: 40rpx;
+  height: 40rpx;
   color: #ccc;
   padding: 8rpx;
 }
@@ -455,7 +461,8 @@
   padding: 200rpx 0;
 }
 .empty-icon {
-  font-size: 100rpx;
+  width: 120rpx;
+  height: 120rpx;
   margin-bottom: 20rpx;
   opacity: 0.4;
 }

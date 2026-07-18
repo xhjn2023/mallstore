@@ -47,7 +47,7 @@
 
   <!-- 空状态 -->
   <view class="empty-state" wx:elif="{{!loading}}">
-    <text class="empty-icon">📭</text>
+    <view class="empty-icon ic ic-box"></view>
     <text class="empty-text">暂无相关商品</text>
   </view>
 

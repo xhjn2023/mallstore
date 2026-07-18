@@ -30,10 +30,8 @@
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
 .icon-mark {
-  font-size: 96rpx;
-  color: #fff;
-  font-weight: 300;
-  line-height: 1;
+  width: 88rpx;
+  height: 88rpx;
 }
 
 /* 结果文字 */

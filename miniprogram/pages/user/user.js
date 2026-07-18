@@ -12,11 +12,11 @@ Page({
     editVisible: false,
     editForm: { nickname: '', avatar: '' },
     orderIcons: [
-      { status: 0, text: '待付款', icon: '💰', count: 0 },
-      { status: 1, text: '待发货', icon: '📦', count: 0 },
-      { status: 2, text: '待收货', icon: '🚚', count: 0 },
-      { status: 3, text: '已完成', icon: '✅', count: 0 },
-      { status: -2, text: '售后', icon: '🔄', count: 0 },
+      { status: 0, text: '待付款', icon: 'pay', count: 0 },
+      { status: 1, text: '待发货', icon: 'box', count: 0 },
+      { status: 2, text: '待收货', icon: 'truck', count: 0 },
+      { status: 3, text: '已完成', icon: 'check-circle', count: 0 },
+      { status: -2, text: '售后', icon: 'refund', count: 0 },
     ],
   },
 

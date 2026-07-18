@@ -29,7 +29,7 @@
         <view class="sidebar-bar" wx:if="{{activeId === item.id}}"></view>
         <view class="sidebar-icon">
           <image wx:if="{{item._isImageIcon}}" class="sidebar-icon-media" src="{{item.icon}}" mode="aspectFit" />
-          <text wx:else>{{item.icon || '📦'}}</text>
+          <view wx:else class="ic ic-box"></view>
         </view>
         <text class="sidebar-name">{{item.name}}</text>
       </view>
@@ -77,7 +77,7 @@
 
       <!-- 空状态 -->
       <view class="empty-state" wx:else>
-        <text class="empty-icon">📦</text>
+        <view class="empty-icon ic ic-box"></view>
         <text class="empty-text">该分类暂无商品</text>
       </view>
 

@@ -17,7 +17,7 @@
 
   <!-- 微信登录面板 -->
   <view class="panel" wx:if="{{tab === 'wechat'}}">
-    <view class="wx-icon">💬</view>
+    <view class="wx-icon ic ic-chat"></view>
     <text class="panel-tip">使用微信账号一键登录，安全便捷</text>
     <button
       class="btn-primary wx-btn"
@@ -51,7 +51,7 @@
   <!-- 底部协议（可勾选 + 可查看） -->
   <view class="agreement">
     <view class="agree-check {{agree ? 'checked' : ''}}" bindtap="onAgreeChange">
-      <text wx:if="{{agree}}" class="agree-tick">✓</text>
+      <view wx:if="{{agree}}" class="agree-tick ic ic-check-white"></view>
     </view>
     <view class="agree-text">
       我已阅读并同意

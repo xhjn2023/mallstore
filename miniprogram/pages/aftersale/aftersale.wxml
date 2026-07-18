@@ -1,7 +1,7 @@
 <!-- pages/aftersale/aftersale.wxml -->
 <view class="page">
   <view wx:if="{{!loading && list.length === 0}}" class="empty">
-    <text class="empty-icon">🛠️</text>
+    <view class="empty-icon ic ic-tool"></view>
     <text class="empty-text">暂无售后订单</text>
   </view>
 

@@ -32,7 +32,7 @@
 
   <!-- 空状态 -->
   <view class="empty-state" wx:if="{{currentList.length === 0}}">
-    <text class="empty-icon">🎟️</text>
+    <view class="empty-icon ic ic-ticket"></view>
     <text class="empty-text">暂无{{tabs[activeTab].text}}优惠券</text>
   </view>
 </view>

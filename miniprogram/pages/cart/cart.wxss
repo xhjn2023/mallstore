@@ -11,7 +11,8 @@
   text-align: center;
 }
 .empty-icon-wrap {
-  font-size: 120rpx;
+  width: 140rpx;
+  height: 140rpx;
   margin-bottom: 24rpx;
   opacity: 0.4;
 }

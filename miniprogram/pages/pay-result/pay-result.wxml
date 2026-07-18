@@ -3,7 +3,7 @@
   <!-- 支付成功 -->
   <view class="result-wrap" wx:if="{{isSuccess}}">
     <view class="result-icon success-icon">
-      <text class="icon-mark">✓</text>
+      <view class="icon-mark ic ic-check-white"></view>
     </view>
     <view class="result-title">支付成功</view>
     <view class="result-desc" wx:if="{{orderNo}}">订单号：{{orderNo}}</view>
@@ -18,7 +18,7 @@
   <!-- 支付失败 -->
   <view class="result-wrap" wx:else>
     <view class="result-icon fail-icon">
-      <text class="icon-mark">✕</text>
+      <view class="icon-mark ic ic-close-white"></view>
     </view>
     <view class="result-title">支付失败</view>
     <view class="result-desc" wx:if="{{orderNo}}">订单号：{{orderNo}}</view>

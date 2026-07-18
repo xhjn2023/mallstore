@@ -219,7 +219,8 @@
 }
 
 .icon-emoji {
-  font-size: 48rpx;
+  width: 52rpx;
+  height: 52rpx;
 }
 
 .badge {
@@ -266,9 +267,9 @@
 }
 
 .menu-icon {
-  font-size: 40rpx;
-  margin-right: 20rpx;
   width: 48rpx;
+  height: 48rpx;
+  margin-right: 20rpx;
   text-align: center;
 }
 

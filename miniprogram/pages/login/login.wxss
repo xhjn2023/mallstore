@@ -77,7 +77,8 @@
 }
 
 .wx-icon {
-  font-size: 80rpx;
+  width: 96rpx;
+  height: 96rpx;
   margin-bottom: 24rpx;
 }
 
@@ -198,9 +199,8 @@
 }
 
 .agree-tick {
-  color: #fff;
-  font-size: 22rpx;
-  line-height: 1;
+  width: 20rpx;
+  height: 20rpx;
 }
 
 .agree-text {
