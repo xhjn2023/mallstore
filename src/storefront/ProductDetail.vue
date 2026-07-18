@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Minus, Plus, ShoppingCart, ChevronLeft } from 'lucide-vue-next'
+import { Minus, Plus, ShoppingBag, Check, ChevronLeft } from 'lucide-vue-next'
 import { http } from '@/api/request'
 import { useCartStore } from './cart'
 import { yuan } from './format'
@@ -41,24 +41,24 @@ function add() {
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto px-4 py-5" v-if="product">
-    <button @click="router.back()" class="flex items-center gap-1 text-sm text-slate-400 mb-4 hover:text-violet-600">
+  <div class="max-w-5xl mx-auto px-5 py-8" v-if="product">
+    <button @click="router.back()" class="flex items-center gap-1 text-sm text-neutral-400 mb-6 hover:text-neutral-900 transition">
       <ChevronLeft class="w-4 h-4" /> 返回
     </button>
 
-    <div class="grid md:grid-cols-2 gap-8 bg-white rounded-2xl p-5 border border-slate-100">
+    <div class="grid md:grid-cols-2 gap-10">
       <!-- Gallery -->
       <div>
-        <div class="aspect-square rounded-2xl overflow-hidden bg-slate-50">
+        <div class="aspect-square rounded-2xl overflow-hidden bg-neutral-50">
           <img :src="product.images[activeImg]" class="w-full h-full object-cover" :alt="product.name" />
         </div>
-        <div v-if="product.images.length > 1" class="flex gap-2 mt-3">
+        <div v-if="product.images.length > 1" class="flex gap-3 mt-4">
           <button
             v-for="(img, i) in product.images"
             :key="i"
             @click="activeImg = i"
-            :class="activeImg === i ? 'ring-2 ring-violet-500' : 'ring-1 ring-slate-100'"
-            class="w-16 h-16 rounded-lg overflow-hidden"
+            :class="activeImg === i ? 'ring-2 ring-neutral-900' : 'ring-1 ring-neutral-100'"
+            class="w-16 h-16 rounded-xl overflow-hidden"
           >
             <img :src="img" class="w-full h-full object-cover" />
           </button>
@@ -67,34 +67,34 @@ function add() {
 
       <!-- Info -->
       <div class="flex flex-col">
-        <h1 class="text-xl font-bold text-slate-800">{{ product.name }}</h1>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold text-rose-500">{{ yuan(product.price) }}</span>
-          <span v-if="product.original_price" class="text-slate-300 line-through">{{ yuan(product.original_price) }}</span>
+        <h1 class="text-2xl font-semibold tracking-tight text-neutral-900">{{ product.name }}</h1>
+        <div class="mt-4 flex items-baseline gap-3">
+          <span class="text-3xl font-semibold text-neutral-900">{{ yuan(product.price) }}</span>
+          <span v-if="product.original_price" class="text-neutral-400 line-through">{{ yuan(product.original_price) }}</span>
         </div>
-        <p class="text-xs text-slate-400 mt-2">已售 {{ product.sales }} · 库存 {{ product.stock }}</p>
+        <p class="text-xs text-neutral-400 mt-2">已售 {{ product.sales }} · 库存 {{ product.stock }}</p>
 
-        <div v-if="product.skuList && product.skuList.length" class="mt-4">
-          <p class="text-sm text-slate-500 mb-2">规格</p>
+        <div v-if="product.skuList && product.skuList.length" class="mt-6">
+          <p class="text-sm text-neutral-500 mb-2">规格</p>
           <div class="flex flex-wrap gap-2">
             <span
               v-for="sku in product.skuList"
               :key="sku.id"
-              class="px-3 py-1.5 rounded-lg border border-slate-200 text-sm text-slate-600"
+              class="px-3 py-1.5 rounded-full border border-neutral-200 text-sm text-neutral-600"
             >
               {{ Object.values(JSON.parse(sku.specs || '{}')).join(' / ') || '默认' }}
             </span>
           </div>
         </div>
 
-        <div class="mt-5 flex items-center gap-3">
-          <span class="text-sm text-slate-500">数量</span>
-          <div class="flex items-center border border-slate-200 rounded-lg">
-            <button @click="qty = Math.max(1, qty - 1)" class="w-9 h-9 flex items-center justify-center text-slate-500">
+        <div class="mt-6 flex items-center gap-3">
+          <span class="text-sm text-neutral-500">数量</span>
+          <div class="flex items-center border border-neutral-200 rounded-full">
+            <button @click="qty = Math.max(1, qty - 1)" class="w-10 h-10 flex items-center justify-center text-neutral-500 hover:text-neutral-900">
               <Minus class="w-4 h-4" />
             </button>
-            <span class="w-10 text-center text-sm">{{ qty }}</span>
-            <button @click="qty++" class="w-9 h-9 flex items-center justify-center text-slate-500">
+            <span class="w-10 text-center text-sm tabular-nums">{{ qty }}</span>
+            <button @click="qty++" class="w-10 h-10 flex items-center justify-center text-neutral-500 hover:text-neutral-900">
               <Plus class="w-4 h-4" />
             </button>
           </div>
@@ -102,14 +102,16 @@ function add() {
 
         <button
           @click="add"
-          class="mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-violet-500 to-pink-500 text-white py-3 rounded-xl font-medium active:scale-[0.99] transition"
+          class="mt-8 flex items-center justify-center gap-2 bg-neutral-900 text-white py-3.5 rounded-full text-sm tracking-wide hover:bg-neutral-700 active:scale-[0.99] transition"
         >
-          <ShoppingCart class="w-5 h-5" /> {{ added ? '✓ 已加入购物车' : '加入购物车' }}
+          <Check v-if="added" class="w-5 h-5" />
+          <ShoppingBag v-else class="w-5 h-5" />
+          {{ added ? '已加入购物车' : '加入购物车' }}
         </button>
 
-        <div v-if="product.detail" class="mt-6 text-sm text-slate-600 leading-relaxed" v-html="product.detail"></div>
+        <div v-if="product.detail" class="mt-8 pt-8 border-t border-neutral-100 text-sm text-neutral-600 leading-relaxed" v-html="product.detail"></div>
       </div>
     </div>
   </div>
-  <div v-else class="max-w-5xl mx-auto px-4 py-20 text-center text-slate-400">加载中…</div>
+  <div v-else class="max-w-5xl mx-auto px-5 py-24 text-center text-neutral-400">加载中…</div>
 </template>

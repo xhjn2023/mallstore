@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { useIntervalFn } from '@vueuse/core'
-import { Zap, ChevronRight } from 'lucide-vue-next'
+import { ChevronRight } from 'lucide-vue-next'
 import { http } from '@/api/request'
 import { yuan } from './format'
 import ProductCard from './ProductCard.vue'
@@ -18,6 +18,7 @@ const seckills = ref<any[]>([])
 const hot = ref<any[]>([])
 const now = ref(Math.floor(Date.now() / 1000))
 const modules = [Autoplay, Pagination]
+const root = ref<HTMLElement | null>(null)
 
 useIntervalFn(() => {
   now.value = Math.floor(Date.now() / 1000)
@@ -31,6 +32,14 @@ function remain(end: number): string {
   return `${h}:${m}:${ss}`
 }
 
+function observeReveal() {
+  const io = new IntersectionObserver(
+    (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add('in')),
+    { threshold: 0.08 },
+  )
+  root.value?.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+}
+
 onMounted(async () => {
   try {
     const data = await http.get('/home')
@@ -41,77 +50,112 @@ onMounted(async () => {
   } catch (e) {
     console.error('加载首页失败', e)
   }
+  await nextTick()
+  observeReveal()
 })
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-6 space-y-10">
+  <div ref="root">
+    <!-- Hero -->
+    <section class="max-w-6xl mx-auto px-5 pt-16 pb-12 text-center reveal">
+      <p class="text-xs tracking-[0.3em] text-neutral-400 uppercase mb-5">MALLSTORE · 2026</p>
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight leading-[1.1]">
+        少即是多。<br />为日常而设计。
+      </h1>
+      <p class="mt-6 text-neutral-500 max-w-md mx-auto text-[15px] leading-relaxed">
+        去除多余装饰，保留真正必要的功能与质感。让每一件物品，都安静地融入生活。
+      </p>
+      <button
+        @click="router.push('/shop/products')"
+        class="mt-9 px-8 py-3 rounded-full bg-neutral-900 text-white text-sm tracking-wide hover:bg-neutral-700 transition"
+      >
+        探索全部商品
+      </button>
+    </section>
+
     <!-- Banner -->
-    <Swiper
-      v-if="banners.length"
-      :modules="modules"
-      :autoplay="{ delay: 3500 }"
-      :pagination="{ clickable: true }"
-      :loop="banners.length > 1"
-      class="rounded-2xl overflow-hidden"
-    >
-      <SwiperSlide v-for="b in banners" :key="b.id">
-        <router-link :to="b.link_type === 1 ? '/shop/product/' + b.link_value : '/shop'">
-          <img :src="b.image" class="w-full h-44 md:h-60 object-cover" alt="banner" />
-        </router-link>
-      </SwiperSlide>
-    </Swiper>
-    <div v-else class="h-44 md:h-60 rounded-2xl bg-gradient-to-r from-violet-500 to-pink-500"></div>
+    <section v-if="banners.length" class="max-w-6xl mx-auto px-5 pb-14 reveal">
+      <Swiper
+        :modules="modules"
+        :autoplay="{ delay: 3500 }"
+        :pagination="{ clickable: true }"
+        :loop="banners.length > 1"
+        class="rounded-2xl overflow-hidden"
+      >
+        <SwiperSlide v-for="b in banners" :key="b.id">
+          <router-link :to="b.link_type === 1 ? '/shop/product/' + b.link_value : '/shop/products'">
+            <img :src="b.image" class="w-full h-48 md:h-72 object-cover" alt="banner" />
+          </router-link>
+        </SwiperSlide>
+      </Swiper>
+    </section>
 
     <!-- Categories -->
-    <div class="grid grid-cols-4 sm:grid-cols-8 gap-2">
-      <button
-        v-for="c in categories"
-        :key="c.id"
-        @click="router.push('/shop/products?categoryId=' + c.id)"
-        class="flex flex-col items-center gap-1 py-3 rounded-xl hover:bg-white transition bg-white/60 border border-transparent hover:border-slate-100"
-      >
-        <span class="text-2xl">{{ c.icon }}</span>
-        <span class="text-xs text-slate-600">{{ c.name }}</span>
-      </button>
-    </div>
+    <section class="max-w-6xl mx-auto px-5 pb-14 reveal">
+      <div class="flex flex-wrap justify-center gap-3">
+        <button
+          v-for="c in categories"
+          :key="c.id"
+          @click="router.push('/shop/products?categoryId=' + c.id)"
+          class="px-4 py-2 rounded-full border border-neutral-200 text-sm text-neutral-600 hover:border-neutral-900 hover:text-neutral-900 transition"
+        >
+          {{ c.name }}
+        </button>
+      </div>
+    </section>
 
     <!-- Seckill -->
-    <section v-if="seckills.length" class="bg-rose-50/60 rounded-2xl p-4">
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2 text-rose-600 font-bold">
-          <Zap class="w-5 h-5 fill-rose-500" /> 限时秒杀
-          <span class="text-xs font-normal text-slate-400">距结束 {{ remain(seckills[0].end_time) }}</span>
+    <section v-if="seckills.length" class="max-w-6xl mx-auto px-5 pb-16 reveal">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-baseline gap-3">
+          <h2 class="text-2xl font-semibold tracking-tight">限时精选</h2>
+          <span class="text-xs text-neutral-400 tabular-nums">距结束 {{ remain(seckills[0].end_time) }}</span>
         </div>
-        <router-link to="/shop/products" class="text-xs text-slate-400 flex items-center"
-          >更多 <ChevronRight class="w-3 h-3" /></router-link
+        <router-link to="/shop/products" class="text-sm text-neutral-400 hover:text-neutral-900 flex items-center transition"
+          >更多 <ChevronRight class="w-4 h-4" /></router-link
         >
       </div>
-      <div class="flex gap-3 overflow-x-auto pb-2">
+      <div class="flex gap-5 overflow-x-auto pb-2 -mx-1 px-1">
         <router-link
           v-for="s in seckills"
           :key="s.id"
           :to="'/shop/product/' + s.product.id"
-          class="shrink-0 w-32 bg-white rounded-2xl p-2 border border-rose-100"
+          class="group shrink-0 w-40"
         >
-          <div class="aspect-square rounded-xl overflow-hidden mb-1">
-            <img :src="s.product.main_image" class="w-full h-full object-cover" alt="" />
+          <div class="aspect-square rounded-2xl overflow-hidden bg-neutral-50 mb-3">
+            <img :src="s.product.main_image" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="" />
           </div>
-          <p class="text-xs truncate">{{ s.product.name }}</p>
-          <p class="text-rose-500 font-bold text-sm">{{ yuan(s.seckill_price) }}</p>
-          <div class="h-1 bg-rose-100 rounded mt-1 overflow-hidden">
-            <div class="h-full bg-rose-500 rounded" :style="{ width: s.progress + '%' }"></div>
+          <p class="text-sm text-neutral-900 truncate">{{ s.product.name }}</p>
+          <p class="text-neutral-900 font-semibold mt-0.5">{{ yuan(s.seckill_price) }}</p>
+          <div class="h-1 bg-neutral-100 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-neutral-900 rounded-full" :style="{ width: s.progress + '%' }"></div>
           </div>
         </router-link>
       </div>
     </section>
 
     <!-- Hot products -->
-    <section>
-      <h2 class="text-lg font-bold mb-4">热销精选</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <section class="max-w-6xl mx-auto px-5 pb-24">
+      <h2 class="text-2xl font-semibold tracking-tight mb-8 reveal">热销精选</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
         <ProductCard v-for="p in hot" :key="p.id" :product="p" />
       </div>
     </section>
   </div>
 </template>
+
+<style scoped>
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+:deep(.swiper-pagination-bullet-active) {
+  background: #171717;
+}
+</style>
