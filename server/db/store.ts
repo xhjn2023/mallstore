@@ -134,6 +134,17 @@ export async function flushAll(): Promise<void> {
  * - 本地：确保种子数据存在（沿用 JSON 文件）。
  */
 let readyPromise: Promise<void> | null = null
+
+// DB 首次连不上时，后台退避重试（8s 间隔），恢复后自动上线，无需重启容器。
+let retryTimer: ReturnType<typeof setTimeout> | null = null
+function scheduleRetry() {
+  if (retryTimer) return
+  retryTimer = setTimeout(() => {
+    retryTimer = null
+    ensureReady().catch(() => scheduleRetry())
+  }, 8000)
+}
+
 export function ensureReady(): Promise<void> {
   if (!readyPromise) {
     readyPromise = (async () => {
@@ -165,6 +176,7 @@ export function ensureReady(): Promise<void> {
     })().catch((e) => {
       readyPromise = null // 允许下次重试
       console.error('[store] ensureReady 失败:', e)
+      scheduleRetry() // 后台退避重试，DB 恢复后自动上线
       throw e
     })
   }
