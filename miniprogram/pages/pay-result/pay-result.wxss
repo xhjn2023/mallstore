@@ -22,12 +22,12 @@
   margin-bottom: 40rpx;
 }
 .success-icon {
-  background: linear-gradient(135deg, #4caf50, #66bb6a);
-  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+  background: linear-gradient(135deg, #333333, #333333);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
 .fail-icon {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
-  box-shadow: 0 8rpx 24rpx rgba(255, 68, 68, 0.3);
+  background: linear-gradient(135deg, #111111, #333333);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
 }
 .icon-mark {
   font-size: 96rpx;
@@ -74,11 +74,11 @@
 }
 .btn.outline {
   background: #fff;
-  color: #ff4444;
-  border: 2rpx solid #ff4444;
+  color: #111111;
+  border: 2rpx solid #111111;
 }
 .btn.primary {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
   border: 2rpx solid transparent;
 }

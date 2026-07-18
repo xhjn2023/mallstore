@@ -83,7 +83,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定清空搜索历史？',
-      confirmColor: '#ff4444',
+      confirmColor: '#111111',
       success: (res) => {
         if (res.confirm) {
           this.clearHistory()

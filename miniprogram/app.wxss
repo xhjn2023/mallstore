@@ -1,81 +1,94 @@
-/* app.wxss 全局样式 */
+/* app.wxss — 极简纯净（Calm / Apple-like）设计系统
+   参考 design-prototypes/direction-a-calm.html：近单色中性、留白、
+   细边框、药丸按钮、内容优先。 */
+
 page {
-  /* ===== 设计令牌（统一视觉语言，参考主流开源商城 UI 规范） ===== */
-  --brand: #ff4444;          /* 主品牌色 */
-  --brand-light: #ff6b6b;
-  --brand-bg: #fff0f0;        /* 品牌浅色底 */
-  --text: #1f1f1f;            /* 主文本 */
-  --text-2: #666;             /* 次级文本 */
-  --text-3: #999;             /* 辅助文本 */
-  --bg: #f5f5f5;              /* 页面背景 */
+  /* ===== 设计令牌 ===== */
+  --brand: #111111;          /* 唯一强调色：近黑 */
+  --brand-light: #333333;
+  --brand-bg: #f5f5f4;        /* 中性浅底（替代原品牌浅红） */
+  --text: #1a1a1a;            /* 主文本 neutral-900 */
+  --text-2: #6b6b6b;          /* 次级文本 neutral-500 */
+  --text-3: #a3a3a3;          /* 辅助文本 neutral-400 */
+  --bg: #ffffff;              /* 页面背景：纯白 */
+  --bg-soft: #fafafa;         /* 浅中性分区底 */
   --card: #ffffff;            /* 卡片背景 */
-  --border: #f0f0f0;          /* 分割线 */
-  --radius: 20rpx;            /* 圆角基准 */
-  --shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  --border: #ededed;          /* 分割线 / 细边框 neutral-200 */
+  --radius: 24rpx;            /* 圆角基准 */
+  --radius-sm: 16rpx;
+  --shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.04);  /* 极轻阴影，优先用边框 */
 
   background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 28rpx;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.2rpx;
 }
 
-/* 常用变量 */
 .container {
   min-height: 100vh;
   box-sizing: border-box;
 }
 
-/* 卡片 */
+/* 卡片：细边框 + 极轻阴影，弱化投影、强调留白 */
 .card {
   background: var(--card);
   border-radius: var(--radius);
   margin: 20rpx;
-  padding: 24rpx;
+  padding: 28rpx;
+  border: 1rpx solid var(--border);
   box-shadow: var(--shadow);
 }
 
-/* 区块标题（统一商城各列表页小标题风格） */
+/* 区块卡片（列表页通用容器） */
 .section-card {
   background: var(--card);
   border-radius: var(--radius);
   margin: 16rpx;
-  padding: 24rpx;
+  padding: 28rpx;
+  border: 1rpx solid var(--border);
   box-shadow: var(--shadow);
 }
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 .section-title {
   display: flex;
   align-items: center;
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: 600;
+  letter-spacing: -0.6rpx;
   color: var(--text);
 }
+/* 极简：短黑细线替代粗色块 */
 .section-title::before {
   content: '';
-  width: 8rpx;
+  width: 6rpx;
   height: 30rpx;
-  border-radius: 4rpx;
+  border-radius: 3rpx;
   background: var(--brand);
-  margin-right: 14rpx;
+  margin-right: 16rpx;
 }
 .section-more {
   font-size: 24rpx;
   color: var(--text-3);
 }
 
-/* 价格 */
+/* 价格：近黑，弱化符号与原价 */
 .price {
   color: var(--brand);
   font-weight: 600;
 }
 .price-symbol {
   font-size: 24rpx;
+  font-weight: 500;
+}
+.price-num {
+  font-weight: 600;
 }
 .price-original {
   color: var(--text-3);
@@ -84,12 +97,12 @@ page {
   margin-left: 8rpx;
 }
 
-/* 按钮 */
+/* 按钮：药丸形，实黑 / 细描边 */
 .btn-primary {
-  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  background: var(--brand);
   color: #fff;
-  border-radius: 48rpx;
-  padding: 20rpx 40rpx;
+  border-radius: 999rpx;
+  padding: 22rpx 44rpx;
   text-align: center;
   font-size: 30rpx;
   font-weight: 500;
@@ -100,15 +113,15 @@ page {
   border: none;
 }
 .btn-primary[disabled] {
-  opacity: 0.55;
+  opacity: 0.4;
   color: #fff;
 }
 .btn-outline {
   background: #fff;
   color: var(--brand);
-  border: 2rpx solid var(--brand);
-  border-radius: 48rpx;
-  padding: 18rpx 40rpx;
+  border: 1rpx solid var(--brand);
+  border-radius: 999rpx;
+  padding: 20rpx 44rpx;
   text-align: center;
   font-size: 30rpx;
   transition: all 0.2s;
@@ -116,22 +129,27 @@ page {
 .btn-outline::after {
   border: none;
 }
+.btn-block {
+  width: 100%;
+  box-sizing: border-box;
+}
 
-/* 标签 */
+/* 标签：中性浅底 / 描边，弱化色彩 */
 .tag {
   display: inline-block;
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
   font-size: 20rpx;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .tag-hot {
   background: var(--brand-bg);
-  color: var(--brand);
+  color: var(--text);
 }
 .tag-new {
-  background: #e8f5e9;
-  color: #4caf50;
+  background: #fff;
+  color: var(--text);
+  border: 1rpx solid var(--border);
 }
 
 /* Flex 工具 */
@@ -144,6 +162,7 @@ page {
 
 /* 文字 */
 .text-gray { color: var(--text-3); }
+.text-2 { color: var(--text-2); }
 .text-sm { font-size: 24rpx; }
 .text-xs { font-size: 20rpx; }
 .text-ellipsis {
@@ -165,6 +184,10 @@ page {
   background: var(--border);
   margin: 20rpx 0;
 }
+.hairline {
+  height: 1rpx;
+  background: var(--border);
+}
 
 /* 空状态 */
 .empty {
@@ -182,7 +205,7 @@ page {
 
 /* 骨架屏 */
 .skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, #f2f2f2 25%, #e8e8e8 50%, #f2f2f2 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
   border-radius: 8rpx;

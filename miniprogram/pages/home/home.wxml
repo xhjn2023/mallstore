@@ -8,29 +8,29 @@
     </view>
   </view>
 
-  <!-- 轮播图 -->
-  <swiper class="banner-swiper" indicator-dots autoplay circular interval="4000" duration="500" wx:if="{{banners.length}}">
-    <swiper-item wx:for="{{banners}}" wx:key="id" bindtap="onBannerTap" data-item="{{item}}">
-      <image src="{{item.image}}" mode="aspectFill" class="banner-img" lazy-load />
-    </swiper-item>
-  </swiper>
+  <!-- 极简主张 -->
+  <view class="hero">
+    <text class="hero-eyebrow">2026 春夏系列</text>
+    <view class="hero-title">少即是多，为日常而设计</view>
+    <view class="hero-sub">去除多余装饰，保留真正必要的质感。</view>
+  </view>
 
   <!-- 分类导航 -->
   <view class="category-nav" wx:if="{{categories.length}}">
-      <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
-        <view class="cat-icon">
-          <image wx:if="{{item._isImageIcon}}" class="cat-icon-media" src="{{item.icon}}" mode="aspectFit" />
-          <text wx:else>{{item.icon || '📦'}}</text>
-        </view>
-        <text class="cat-name">{{item.name}}</text>
+    <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
+      <view class="cat-icon">
+        <image wx:if="{{item._isImageIcon}}" class="cat-icon-media" src="{{item.icon}}" mode="aspectFit" />
+        <text wx:else>{{item.icon || '📦'}}</text>
       </view>
+      <text class="cat-name">{{item.name}}</text>
+    </view>
   </view>
 
   <!-- 限时秒杀 -->
   <view class="seckill-section" wx:if="{{seckills.length}}">
     <view class="section-header">
       <view class="section-title">
-        <text class="title-text">⚡ 限时秒杀</text>
+        <text class="title-text">限时秒杀</text>
         <text class="countdown">{{countdownText}}</text>
       </view>
       <text class="section-more" bindtap="goSeckill">更多 ></text>
@@ -53,7 +53,7 @@
   <!-- 热销推荐 -->
   <view class="hot-section">
     <view class="section-header">
-      <view class="section-title">🔥 热销推荐</view>
+      <view class="section-title">热销推荐</view>
     </view>
     <view class="product-grid">
       <view class="product-card" wx:for="{{hotProducts}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">

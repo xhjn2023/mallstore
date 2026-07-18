@@ -1,7 +1,7 @@
 /* pages/search/search.wxss */
 .search-page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #fafafa;
 }
 
 /* 顶部搜索框 */
@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   height: 72rpx;
-  background: #f5f5f5;
+  background: #fafafa;
   border-radius: 36rpx;
   padding: 0 24rpx;
   gap: 12rpx;
@@ -45,7 +45,7 @@
   padding: 8rpx;
 }
 .search-btn {
-  color: #ff4444;
+  color: #111111;
   font-size: 30rpx;
   font-weight: 500;
   padding: 0 8rpx;
@@ -57,7 +57,7 @@
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 .section-header {
   display: flex;
@@ -83,13 +83,13 @@
 }
 .hot-chip {
   padding: 14rpx 32rpx;
-  background: #fff0f0;
-  color: #ff4444;
+  background: #f5f5f4;
+  color: #111111;
   border-radius: 32rpx;
   font-size: 26rpx;
 }
 .hot-chip:first-child {
-  background: #ff4444;
+  background: #111111;
   color: #fff;
 }
 

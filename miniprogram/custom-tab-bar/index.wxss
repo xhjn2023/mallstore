@@ -1,4 +1,6 @@
-/* custom-tab-bar/index.wxss */
+/* custom-tab-bar/index.wxss — 极简中性
+   激活态：近黑实心图标 + 顶部短黑细线；未选态：中性灰描边。 */
+
 .tab-bar {
   position: fixed;
   bottom: 0;
@@ -8,7 +10,7 @@
   padding-bottom: env(safe-area-inset-bottom);
   background: #ffffff;
   display: flex;
-  box-shadow: 0 -1rpx 0 rgba(0, 0, 0, 0.05);
+  border-top: 1rpx solid #ededed;
   z-index: 999;
 }
 
@@ -32,7 +34,7 @@
 }
 
 .tab-bar-item.active .tab-icon {
-  transform: scale(1.12);
+  transform: scale(1.1);
 }
 
 .tab-bar-item.active::before {
@@ -41,16 +43,17 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 36rpx;
+  width: 32rpx;
   height: 4rpx;
   border-radius: 2rpx;
-  background: #ff4444;
+  background: #111111;
 }
 
 .tab-text {
   font-size: 20rpx;
   line-height: 1.4;
   margin-top: 6rpx;
+  letter-spacing: 0;
 }
 
 /* ====== 首页图标 ====== */
@@ -58,7 +61,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9.5l9-7 9 7v10.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpath d='M9 22v-7h6v7'/%3E%3C/svg%3E");
 }
 .tab-icon-home-active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4444'%3E%3Cpath d='M3 9.5l9-7 9 7v10.5a2 2 0 0 1-2 2h-4.5v-7h-5v7H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Cpath d='M3 9.5l9-7 9 7v10.5a2 2 0 0 1-2 2h-4.5v-7h-5v7H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E");
 }
 
 /* ====== 分类图标 ====== */
@@ -66,7 +69,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='3' y='14' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='14' width='7' height='7' rx='1.5'/%3E%3C/svg%3E");
 }
 .tab-icon-category-active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4444'%3E%3Crect x='3' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='3' y='14' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='14' width='7' height='7' rx='1.5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Crect x='3' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='3' width='7' height='7' rx='1.5'/%3E%3Crect x='3' y='14' width='7' height='7' rx='1.5'/%3E%3Crect x='14' y='14' width='7' height='7' rx='1.5'/%3E%3C/svg%3E");
 }
 
 /* ====== 购物车图标 ====== */
@@ -74,7 +77,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='20' r='1.5'/%3E%3Ccircle cx='18' cy='20' r='1.5'/%3E%3Cpath d='M2 3h2.5l2.2 12.6a1.5 1.5 0 0 0 1.5 1.2h9.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6'/%3E%3C/svg%3E");
 }
 .tab-icon-cart-active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='20' r='1.8' fill='%23ff4444'/%3E%3Ccircle cx='18' cy='20' r='1.8' fill='%23ff4444'/%3E%3Cpath d='M2 3h2.5l2.2 12.6a1.5 1.5 0 0 0 1.5 1.2h9.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6z' fill='%23ff4444' stroke='%23ff4444' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='20' r='1.8' fill='%23111111'/%3E%3Ccircle cx='18' cy='20' r='1.8' fill='%23111111'/%3E%3Cpath d='M2 3h2.5l2.2 12.6a1.5 1.5 0 0 0 1.5 1.2h9.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6z' fill='%23111111' stroke='%23111111' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 /* ====== 我的图标 ====== */
@@ -82,5 +85,5 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1'/%3E%3C/svg%3E");
 }
 .tab-icon-user-active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4444'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1z'/%3E%3C/svg%3E");
 }

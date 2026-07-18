@@ -1,7 +1,7 @@
 /* pages/aftersale/aftersale.wxss */
 .page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #fafafa;
   padding: 20rpx 24rpx;
   box-sizing: border-box;
 }
@@ -45,13 +45,13 @@
   font-weight: 600;
 }
 .status-0 {
-  color: #ff9800;
+  color: #333333;
 }
 .status-1 {
-  color: #4caf50;
+  color: #333333;
 }
 .status-2 {
-  color: #f44336;
+  color: #111111;
 }
 
 .items {
@@ -86,7 +86,7 @@
 }
 .price {
   font-size: 26rpx;
-  color: #ff4444;
+  color: #111111;
 }
 
 .reason {
@@ -107,7 +107,7 @@
 }
 .link {
   font-size: 26rpx;
-  color: #ff4444;
+  color: #111111;
 }
 
 .safe-bottom {

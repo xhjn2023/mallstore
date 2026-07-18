@@ -6,7 +6,7 @@
 
 /* 用户信息区 */
 .profile-section {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   padding: 60rpx 32rpx 80rpx;
   position: relative;
 }
@@ -137,7 +137,7 @@
   border: none;
 }
 .edit-save {
-  background: #ff4444;
+  background: #111111;
   color: #fff;
 }
 
@@ -173,7 +173,7 @@
   border-radius: 16rpx;
   margin: 20rpx 24rpx;
   padding: 24rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 
 /* 订单快捷入口上移 */
@@ -230,7 +230,7 @@
   height: 32rpx;
   line-height: 32rpx;
   padding: 0 8rpx;
-  background: #ff4444;
+  background: #111111;
   color: #fff;
   font-size: 20rpx;
   border-radius: 16rpx;
@@ -283,7 +283,7 @@
   color: #ccc;
 }
 
-/* 退出登录项（红色，左对齐无箭头） */
+/* 退出登录项（中性，左对齐无箭头） */
 .logout-item {
   justify-content: center;
 }
@@ -291,7 +291,7 @@
 .logout-text {
   flex: none;
   margin-left: 20rpx;
-  color: #ff4444;
+  color: #111111;
   font-weight: 500;
 }
 

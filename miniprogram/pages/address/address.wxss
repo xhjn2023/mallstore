@@ -11,7 +11,7 @@
   border-radius: 16rpx;
   margin-bottom: 20rpx;
   padding: 28rpx 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 
 .address-card:active {
@@ -43,7 +43,7 @@
 
 .default-tag {
   margin-left: 16rpx;
-  background: #ff4444;
+  background: #111111;
   color: #fff;
   font-size: 20rpx;
   padding: 2rpx 12rpx;
@@ -112,11 +112,11 @@
   padding: 20rpx 32rpx;
   padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   background: #fff;
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  border-top: 1rpx solid #ededed;
 }
 
 .add-btn {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
   text-align: center;
   padding: 24rpx 0;

@@ -36,7 +36,7 @@
   <view class="default-card">
     <view class="default-row">
       <text class="default-label">设为默认地址</text>
-      <switch checked="{{form.is_default}}" bindchange="onDefaultChange" color="#ff4444" />
+      <switch checked="{{form.is_default}}" bindchange="onDefaultChange" color="#111111" />
     </view>
   </view>
 

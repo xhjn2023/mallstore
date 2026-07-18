@@ -13,7 +13,7 @@
   padding: 28rpx 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
   position: relative;
   overflow: hidden;
 }
@@ -24,7 +24,7 @@
   right: 0;
   bottom: 0;
   height: 4rpx;
-  background: repeating-linear-gradient(90deg, #ff4444 0, #ff4444 20rpx, #ff8a8a 20rpx, #ff8a8a 40rpx);
+  background: repeating-linear-gradient(90deg, #111111 0, #111111 20rpx, #555555 20rpx, #555555 40rpx);
 }
 .addr-icon {
   font-size: 36rpx;
@@ -74,7 +74,7 @@
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 .goods-item {
   display: flex;
@@ -88,7 +88,7 @@
   width: 144rpx;
   height: 144rpx;
   border-radius: 12rpx;
-  background: #f5f5f5;
+  background: #fafafa;
   margin-right: 20rpx;
   flex-shrink: 0;
 }
@@ -110,7 +110,7 @@
 .spec-tag {
   font-size: 22rpx;
   color: #999;
-  background: #f5f5f5;
+  background: #fafafa;
   padding: 4rpx 12rpx;
   border-radius: 6rpx;
 }
@@ -121,7 +121,7 @@
   margin-top: 8rpx;
 }
 .goods-price {
-  color: #ff4444;
+  color: #111111;
 }
 .price-symbol {
   font-size: 22rpx;
@@ -143,7 +143,7 @@
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 .remark-label {
   font-size: 28rpx;
@@ -166,7 +166,7 @@
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 .coupon-label {
   font-size: 28rpx;
@@ -179,12 +179,12 @@
 }
 .coupon-applied {
   font-size: 28rpx;
-  color: #ff4444;
+  color: #111111;
   font-weight: 600;
 }
 .coupon-available {
   font-size: 26rpx;
-  color: #ff4444;
+  color: #111111;
 }
 .coupon-none {
   font-size: 26rpx;
@@ -201,7 +201,7 @@
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #ededed;
 }
 .amount-row {
   display: flex;
@@ -218,7 +218,7 @@
   color: #333;
 }
 .discount-val {
-  color: #ff4444;
+  color: #111111;
 }
 .amount-divider {
   height: 1rpx;
@@ -229,7 +229,7 @@
   padding: 16rpx 0 4rpx;
 }
 .pay-amount {
-  color: #ff4444;
+  color: #111111;
 }
 .pay-num {
   font-size: 36rpx;
@@ -255,7 +255,7 @@
 .bottom-amount {
   display: flex;
   align-items: baseline;
-  color: #ff4444;
+  color: #111111;
 }
 .bottom-label {
   font-size: 26rpx;
@@ -266,7 +266,7 @@
   font-weight: 600;
 }
 .submit-btn {
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
   font-size: 30rpx;
   font-weight: 500;
@@ -297,7 +297,7 @@
   right: 0;
   bottom: 0;
   z-index: 101;
-  background: #f5f5f5;
+  background: #fafafa;
   border-radius: 24rpx 24rpx 0 0;
   max-height: 80vh;
   display: flex;
@@ -341,13 +341,13 @@
   box-sizing: border-box;
 }
 .coupon-item.selected {
-  border-color: #ff4444;
+  border-color: #111111;
 }
 .coupon-item-left {
   width: 180rpx;
   padding: 24rpx 0;
   text-align: center;
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
 }
 .coupon-amount {
@@ -388,8 +388,8 @@
   box-sizing: border-box;
 }
 .coupon-radio.checked {
-  background: #ff4444;
-  border-color: #ff4444;
+  background: #111111;
+  border-color: #111111;
 }
 .coupon-radio.checked::after {
   content: '';

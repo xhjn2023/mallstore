@@ -37,7 +37,7 @@ Page({
     wx.showModal({
       title: '提示',
       content: '确定要取消收藏该商品吗？',
-      confirmColor: '#ff4444',
+      confirmColor: '#111111',
       success: async (res) => {
         if (res.confirm) {
           try {

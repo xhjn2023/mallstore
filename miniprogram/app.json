@@ -23,14 +23,14 @@
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "商城",
-    "backgroundColor": "#f5f5f5",
+    "backgroundColor": "#ffffff",
     "backgroundTextStyle": "dark",
     "enablePullDownRefresh": false
   },
   "tabBar": {
     "custom": true,
     "color": "#999999",
-    "selectedColor": "#ff4444",
+    "selectedColor": "#111111",
     "backgroundColor": "#ffffff",
     "list": [
       {

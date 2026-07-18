@@ -105,7 +105,7 @@ Page({
       content: '客服热线：400-888-8888\n服务时间：9:00 - 22:00',
       showCancel: false,
       confirmText: '知道了',
-      confirmColor: '#ff4444',
+      confirmColor: '#111111',
     })
   },
 
@@ -137,7 +137,7 @@ Page({
       title: '提示',
       content: '确定要退出登录吗？',
       confirmText: '退出',
-      confirmColor: '#ff4444',
+      confirmColor: '#111111',
       success: (r) => {
         if (!r.confirm) return
         // 清理本地登录态

@@ -1,7 +1,7 @@
 /* pages/goods-detail/goods-detail.wxss */
 .detail-page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #fafafa;
   padding-bottom: 140rpx;
 }
 
@@ -58,16 +58,16 @@
   gap: 16rpx;
 }
 .price-box {
-  color: #ff4444;
+  color: #111111;
 }
 .price-symbol {
   font-size: 28rpx;
-  color: #ff4444;
+  color: #111111;
 }
 .price-num {
   font-size: 52rpx;
   font-weight: 700;
-  color: #ff4444;
+  color: #111111;
 }
 .price-original {
   font-size: 28rpx;
@@ -160,7 +160,7 @@
   width: 64rpx;
   height: 64rpx;
   border-radius: 50%;
-  background: #f5f5f5;
+  background: #fafafa;
   margin-right: 16rpx;
 }
 .comment-user {
@@ -180,7 +180,7 @@
   margin-right: 2rpx;
 }
 .star-on {
-  color: #ff4444;
+  color: #111111;
 }
 .star-off {
   color: #ddd;
@@ -206,7 +206,7 @@
 /* 底部占位 */
 .bottom-placeholder {
   height: 140rpx;
-  background: #f5f5f5;
+  background: #fafafa;
 }
 
 /* 底部操作栏 */
@@ -220,7 +220,7 @@
   background: #fff;
   padding: 12rpx 24rpx;
   padding-bottom: calc(12rpx + env(safe-area-inset-bottom));
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  border-top: 1rpx solid #ededed;
   z-index: 50;
 }
 .action-bar-bg {
@@ -254,7 +254,7 @@
 }
 .icon-text.fav-on,
 .icon-emoji.fav-on {
-  color: #ff4444;
+  color: #111111;
 }
 .action-btns {
   flex: 1;
@@ -267,7 +267,7 @@
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
-  background: linear-gradient(135deg, #ffb347, #ff8a3d);
+  background: linear-gradient(135deg, #999999, #333333);
   color: #fff;
   font-size: 28rpx;
   font-weight: 500;
@@ -278,7 +278,7 @@
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
   font-size: 28rpx;
   font-weight: 500;
@@ -324,7 +324,7 @@
   width: 180rpx;
   height: 180rpx;
   border-radius: 16rpx;
-  background: #f5f5f5;
+  background: #fafafa;
   margin-top: -40rpx;
   border: 4rpx solid #fff;
 }
@@ -337,7 +337,7 @@
   gap: 8rpx;
 }
 .popup-price {
-  color: #ff4444;
+  color: #111111;
 }
 .popup-price .price-symbol {
   font-size: 28rpx;
@@ -386,16 +386,16 @@
 }
 .spec-value-item {
   padding: 14rpx 28rpx;
-  background: #f5f5f5;
+  background: #fafafa;
   border-radius: 8rpx;
   font-size: 26rpx;
   color: #333;
   border: 2rpx solid transparent;
 }
 .spec-value-item.selected {
-  background: #fff0f0;
-  color: #ff4444;
-  border-color: #ff4444;
+  background: #f5f5f4;
+  color: #111111;
+  border-color: #111111;
 }
 
 /* 数量选择 */
@@ -415,7 +415,7 @@
   height: 56rpx;
   line-height: 56rpx;
   text-align: center;
-  background: #f5f5f5;
+  background: #fafafa;
   font-size: 32rpx;
   color: #333;
   border-radius: 8rpx;
@@ -439,7 +439,7 @@
   height: 88rpx;
   line-height: 88rpx;
   text-align: center;
-  background: linear-gradient(135deg, #ff4444, #ff6b6b);
+  background: linear-gradient(135deg, #111111, #333333);
   color: #fff;
   font-size: 32rpx;
   font-weight: 500;

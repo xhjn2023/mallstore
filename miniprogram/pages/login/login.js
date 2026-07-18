@@ -47,7 +47,7 @@ Page({
           '我们高度重视您的个人信息保护。本政策说明我们如何收集、使用、存储您的微信昵称、头像及交易信息，并承诺不会用于未经您授权的用途。登录即表示您理解并同意本政策。',
         showCancel: false,
         confirmText: '我已知晓',
-        confirmColor: '#ff4444',
+        confirmColor: '#111111',
       })
     } else {
       wx.showModal({
@@ -56,7 +56,7 @@ Page({
           '欢迎使用本商城。使用本服务前请仔细阅读以下条款：您需保证所提交信息的真实性；我们提供的商品与服务以页面描述为准；任何违规行为可能导致账号被限制。点击“同意”即代表您接受全部条款。',
         showCancel: false,
         confirmText: '我已知晓',
-        confirmColor: '#ff4444',
+        confirmColor: '#111111',
       })
     }
   },
