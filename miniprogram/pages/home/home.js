@@ -2,6 +2,18 @@
 const { get } = require('../../utils/request')
 const { fenToYuan, formatCountdown } = require('../../utils/format')
 
+/** 分类名 → 专属图标类（与 app.wxss .ic-cat-* 对应） */
+const CAT_ICON_MAP = {
+  '手机数码': 'cat-phone',
+  '电脑办公': 'cat-laptop',
+  '家用电器': 'cat-appliance',
+  '服饰鞋包': 'cat-bag',
+  '美妆个护': 'cat-beauty',
+  '食品生鲜': 'cat-food',
+  '家居家装': 'cat-home',
+  '运动户外': 'cat-sports',
+}
+
 Page({
   data: {
     banners: [],
@@ -39,6 +51,7 @@ Page({
       const categories = (data.categories || []).map((c) => ({
         ...c,
         _isImageIcon: /^(https?:\/\/|\/|data:)/.test(c.icon || ''),
+        _icClass: CAT_ICON_MAP[c.name] || 'box',
       }))
       const seckills = (data.seckills || []).map((s) => ({
         ...s,

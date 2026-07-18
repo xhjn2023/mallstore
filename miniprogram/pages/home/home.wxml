@@ -8,8 +8,9 @@
     </view>
   </view>
 
-  <!-- 极简主张 -->
+  <!-- 极简主张 + 视觉装饰 -->
   <view class="hero">
+    <view class="hero-visual"></view>
     <text class="hero-eyebrow">2026 春夏系列</text>
     <view class="hero-title">少即是多，为日常而设计</view>
     <view class="hero-sub">去除多余装饰，保留真正必要的质感。</view>
@@ -20,7 +21,7 @@
     <view class="cat-item" wx:for="{{categories}}" wx:key="id" bindtap="goCategory" data-id="{{item.id}}" data-name="{{item.name}}">
       <view class="cat-icon">
         <image wx:if="{{item._isImageIcon}}" class="cat-icon-media" src="{{item.icon}}" mode="aspectFit" />
-        <view wx:else class="cat-icon-fallback ic ic-box"></view>
+        <view wx:else class="cat-icon-fallback ic ic-{{item._icClass}}"></view>
       </view>
       <text class="cat-name">{{item.name}}</text>
     </view>
