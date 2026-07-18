@@ -1,7 +1,7 @@
-"""Generate 8 category-specific icon CSS rules (ic-cat-*) for app.wxss.
-   Style: 24x24 viewBox, stroke-width 1.8, round caps/joins, #111 stroke.
+"""Generate 8 category-specific icon CSS rules (ic-cat-*).
+   Uses percent-encoding (urllib.parse.quote) for WXSS compatibility.
 """
-import html
+import urllib.parse
 
 ICONS = {
     "cat-phone": (
@@ -39,21 +39,20 @@ ICONS = {
 }
 
 
-def svg_to_data_uri(d: str) -> str:
+def svg_to_percent_uri(d: str) -> str:
     svg = (
-        f'<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' '
-        f'fill=\'none\' stroke=\'%23111111\' stroke-width=\'1.8\' '
-        f'stroke-linecap=\'round\' stroke-linejoin=\'round\'>{d}</svg>'
+        f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' "
+        f"fill='none' stroke='%23111111' stroke-width='1.8' "
+        f"stroke-linecap='round' stroke-linejoin='round'>{d}</svg>"
     )
-    encoded = html.escape(svg, quote=True)
+    encoded = urllib.parse.quote(svg, safe='')
     return f'url("data:image/svg+xml,{encoded}")'
 
 
 lines = ["/* ===== Category-specific icons (generated) ===== */"]
 for cls_name, (label, paths) in ICONS.items():
-    uri = svg_to_data_uri(paths)
+    uri = svg_to_percent_uri(paths)
     lines.append(f".ic-{cls_name} {{ background-image: {uri}; }}")
 
 block = "\n".join(lines)
-print(f"{len(ICONS)} icons, {len(block)} chars")
 print(block)
