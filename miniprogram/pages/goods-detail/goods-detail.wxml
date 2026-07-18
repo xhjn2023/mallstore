@@ -63,7 +63,7 @@
             <view class="comment-user">
               <text class="comment-name">{{item.user_name}}</text>
               <view class="comment-stars">
-                <view class="star {{star ? 'star-on' : 'star-off'}}" wx:for="{{item.stars}}" wx:for-item="star" wx:key="*this"></view>
+                <view class="star ic {{star ? 'ic-star-on' : 'ic-star-off'}}" wx:for="{{item.stars}}" wx:for-item="star" wx:key="*this"></view>
               </view>
             </view>
             <text class="comment-time">{{item.timeText}}</text>

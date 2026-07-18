@@ -179,15 +179,6 @@
   width: 24rpx;
   height: 24rpx;
   margin-right: 2rpx;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-.star-on {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111111' stroke='%23111111' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 17.3 5.8 20.9l1.6-6.8L2.2 8.9l6.9-.6z'/%3E%3C/svg%3E");
-}
-.star-off {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dddddd' stroke-width='1.8' stroke-linejoin='round'%3E%3Cpath d='M12 2l2.9 6.3 6.9.6-5.2 4.6 1.6 6.8L12 17.3 5.8 20.9l1.6-6.8L2.2 8.9l6.9-.6z'/%3E%3C/svg%3E");
 }
 .comment-time {
   font-size: 22rpx;
