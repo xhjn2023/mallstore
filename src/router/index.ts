@@ -15,7 +15,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layouts/AdminLayout.vue'),
-    redirect: '/dashboard',
+    redirect: '/shop',
     children: [
       {
         path: 'dashboard',
@@ -91,7 +91,39 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-  { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
+  // ===== C 端商城前端（公开） =====
+  {
+    path: '/shop',
+    component: () => import('@/storefront/StorefrontLayout.vue'),
+    meta: { public: true },
+    children: [
+      {
+        path: '',
+        name: 'store-home',
+        component: () => import('@/storefront/Home.vue'),
+        meta: { public: true, title: '商城首页' },
+      },
+      {
+        path: 'products',
+        name: 'store-products',
+        component: () => import('@/storefront/ProductList.vue'),
+        meta: { public: true, title: '商品列表' },
+      },
+      {
+        path: 'product/:id',
+        name: 'store-product',
+        component: () => import('@/storefront/ProductDetail.vue'),
+        meta: { public: true, title: '商品详情' },
+      },
+      {
+        path: 'cart',
+        name: 'store-cart',
+        component: () => import('@/storefront/Cart.vue'),
+        meta: { public: true, title: '购物车' },
+      },
+    ],
+  },
+  { path: '/:pathMatch(.*)*', redirect: '/shop' },
 ]
 
 const router = createRouter({
@@ -102,7 +134,8 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   const adminStore = useAdminStore()
   if (to.meta.public) {
-    if (adminStore.isLoggedIn) return next('/dashboard')
+    // 仅登录页在已登录时跳后台；其余公开商城页（首页/商品/购物车）始终允许访问
+    if (to.name === 'login' && adminStore.isLoggedIn) return next('/dashboard')
     return next()
   }
   if (!adminStore.isLoggedIn) {

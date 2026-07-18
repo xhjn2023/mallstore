@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express'
 import { load, findOne, findMany } from '../db/store.js'
-import { ok, fail, paginate } from '../utils/response.js'
+import { ok, fail } from '../utils/response.js'
+import { cached } from '../utils/cache.js'
 import { toProductCard } from './home.js'
 import type { Product, Sku, Comment, Favorite } from '../../shared/types.js'
 
@@ -9,7 +10,9 @@ const router = Router()
 /** 商品列表（分页/筛选/排序） */
 router.get('/list', async (req: Request, res: Response): Promise<void> => {
   const page = Number(req.query.page) || 1
-  const pageSize = Number(req.query.pageSize) || 10
+  // 限制每页上限，防止超大响应（如 pageSize=100000）拖垮服务
+  const rawPageSize = Number(req.query.pageSize) || 12
+  const pageSize = Math.min(Math.max(rawPageSize, 1), 50)
   const categoryId = req.query.categoryId ? Number(req.query.categoryId) : 0
   const keyword = (req.query.keyword as string) || ''
   const sort = (req.query.sort as string) || 'default' // default|sales|price_asc|price_desc|new
@@ -36,8 +39,22 @@ router.get('/list', async (req: Request, res: Response): Promise<void> => {
       list.sort((a, b) => b.sort - a.sort || b.sales - a.sales)
   }
 
-  const cards = list.map(toProductCard)
-  paginate(res, cards, page, pageSize)
+  // 读穿缓存 + 防惊群：以查询参数作为缓存键，5s TTL，
+  // 高并发冷缓存时只排序/序列化一次，避免重复计算拖垮服务
+  const cacheKey = `pl:${page}:${pageSize}:${categoryId}:${keyword}:${sort}`
+  const payload = await cached(cacheKey, 5000, () => {
+    const total = list.length
+    const start = (page - 1) * pageSize
+    const rows = list.slice(start, start + pageSize).map(toProductCard)
+    return {
+      list: rows,
+      total,
+      page,
+      pageSize,
+      pages: Math.ceil(total / pageSize),
+    }
+  })
+  ok(res, payload)
 })
 
 /** 秒杀活动列表 */

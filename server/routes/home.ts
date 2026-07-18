@@ -1,41 +1,45 @@
 import { Router, type Request, type Response } from 'express'
 import { load, findOne, persist, nextId } from '../db/store.js'
 import { ok } from '../utils/response.js'
+import { cached } from '../utils/cache.js'
 import { now } from '../utils/id.js'
 import type { Banner, Category, Product, Seckill } from '../../shared/types.js'
 
 const router = Router()
 
-/** 首页聚合数据 */
-router.get('/', async (req: Request, res: Response): Promise<void> => {
-  const banners = load<Banner>('banner')
-    .filter((b) => b.status === 1)
-    .sort((a, b) => a.sort - b.sort)
+/** 首页聚合数据（同时支持 /api 与 /api/home，兼容各端调用路径） */
+router.get(['/', '/home'], async (req: Request, res: Response): Promise<void> => {
+  const payload = await cached('home:aggregate', 5000, () => {
+    const banners = load<Banner>('banner')
+      .filter((b) => b.status === 1)
+      .sort((a, b) => a.sort - b.sort)
 
-  const categories = load<Category>('category')
-    .filter((c) => c.status === 1)
-    .sort((a, b) => a.sort - b.sort)
+    const categories = load<Category>('category')
+      .filter((c) => c.status === 1)
+      .sort((a, b) => a.sort - b.sort)
 
-  const t = now()
-  const seckills = load<Seckill>('seckill')
-    .filter((s) => s.status === 1 && s.end_time > t)
-    .map((s) => {
-      const product = findOne<Product>('product', (p) => p.id === s.product_id)
-      return {
-        ...s,
-        product: product ? { id: product.id, name: product.name, main_image: product.main_image } : null,
-        progress: s.stock > 0 ? Math.floor((s.sold / (s.sold + s.stock)) * 100) : 100,
-      }
-    })
-    .slice(0, 6)
+    const t = now()
+    const seckills = load<Seckill>('seckill')
+      .filter((s) => s.status === 1 && s.end_time > t)
+      .map((s) => {
+        const product = findOne<Product>('product', (p) => p.id === s.product_id)
+        return {
+          ...s,
+          product: product ? { id: product.id, name: product.name, main_image: product.main_image } : null,
+          progress: s.stock > 0 ? Math.floor((s.sold / (s.sold + s.stock)) * 100) : 100,
+        }
+      })
+      .slice(0, 6)
 
-  const hotProducts = load<Product>('product')
-    .filter((p) => p.status === 1)
-    .sort((a, b) => b.sales - a.sales)
-    .slice(0, 8)
-    .map(toProductCard)
+    const hotProducts = load<Product>('product')
+      .filter((p) => p.status === 1)
+      .sort((a, b) => b.sales - a.sales)
+      .slice(0, 8)
+      .map(toProductCard)
 
-  ok(res, { banners, categories, seckills, hotProducts })
+    return { banners, categories, seckills, hotProducts }
+  })
+  ok(res, payload)
 })
 
 /** 分类列表 */

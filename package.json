@@ -16,6 +16,7 @@
     "lint:fix": "eslint . --ext .ts,.vue --fix"
   },
   "dependencies": {
+    "@vueuse/core": "^14.3.0",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -26,6 +27,7 @@
     "lucide-vue-next": "^0.511.0",
     "pg": "^8.22.0",
     "pinia": "^2.2.2",
+    "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.0",
     "vue": "^3.4.15",
     "vue-echarts": "^7.0.3",

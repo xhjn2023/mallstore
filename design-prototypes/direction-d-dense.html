@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>方向 D · 高效密集（Dense Marketplace）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body { font-family: 'PingFang SC','Segoe UI',sans-serif; }
+    [x-cloak]{display:none!important}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased" x-data="store()" x-init="init()">
+  <!-- Top nav -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center gap-4">
+      <span class="font-bold text-sky-600 text-lg tracking-tight">SUPERMALL</span>
+      <div class="flex-1 flex items-center bg-slate-100 rounded-md px-3 h-9 text-sm">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+        <input x-model="keyword" @input.debounce.300ms="apply()" placeholder="搜索 1,280,000+ 商品" class="bg-transparent outline-none px-2 w-full text-slate-700" />
+      </div>
+      <div class="flex items-center gap-4 text-slate-500 text-sm">
+        <span class="hidden sm:flex items-center gap-1"><i data-lucide="heart" class="w-4 h-4"></i> 收藏</span>
+        <span class="flex items-center gap-1"><i data-lucide="shopping-cart" class="w-4 h-4"></i> 购物车(<span x-text="cart"></span>)</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-4 flex gap-4">
+    <!-- Sidebar filters -->
+    <aside class="hidden lg:block w-56 shrink-0">
+      <div class="bg-white rounded-lg border border-slate-200 p-4 space-y-5 text-sm">
+        <div>
+          <p class="font-semibold mb-2 text-slate-700">分类</p>
+          <template x-for="c in categories" :key="c"><label class="flex items-center gap-2 py-1 text-slate-600 cursor-pointer"><input type="radio" name="cat" :value="c" x-model="cat" @change="apply()" class="accent-sky-600"> <span x-text="c"></span></label></template>
+        </div>
+        <div>
+          <p class="font-semibold mb-2 text-slate-700">价格区间</p>
+          <div class="flex items-center gap-1">
+            <input type="number" x-model.number="minP" @change="apply()" class="w-16 border rounded px-1 py-0.5 text-xs"><span class="text-slate-400">-</span>
+            <input type="number" x-model.number="maxP" @change="apply()" class="w-16 border rounded px-1 py-0.5 text-xs">
+          </div>
+        </div>
+        <div>
+          <p class="font-semibold mb-2 text-slate-700">评分</p>
+          <div class="flex gap-1 text-amber-400 text-xs">
+            <template x-for="r in [5,4,3]" :key="r"><button @click="rating=r; apply()" :class="rating===r?'ring-1 ring-sky-500':''" class="border rounded px-2 py-0.5 text-slate-600" x-text="r+'星+'"></button></template>
+          </div>
+        </div>
+        <div>
+          <p class="font-semibold mb-2 text-slate-700">仅看</p>
+          <label class="flex items-center gap-2 text-slate-600 cursor-pointer"><input type="checkbox" x-model="onlyNew" @change="apply()" class="accent-sky-600"> 新品</label>
+          <label class="flex items-center gap-2 text-slate-600 cursor-pointer"><input type="checkbox" x-model="onlyStock" @change="apply()" class="accent-sky-600"> 有货</label>
+        </div>
+        <button @click="reset()" class="w-full text-sky-600 text-xs py-1 hover:underline">重置筛选</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 min-w-0">
+      <!-- Toolbar -->
+      <div class="bg-white rounded-lg border border-slate-200 px-3 h-11 flex items-center justify-between text-sm mb-3">
+        <div class="flex items-center gap-1">
+          <template x-for="s in sorts" :key="s.k"><button @click="sort=s.k; apply()" :class="sort===s.k?'bg-sky-50 text-sky-700 font-semibold':'text-slate-500'" class="px-3 h-7 rounded" x-text="s.t"></button></template>
+        </div>
+        <div class="flex items-center gap-2 text-slate-400">
+          <span x-text="filtered.length"></span><span>件结果</span>
+          <button @click="density = density==='cozy'?'compact':'cozy'" class="ml-2 text-slate-500 hover:text-sky-600"><i data-lucide="layout-grid" class="w-4 h-4"></i></button>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div :class="density==='cozy' ? 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3' : 'grid grid-cols-1 sm:grid-cols-2 gap-2'">
+        <template x-for="p in paged" :key="p.id">
+          <div :class="density==='cozy' ? 'bg-white border border-slate-200 rounded-lg p-3 hover:shadow-md transition' : 'bg-white border border-slate-200 rounded p-2 flex gap-3 hover:shadow-md transition'">
+            <div :class="density==='cozy' ? 'aspect-square rounded-md overflow-hidden mb-2' : 'w-24 h-24 rounded-md overflow-hidden shrink-0'">
+              <img :src="p.img" loading="lazy" class="w-full h-full object-cover">
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-sm text-slate-800 truncate" x-text="p.name"></h3>
+              <div class="flex items-center gap-1 mt-1 text-amber-400 text-xs">
+                <span x-text="'★'.repeat(p.rating)"></span><span class="text-slate-400" x-text="p.sales+' 销量'"></span>
+              </div>
+              <div class="mt-1 flex items-baseline gap-1.5">
+                <span class="text-rose-500 font-bold" x-text="'¥'+p.price"></span>
+                <span class="text-slate-300 text-xs line-through" x-text="'¥'+p.old"></span>
+              </div>
+              <div class="mt-1 flex items-center justify-between">
+                <span class="text-[11px]" :class="p.stock>0?'text-emerald-600':'text-slate-300'" x-text="p.stock>0?('库存 '+p.stock):'缺货'"></span>
+                <button @click="cart++; open(p)" class="text-[11px] bg-sky-600 text-white px-2 py-1 rounded hover:bg-sky-700">加入</button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-1 mt-4 text-sm">
+        <button @click="page>1&&page--" class="px-3 py-1 border rounded text-slate-500">‹</button>
+        <template x-for="n in pages" :key="n"><button @click="page=n" :class="page===n?'bg-sky-600 text-white':'border text-slate-600'" class="px-3 py-1 rounded" x-text="n"></button></template>
+        <button @click="page<pages.length&&page++" class="px-3 py-1 border rounded text-slate-500">›</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Quick view modal -->
+  <div x-show="quick" x-cloak @click.self="quick=false" class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-5">
+      <div class="flex gap-4">
+        <img :src="current.img" class="w-28 h-28 rounded-lg object-cover">
+        <div>
+          <h3 class="font-semibold" x-text="current.name"></h3>
+          <p class="text-rose-500 font-bold text-xl mt-2" x-text="'¥'+current.price"></p>
+          <p class="text-xs text-slate-400 mt-1" x-text="'销量 '+current.sales+' · 库存 '+current.stock"></p>
+        </div>
+      </div>
+      <button @click="quick=false; cart++" class="mt-4 w-full bg-sky-600 text-white py-2 rounded-lg hover:bg-sky-700">加入购物车</button>
+    </div>
+  </div>
+
+  <script>
+    function store() {
+      const all = [
+        { id:1, name:'降噪无线耳机 主动降噪', price:899, old:1299, rating:5, sales:2300, stock:120, cat:'数码', isNew:true, img:'https://picsum.photos/seed/m1/400/400' },
+        { id:2, name:'智能手表 Pro 血氧监测', price:1499, old:1799, rating:4, sales:1200, stock:0, cat:'数码', isNew:false, img:'https://picsum.photos/seed/m2/400/400' },
+        { id:3, name:'极简双肩背包 15.6寸', price:299, old:459, rating:5, sales:5400, stock:340, cat:'服饰', isNew:false, img:'https://picsum.photos/seed/m3/400/400' },
+        { id:4, name:'便携咖啡机 胶囊式', price:599, old:799, rating:4, sales:880, stock:55, cat:'餐厨', isNew:true, img:'https://picsum.photos/seed/m4/400/400' },
+        { id:5, name:'机械键盘 87键 热插拔', price:449, old:599, rating:5, sales:3100, stock:210, cat:'数码', isNew:false, img:'https://picsum.photos/seed/m5/400/400' },
+        { id:6, name:'香薰加湿器 静音', price:199, old:259, rating:4, sales:6700, stock:900, cat:'家居', isNew:false, img:'https://picsum.photos/seed/m6/400/400' },
+        { id:7, name:'运动跑鞋 减震回弹', price:499, old:699, rating:5, sales:2200, stock:80, cat:'运动', isNew:true, img:'https://picsum.photos/seed/m7/400/400' },
+        { id:8, name:'陶瓷餐具套装 16件', price:259, old:359, rating:4, sales:1500, stock:0, cat:'餐厨', isNew:false, img:'https://picsum.photos/seed/m8/400/400' },
+        { id:9, name:'桌面台灯 护眼', price:179, old:239, rating:5, sales:4200, stock:160, cat:'家居', isNew:false, img:'https://picsum.photos/seed/m9/400/400' },
+        { id:10, name:'保温运动水壶 750ml', price:129, old:169, rating:4, sales:8900, stock:1200, cat:'运动', isNew:false, img:'https://picsum.photos/seed/m10/400/400' },
+        { id:11, name:'蓝牙音箱 360°', price:349, old:459, rating:5, sales:2600, stock:70, cat:'数码', isNew:true, img:'https://picsum.photos/seed/m11/400/400' },
+        { id:12, name:'真丝眼罩 遮光', price:89, old:129, rating:4, sales:5300, stock:430, cat:'家居', isNew:false, img:'https://picsum.photos/seed/m12/400/400' },
+      ]
+      return {
+        all, filtered: all, paged: [], categories:['全部','数码','家居','服饰','运动','餐厨'],
+        keyword:'', cat:'全部', minP:null, maxP:null, rating:0, onlyNew:false, onlyStock:false,
+        sort:'default', density:'cozy', page:1, pageSize:8, pages:[1], cart:0, quick:false, current:{},
+        sorts:[{k:'default',t:'综合'},{k:'sales',t:'销量'},{k:'price_asc',t:'价格↑'},{k:'price_desc',t:'价格↓'},{k:'new',t:'新品'}],
+        init(){ this.apply() },
+        apply(){
+          let r = this.all.slice()
+          if(this.keyword) r = r.filter(p=>p.name.includes(this.keyword))
+          if(this.cat!=='全部') r = r.filter(p=>p.cat===this.cat)
+          if(this.minP!=null) r = r.filter(p=>p.price>=this.minP)
+          if(this.maxP!=null) r = r.filter(p=>p.price<=this.maxP)
+          if(this.rating) r = r.filter(p=>p.rating>=this.rating)
+          if(this.onlyNew) r = r.filter(p=>p.isNew)
+          if(this.onlyStock) r = r.filter(p=>p.stock>0)
+          if(this.sort==='sales') r.sort((a,b)=>b.sales-a.sales)
+          if(this.sort==='price_asc') r.sort((a,b)=>a.price-b.price)
+          if(this.sort==='price_desc') r.sort((a,b)=>b.price-a.price)
+          if(this.sort==='new') r.sort((a,b)=>(b.isNew?1:0)-(a.isNew?1:0))
+          this.filtered = r
+          this.page = 1
+          this.render()
+        },
+        render(){
+          const total = Math.ceil(this.filtered.length/this.pageSize)||1
+          this.pages = Array.from({length:total},(_,i)=>i+1)
+          const start = (this.page-1)*this.pageSize
+          this.paged = this.filtered.slice(start, start+this.pageSize)
+          this.$nextTick(()=>lucide.createIcons())
+        },
+        reset(){ this.keyword='';this.cat='全部';this.minP=null;this.maxP=null;this.rating=0;this.onlyNew=false;this.onlyStock=false;this.sort='default'; this.apply() },
+        open(p){ this.current=p; this.quick=true },
+        watch: { page(){ this.render() } }
+      }
+    }
+  </script>
+</body>
+</html>

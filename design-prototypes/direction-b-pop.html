@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>方向 B · 活力潮玩（Pop）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body { font-family: 'PingFang SC','Segoe UI',sans-serif; }
+    .grad { background: linear-gradient(135deg,#7c3aed 0%,#ec4899 100%); }
+    .grad-soft { background: linear-gradient(135deg,#ede9fe 0%,#fce7f3 100%); }
+    .swiper-pagination-bullet-active { background:#ec4899 !important; }
+  </style>
+</head>
+<body class="bg-[#faf5ff] text-slate-800 antialiased" x-data="{ cart:0, toast:false }">
+  <!-- Header -->
+  <header class="grad text-white sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <span class="font-extrabold text-lg tracking-tight">POPMART</span>
+      <div class="flex-1 flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 text-sm backdrop-blur">
+        <i data-lucide="search" class="w-4 h-4"></i><span class="opacity-80">搜索好物…</span>
+      </div>
+      <button @click="cart++; toast=true; setTimeout(()=>toast=false,1500)" class="relative">
+        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+        <span x-show="cart>0" x-text="cart" class="absolute -top-2 -right-2 bg-yellow-300 text-purple-900 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Banner Swiper -->
+  <div class="max-w-6xl mx-auto px-4 pt-4">
+    <div class="swiper rounded-3xl overflow-hidden">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide grad flex items-center justify-center h-44 md:h-60 text-white">
+          <div class="text-center"><p class="text-xs opacity-80 mb-1">限时秒杀</p><p class="text-2xl font-extrabold">全场低至 5 折 🔥</p></div>
+        </div>
+        <div class="swiper-slide bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center h-44 md:h-60 text-white">
+          <div class="text-center"><p class="text-xs opacity-80 mb-1">新品首发</p><p class="text-2xl font-extrabold">夏日清凉季 ❄️</p></div>
+        </div>
+        <div class="swiper-slide bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center h-44 md:h-60 text-white">
+          <div class="text-center"><p class="text-xs opacity-80 mb-1">会员专享</p><p class="text-2xl font-extrabold">积分兑好礼 🎁</p></div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+
+  <!-- Category chips -->
+  <div class="max-w-6xl mx-auto px-4 py-5 flex gap-3 overflow-x-auto">
+    <template x-data="{ cats:['推荐','数码','家居','美妆','运动','食品','文具'] }" x-for="c in cats" :key="c">
+      <span class="shrink-0 px-4 py-2 rounded-full grad-soft text-sm font-medium text-purple-700 whitespace-nowrap" x-text="c"></span>
+    </template>
+  </div>
+
+  <!-- Flash sale -->
+  <div class="max-w-6xl mx-auto px-4 mb-6">
+    <div class="grad-soft rounded-3xl p-5">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2 font-extrabold text-purple-700"><i data-lucide="zap" class="w-5 h-5 fill-purple-700"></i> 限时秒杀</div>
+        <div class="flex gap-1 text-sm font-bold text-purple-800"><span class="bg-purple-700 text-white rounded px-1.5 py-0.5">02</span>:<span class="bg-purple-700 text-white rounded px-1.5 py-0.5">18</span>:<span class="bg-purple-700 text-white rounded px-1.5 py-0.5">40</span></div>
+      </div>
+      <div id="flash" class="flex gap-3 overflow-x-auto pb-1"></div>
+    </div>
+  </div>
+
+  <!-- Product grid -->
+  <div class="max-w-6xl mx-auto px-4 pb-28">
+    <h2 class="text-xl font-extrabold mb-4 text-purple-800">为你推荐 ✨</h2>
+    <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+  </div>
+
+  <!-- Floating cart -->
+  <button @click="cart++; toast=true; setTimeout(()=>toast=false,1500)" class="fixed bottom-6 right-5 z-40 grad text-white rounded-full p-4 shadow-lg shadow-purple-500/40 active:scale-90 transition">
+    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+  </button>
+  <div x-show="toast" x-transition class="fixed bottom-24 right-5 z-40 bg-slate-900 text-white text-sm px-4 py-2 rounded-full shadow-lg">已加入购物车 🛒</div>
+
+  <script>
+    const flash = [
+      { name:'蓝牙音箱', price:349, img:'https://picsum.photos/seed/p11/400/400' },
+      { name:'真丝眼罩', price:89, img:'https://picsum.photos/seed/p12/400/400' },
+      { name:'保温水壶', price:129, img:'https://picsum.photos/seed/p13/400/400' },
+      { name:'桌面台灯', price:179, img:'https://picsum.photos/seed/p14/400/400' },
+    ]
+    document.getElementById('flash').innerHTML = flash.map(p => `
+      <div class="shrink-0 w-28 text-center">
+        <div class="aspect-square rounded-2xl overflow-hidden mb-2"><img src="${p.img}" class="w-full h-full object-cover"></div>
+        <p class="text-xs truncate">${p.name}</p>
+        <p class="text-sm font-extrabold text-pink-600">¥${p.price}</p>
+      </div>`).join('')
+
+    const products = [
+      { id:1, name:'降噪无线耳机', price:899, old:1299, tag:'热卖', img:'https://picsum.photos/seed/m1/600/600' },
+      { id:2, name:'智能手表 Pro', price:1499, old:1799, tag:'新品', img:'https://picsum.photos/seed/m2/600/600' },
+      { id:3, name:'极简双肩背包', price:299, old:459, tag:'', img:'https://picsum.photos/seed/m3/600/600' },
+      { id:4, name:'便携咖啡机', price:599, old:799, tag:'秒杀', img:'https://picsum.photos/seed/m4/600/600' },
+      { id:5, name:'机械键盘 87 键', price:449, old:599, tag:'', img:'https://picsum.photos/seed/m5/600/600' },
+      { id:6, name:'香薰加湿器', price:199, old:259, tag:'', img:'https://picsum.photos/seed/m6/600/600' },
+      { id:7, name:'运动跑鞋', price:499, old:699, tag:'热卖', img:'https://picsum.photos/seed/m7/600/600' },
+      { id:8, name:'陶瓷餐具套装', price:259, old:359, tag:'', img:'https://picsum.photos/seed/m8/600/600' },
+    ]
+    document.getElementById('grid').innerHTML = products.map(p => `
+      <div class="bg-white rounded-3xl p-3 shadow-sm hover:shadow-xl hover:-translate-y-1 transition">
+        <div class="relative aspect-square rounded-2xl overflow-hidden mb-3">
+          <img src="${p.img}" loading="lazy" class="w-full h-full object-cover">
+          ${p.tag ? `<span class="absolute top-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white grad">${p.tag}</span>` : ''}
+        </div>
+        <h3 class="text-sm font-semibold truncate">${p.name}</h3>
+        <div class="mt-1 flex items-baseline gap-1.5">
+          <span class="text-pink-600 font-extrabold">¥${p.price}</span>
+          <span class="text-slate-300 text-xs line-through">¥${p.old}</span>
+        </div>
+        <button @click="cart++; toast=true; setTimeout(()=>toast=false,1500)" class="mt-2 w-full grad text-white text-xs font-bold py-2 rounded-full active:scale-95 transition">加入购物车</button>
+      </div>`).join('')
+    lucide.createIcons()
+    new Swiper('.swiper', { loop:true, autoplay:{ delay:3000 }, pagination:{ el:'.swiper-pagination' } })
+  </script>
+</body>
+</html>
