@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>方向 C · 编辑奢品（Editorial）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Noto Serif SC', serif; }
+    .display { font-family: 'Playfair Display', serif; }
+    .zoom img { transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+    .zoom:hover img { transform: scale(1.08); }
+    .rule { height:1px; background:linear-gradient(90deg,transparent,#caa35a,transparent); }
+  </style>
+</head>
+<body class="bg-[#0e0e0e] text-[#e8e2d6] antialiased">
+  <!-- Top bar -->
+  <div class="border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-6 h-10 flex items-center justify-between text-[11px] uppercase tracking-[0.25em] text-[#9c937f]">
+      <span>免费配送 · 全球臻选</span>
+      <span>会员专享预览</span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+    <span class="display text-2xl tracking-wide text-[#caa35a]">MAISON</span>
+    <nav class="hidden md:flex gap-8 text-sm tracking-wide text-[#cfc7b6]">
+      <a href="#collection" class="hover:text-[#caa35a] transition">系列</a>
+      <a href="#editor" class="hover:text-[#caa35a] transition">编辑精选</a>
+      <a href="#atelier" class="hover:text-[#caa35a] transition">工艺</a>
+    </nav>
+    <div class="flex gap-5 text-[#cfc7b6]"><i data-lucide="search" class="w-5 h-5"></i><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
+  </header>
+
+  <!-- Hero -->
+  <section class="max-w-6xl mx-auto px-6 pt-10 pb-16 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <p class="text-[11px] uppercase tracking-[0.3em] text-[#9c937f] mb-5">The 2026 Collection</p>
+      <h1 class="display text-5xl md:text-6xl leading-[1.05] text-white">静谧之器，<br/>匠心所成。</h1>
+      <p class="mt-6 text-[#b6ad9a] leading-relaxed max-w-sm">我们遍访匠人，甄选材质，只为呈现经得起时间审视的日用之物。少一分喧哗，多一分从容。</p>
+      <button class="mt-8 border border-[#caa35a] text-[#caa35a] px-8 py-3 text-sm tracking-wide hover:bg-[#caa35a] hover:text-black transition">浏览系列</button>
+    </div>
+    <div class="zoom overflow-hidden rounded-sm aspect-[4/5]">
+      <img src="https://picsum.photos/seed/lux1/800/1000" class="w-full h-full object-cover" alt="" />
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-6"><div class="rule"></div></div>
+
+  <!-- Editorial split -->
+  <section id="editor" class="max-w-6xl mx-auto px-6 py-16">
+    <p class="text-center text-[11px] uppercase tracking-[0.3em] text-[#9c937f] mb-10">Editor's Picks · 编辑精选</p>
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="zoom overflow-hidden rounded-sm aspect-square order-2 md:order-1">
+        <img src="https://picsum.photos/seed/lux2/800/800" class="w-full h-full object-cover" alt="" />
+      </div>
+      <div class="order-1 md:order-2">
+        <h3 class="display text-3xl text-white mb-4">极简双肩背包</h3>
+        <p class="text-[#b6ad9a] leading-relaxed mb-5">植鞣皮革，随使用愈发温润。每一道缝线，皆出自二十年匠人之手。</p>
+        <p class="text-[#caa35a] text-xl display mb-6">¥ 299</p>
+        <button class="text-sm border-b border-[#caa35a] pb-1 hover:text-[#caa35a] transition">查看详情 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collection cards -->
+  <section id="collection" class="max-w-6xl mx-auto px-6 pb-20">
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-8 text-sm text-[#9c937f]">
+      <div><span class="display text-xl text-[#caa35a]">MAISON</span><p class="mt-3 max-w-xs">静谧之器，匠心所成。为全球甄选经得起时间审视的日用之物。</p></div>
+      <div><p class="text-[#cfc7b6] mb-3">客户服务</p><p class="space-y-2"><span class="block">专属顾问</span><span class="block">保养与维修</span><span class="block">配送与退换</span></p></div>
+      <div><p class="text-[#cfc7b6] mb-3">订阅资讯</p><p>留下邮箱，第一时间获知新品与私享活动。</p></div>
+    </div>
+    <div class="text-center text-[11px] text-[#6b6453] py-6">© 2026 MAISON. 保留所有权利。</div>
+  </footer>
+
+  <script>
+    const products = [
+      { id:3, name:'极简双肩背包', price:299, img:'https://picsum.photos/seed/m3/600/600' },
+      { id:8, name:'陶瓷餐具套装', price:259, img:'https://picsum.photos/seed/m8/600/600' },
+      { id:6, name:'香薰加湿器', price:199, img:'https://picsum.photos/seed/m6/600/600' },
+      { id:9, name:'桌面台灯', price:179, img:'https://picsum.photos/seed/m9/600/600' },
+      { id:1, name:'降噪无线耳机', price:899, img:'https://picsum.photos/seed/m1/600/600' },
+      { id:4, name:'便携咖啡机', price:599, img:'https://picsum.photos/seed/m4/600/600' },
+    ]
+    document.getElementById('grid').innerHTML = products.map(p => `
+      <div class="zoom group cursor-pointer">
+        <div class="overflow-hidden rounded-sm aspect-square mb-4 bg-white/5">
+          <img src="${p.img}" loading="lazy" class="w-full h-full object-cover opacity-90 group-hover:opacity-100">
+        </div>
+        <h3 class="text-white text-lg">${p.name}</h3>
+        <p class="text-[#caa35a] display text-lg mt-1">¥ ${p.price}</p>
+      </div>`).join('')
+    lucide.createIcons()
+  </script>
+</body>
+</html>

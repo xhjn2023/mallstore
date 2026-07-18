@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>商城 UI 重设计 · 4 个方向</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'PingFang SC','Segoe UI',sans-serif; }
+    .card { transition: transform .3s ease, box-shadow .3s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 20px 45px -22px rgba(0,0,0,.35); }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+  <header class="bg-white border-b">
+    <div class="max-w-5xl mx-auto px-6 py-10 text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-slate-400 mb-3">MallStore UI Redesign</p>
+      <h1 class="text-3xl md:text-4xl font-bold tracking-tight">商城前端 · 四个设计方向</h1>
+      <p class="mt-4 text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">面向「响应式 Web 商城前端」的四种差异化探索。每个方向在布局、视觉语言与交互上均有明显区分，点击进入可交互原型。</p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-12 grid sm:grid-cols-2 gap-6">
+    <a href="direction-a-calm.html" class="card bg-white rounded-2xl overflow-hidden border">
+      <div class="h-40 bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center text-neutral-500 text-5xl font-light">A</div>
+      <div class="p-5">
+        <h2 class="text-lg font-semibold">A · 极简纯净</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-3">Calm / Apple-like</p>
+        <p class="text-sm text-slate-500 leading-relaxed">居中留白、近单色、细边框、滚动渐显。强调内容本身，安静克制。</p>
+        <span class="inline-block mt-4 text-sky-600 text-sm font-medium">查看原型 →</span>
+      </div>
+    </a>
+    <a href="direction-b-pop.html" class="card bg-white rounded-2xl overflow-hidden border">
+      <div class="h-40 bg-gradient-to-br from-violet-400 to-pink-500 flex items-center justify-center text-white text-5xl font-black">B</div>
+      <div class="p-5">
+        <h2 class="text-lg font-semibold">B · 活力潮玩</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-3">Pop / Consumer App</p>
+        <p class="text-sm text-slate-500 leading-relaxed">渐变、圆角、Swiper 轮播、秒杀倒计时、悬浮购物车。热闹有活力。</p>
+        <span class="inline-block mt-4 text-sky-600 text-sm font-medium">查看原型 →</span>
+      </div>
+    </a>
+    <a href="direction-c-editorial.html" class="card bg-white rounded-2xl overflow-hidden border">
+      <div class="h-40 bg-gradient-to-br from-neutral-900 to-neutral-700 flex items-center justify-center text-[#caa35a] text-5xl font-serif italic">C</div>
+      <div class="p-5">
+        <h2 class="text-lg font-semibold">C · 编辑奢品</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-3">Editorial / Luxury</p>
+        <p class="text-sm text-slate-500 leading-relaxed">暗色 + 金、衬线大标题、非对称编辑式排版、图像悬停缓动。高级感。</p>
+        <span class="inline-block mt-4 text-sky-600 text-sm font-medium">查看原型 →</span>
+      </div>
+    </a>
+    <a href="direction-d-dense.html" class="card bg-white rounded-2xl overflow-hidden border">
+      <div class="h-40 bg-gradient-to-br from-slate-200 to-sky-100 flex items-center justify-center text-sky-700 text-5xl font-bold">D</div>
+      <div class="p-5">
+        <h2 class="text-lg font-semibold">D · 高效密集</h2>
+        <p class="text-xs text-slate-400 mt-1 mb-3">Dense / Marketplace</p>
+        <p class="text-sm text-slate-500 leading-relaxed">左侧筛选 + 排序工具栏 + 紧凑网格 + 快捷查看弹窗。信息密集、效率优先。</p>
+        <span class="inline-block mt-4 text-sky-600 text-sm font-medium">查看原型 →</span>
+      </div>
+    </a>
+  </main>
+
+  <section class="max-w-5xl mx-auto px-6 pb-16">
+    <div class="bg-white rounded-2xl border p-6">
+      <h3 class="font-semibold mb-4">方向对比</h3>
+      <div class="overflow-x-auto text-sm">
+        <table class="w-full text-left border-collapse">
+          <thead><tr class="text-slate-400 border-b"><th class="py-2 pr-4">维度</th><th class="py-2 pr-4">A 极简</th><th class="py-2 pr-4">B 活力</th><th class="py-2 pr-4">C 奢品</th><th class="py-2">D 密集</th></tr></thead>
+          <tbody class="text-slate-600">
+            <tr class="border-b"><td class="py-2 pr-4 text-slate-400">布局</td><td>居中单列</td><td>卡片流式</td><td>非对称编辑式</td><td>侧栏+网格</td></tr>
+            <tr class="border-b"><td class="py-2 pr-4 text-slate-400">配色</td><td>近单色中性</td><td>渐变亮彩</td><td>暗+金</td><td>功能灰蓝</td></tr>
+            <tr class="border-b"><td class="py-2 pr-4 text-slate-400">字体</td><td>无衬线</td><td>圆润无衬线</td><td>衬线大标题</td><td>紧凑无衬线</td></tr>
+            <tr class="border-b"><td class="py-2 pr-4 text-slate-400">主交互</td><td>滚动渐显</td><td>轮播/悬浮购物车</td><td>图像缓动</td><td>筛选/排序/弹窗</td></tr>
+            <tr><td class="py-2 pr-4 text-slate-400">适用</td><td>生活方式品牌</td><td>大众电商/促销</td><td>高端/设计师</td><td>批发/比价</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
